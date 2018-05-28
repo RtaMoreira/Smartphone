@@ -5,35 +5,16 @@
 */
 package smartphone;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class ContactApp extends AppTemplate{
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
-	private ArrayList<JPanel> contactPanel= new ArrayList<JPanel>();
 	
 	//cardLayout manager
 	private CardLayout cardlayout = new CardLayout();
@@ -45,19 +26,11 @@ public class ContactApp extends AppTemplate{
 	private JButton add = new JButton ("+");
 	private ImageIcon contactIcon =new ImageIcon("image/icon/contact.png");
 	private ImageIcon contactIconHover =new ImageIcon("image/icon/contactHOVER.png");
+	private Timer timer = new Timer(2000,new Selection());
 	
-	//for contactInfo
-	
-	public ImageIcon getContactIcon() {
-		return contactIcon;
-	}
-
-	public ImageIcon getContactIconHover() {
-		return contactIconHover;
-	}
-
 	public ContactApp() {
 		super("contacts", Color.GREEN);
+		
 		add.addActionListener(new showAddContact());
 		super.getNavigation().add(add, BorderLayout.EAST);
 		
@@ -69,13 +42,23 @@ public class ContactApp extends AppTemplate{
 		add(myPanel);
 		
 		deserializeContacts();
-		CreateLabels();
+		for (int i = 0; i < contacts.size(); i++) {
+			contacts.get(i).getbutton().addMouseListener(new getInfo());
+		}
 		insertLabels();
 	}
 	
+	public ImageIcon getContactIcon() {
+		return contactIcon;
+	}
+
+	public ImageIcon getContactIconHover() {
+		return contactIconHover;
+	}
+	
 	private void insertLabels() {//rajoute un panel a l'arraylist pour chaque contact trouvé
-		for (int i = 0; i < contactPanel.size(); i++) {
-			maincontact.add(contactPanel.get(i));
+		for (int i = 0; i < contacts.size(); i++) {
+			maincontact.liste.add(contacts.get(i).getbutton());
 		}
 	}
 
@@ -94,7 +77,6 @@ public class ContactApp extends AppTemplate{
 	
 	public void serializeContacts() {
 		try {
-			System.out.println("serialization");
 			FileOutputStream fichier;
 			fichier = new FileOutputStream("serials/contacts.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
@@ -105,27 +87,25 @@ public class ContactApp extends AppTemplate{
 		}
 	}
 	
-	private void CreateLabels() {//rajoute un panel a l'arraylist pour chaque contact trouvé
-		for (int i = 0; i < contacts.size(); i++) {
-			JPanel panel = new JPanel();
-			JLabel label = new JLabel(contacts.get(i).getNom()+" "+contacts.get(i).getPrenom());
-			label.setBackground(Color.RED);
-			label.addMouseListener(new getInfo());
-			panel.add(label);
-			contactPanel.add(panel);
-		}
-	}
-	
 	class MainContact extends JPanel{//le panel d'affichage de tous les contacts
+		private JTextField recherche = new JTextField();
+		private JPanel liste = new JPanel();
+		private JScrollPane scroll = new JScrollPane(liste,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		MainContact(){
 			paint();
 		}
-		
+
 		public  void paint() {
-			setLayout(new BoxLayout(this,1));
-		}
-		
+			liste.setLayout(new BoxLayout(liste, BoxLayout.Y_AXIS));//boxLayout vertical a ma liste de contacts
+			liste.setBackground(Color.WHITE);			
+			
+			setLayout(new BorderLayout());
+			recherche.addKeyListener(new Recherche());
+			add(recherche,BorderLayout.BEFORE_FIRST_LINE);
+			
+			add(scroll, BorderLayout.CENTER);
+		}	
 	}
 	
 	class NewContact extends JPanel{//panel pour inserer un nouveau contact
@@ -178,38 +158,6 @@ public class ContactApp extends AppTemplate{
 		
 	}
 	
-	class getInfo implements MouseListener{//affiche le contact pour la case correspondante
-
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-		int id=0;
-		
-		for (int i = 0; i < contactPanel.size(); i++) {
-			if(contactPanel.get(i)==arg0.getSource()) {
-				id=i;
-				break;
-			}
-		}
-		
-			contactinfo.lnom1.setText("Nom: " + contacts.get(id).getNom());
-			contactinfo.lprenom1.setText("Prenom: " + contacts.get(id).getPrenom());
-			contactinfo.lnumero1.setText("Numero: " + contacts.get(id).getNumero());
-			cardlayout.show(myPanel, "info");
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
-		
-	}
 	
 	class returnMain implements ActionListener{
 
@@ -225,23 +173,124 @@ public class ContactApp extends AppTemplate{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnumero.getText());
-			contactPanel= new ArrayList<JPanel>();	
 			
 			maincontact.removeAll();
-			contacts.add(p1);//l'ajouter le contact a la fin
 			
-			Contact[] sort = new Contact[contacts.size()];
+		//ajouter le nouveau contact au bon endroit alphabetiquement
+			String newPers=newcontact.tnom.getText() + newcontact.tprenom.getText();
+			int next=0;
+			boolean last=true;
 			
-//			for(char i='a'; 'a'<='z';i++) {
-//				
-//			}
+			if (contacts.size()>0) {
+				for (int j = 0; j < contacts.size(); j++) {
+					last=true;
+					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+contacts.get(j).getPrenom())<0) {
+						next=j;
+						last=false;//si je trouve un négatif c'est que le nouveau contact n'est pas dernier
+						break;
+					}
+				}
+				
+				if(last) {
+					contacts.add(contacts.size(),p1);
+				}
+				else {
+					contacts.add(next,p1);
+				}
+			}
+			else
+				contacts.add(next,p1);
+			
+			p1.getbutton().addMouseListener(new getInfo());
+			
+			
+			newcontact.tnom.setText("");
+			newcontact.tprenom.setText("");
+			newcontact.tnumero.setText("");
 			
 			serializeContacts();
-			CreateLabels();
-			insertLabels();
 			maincontact.paint();
+			insertLabels();
 			cardlayout.show(myPanel, "main");
 		}
+		
+	}
+	
+	class getInfo implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			
+			Contact contact=null;
+			
+			for (int i = 0; i < contacts.size(); i++) {
+				if(e.getSource()==contacts.get(i).getbutton()) {
+					contact=contacts.get(i);
+					break;
+				}
+			}
+			
+			contactinfo.lnom1.setText(contact.getNom());
+			contactinfo.lprenom1.setText(contact.getPrenom());
+			contactinfo.lnumero1.setText(contact.getNumero());
+			cardlayout.show(myPanel, "info");
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			timer.start();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			timer.stop();
+		}
+		
+	}
+	
+	class Selection implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			for (int i = 0; i < contacts.size(); i++) {
+				JPanel panel=contacts.get(i).getbutton();
+				panel.add(new JLabel(new ImageIcon("image/icon/backicon.png")));
+				contacts.get(i).setbutton(panel);
+			}
+			cardlayout.show(myPanel, "main");
+		}
+		
+	}
+	
+	class Recherche implements KeyListener{
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			maincontact.liste.removeAll();
+			
+			String sub = maincontact.recherche.getText().toLowerCase();
+			
+			for (int i = 0; i < contacts.size(); i++) {
+				if((contacts.get(i).getNom()+contacts.get(i).getPrenom()).toLowerCase().indexOf(sub)!=-1) {
+					maincontact.liste.add(contacts.get(i).getbutton());
+				}
+			}
+			maincontact.scroll.repaint();
+			maincontact.recherche.requestFocus();
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
 		
 	}
 
