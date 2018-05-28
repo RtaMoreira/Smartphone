@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.Serializable;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
