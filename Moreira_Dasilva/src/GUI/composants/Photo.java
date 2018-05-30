@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 public class Photo extends File{
 	private String nom;
 	
-	private int ID;
 	private int width;
 	private int height;
 	private String location;
@@ -40,10 +39,9 @@ public class Photo extends File{
 	 * @param nom
 	 */
 	
-	public Photo(String nom, int ID){
+	public Photo(String nom){
 		super("image/image/"+nom);
 		this.nom = nom;
-		this.ID = ID;
 		this.location = "image/image/"+nom;
 	
 		BufferedImage bimg;
@@ -65,14 +63,6 @@ public class Photo extends File{
 
 	public void setNom(String nom) {
 		this.nom = nom;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int iD) {
-		ID = iD;
 	}
 
 	public int getWidth() {

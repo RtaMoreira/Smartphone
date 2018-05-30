@@ -14,10 +14,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.awt.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,100 +48,93 @@ public class GalerieApp extends AppTemplate {
 	private File dossier = new File("image\\image");
 	private String path = "image/image/";
 	private ArrayList<Photo> liste = new ArrayList<>();
+	
+	private JFileChooser chooser = new JFileChooser();
 
-	// JPanel
+
+	// JPanel principal
 	private CardLayout cardLayout = new CardLayout();
 	private JPanel mainPanel = new JPanel();
-	
-	//Jpanel qui contient la galerie et le JLabel d'Ajout de photo
+
+	// Jpanel qui contient la galerie et le JLabel d'Ajout de photo, etc.
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
-		private JPanel galerie = new JPanel(new FlowLayout());
-		private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
+	private JPanel galerie = new JPanel(new FlowLayout());
+	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
 	private ShowPanel apercu = new ShowPanel();
 
-	
-	
 	public GalerieApp() {
 		super("Galerie Photo", Color.CYAN);
 
 		liste = recupImages();
 		showGalery(liste);
 
+		super.getNavigation().getBackButton().addActionListener(new resetGalerie());
+
 		mainPanel.setLayout(cardLayout);
 		this.add(mainPanel);
-		
+
 		ajout.addMouseListener(new AddImage());
 		ajout.setBackground(Color.CYAN);
 		ajout.setOpaque(true);
 		Border border = ajout.getBorder();
-		Border margin = new EmptyBorder(5,10,5,10);
+		Border margin = new EmptyBorder(5, 10, 5, 10);
 		ajout.setBorder(new CompoundBorder(border, margin));
 		mainGalerie.add(galerie, BorderLayout.CENTER);
-		mainGalerie.add(ajout,BorderLayout.SOUTH);
-		
+		mainGalerie.add(ajout, BorderLayout.SOUTH);
+
 		mainPanel.add(mainGalerie, "galerie");
 		mainPanel.add(apercu, "aperçu");
 	}
-	//*******Autres classes*******
+
+	// *******Autres classes*******
 
 	public class ShowPanel extends JPanel {
-		
+
 		private JLabel delete = new JLabel(new ImageIcon("image/icon/delete.png"));
 		private JLabel quit = new JLabel(new ImageIcon("image/icon/crossBL.png"));
 
-		
-		
-		public ShowPanel(){
+		public ShowPanel() {
 			super();
 			this.setLayout(new BorderLayout());
-			this.setBackground(new Color(000,000,000,250));
-			
-			
-			//Création partie gestion (supprimer, quitter aperçu)
+			this.setBackground(new Color(000, 000, 000, 180));
+
+			// Création partie gestion (supprimer, quitter aperçu)
 			JPanel gestion = new JPanel(new FlowLayout(FlowLayout.CENTER, 170, 5));
 			gestion.setBackground(Color.CYAN);
-			
-			
 
 			delete.addMouseListener(new Options());
 			quit.addMouseListener(new Options());
-			
-			//Panel qui contient la croix pour quitter aperçu 
+
+			// Panel qui contient la croix pour quitter aperçu
 			JPanel quitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 			quitPanel.setOpaque(false);
 			quitPanel.add(quit);
 
-
 			gestion.add(delete);
-			
-			add(quitPanel, BorderLayout.NORTH);
-			add(gestion,BorderLayout.SOUTH);
-		}
-		
 
-		
-		class Options implements MouseListener{
+			add(quitPanel, BorderLayout.NORTH);
+			add(gestion, BorderLayout.SOUTH);
+		}
+
+		class Options implements MouseListener {
 
 			public void mouseClicked(MouseEvent e) {
 				JLabel event = (JLabel) e.getSource();
-		
-				if (event == getDelete()) 
-				{
-					((CardLayout) getMainPanel().getLayout()).show(mainGalerie, "galerie");
-						
-				}else if (event == getQuit()) {
-				 CardLayout cl = (CardLayout)(getMainPanel().getLayout());
-				 showGalery(recupImages());
-				 
-				 cl.first(getMainPanel());
-				 
-				 //reset le reste du ShowPanel "aperçu"
-				 getApercu().remove(2);
 
-	               }
-	              
+				if (event == getDelete()) {
+					cardLayout.show(mainGalerie, "galerie");
+
+				} else if (event == getQuit()) {
+
+					showGalery(recupImages());
+					cardLayout.first(getMainPanel());
+
+					// reset le reste du ShowPanel "aperçu"
+					getApercu().remove(2);
+
 				}
-			
+
+			}
 
 			public void mouseEntered(MouseEvent e) {
 				JLabel event = (JLabel) e.getSource();
@@ -150,91 +149,130 @@ public class GalerieApp extends AppTemplate {
 
 			}
 
-			public void mousePressed(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {
+			}
 
-			public void mouseReleased(MouseEvent e) {}
-		}	
-
+			public void mouseReleased(MouseEvent e) {
+			}
+		}
 
 		public JLabel getDelete() {
 			return delete;
 		}
+
 		public void setDelete(JLabel delete) {
 			this.delete = delete;
 		}
+
 		public JLabel getQuit() {
 			return quit;
 		}
+
 		public void setQuit(JLabel quit) {
 			this.quit = quit;
 		}
 
 	}
 	// FIN autres classes
-	
-	
-	//*******Méthodes********
-	
 
-	public ArrayList<Photo> recupImages() {
+	// *******Méthodes********
+
+	public ArrayList<Photo> recupImages() 
+	{
 		ArrayList<Photo> liste = new ArrayList<Photo>();
 		Photo image;
 
-		for (int i = 0; i < dossier.list().length; i++) {
-		
-			image = new Photo(dossier.list()[i], i);
-			
+		for (int i = 0; i < dossier.list().length; i++) 
+		{
+
+			image = new Photo(dossier.list()[i]);
 			liste.add(image);
 		}
-		
+
 		return liste;
 
 	}
 
-	public void showGalery(ArrayList<Photo> photos) {
-		//Supprime si des photos étaient déjà dans galerie avant
-			galerie.removeAll();
+	public void showGalery(ArrayList<Photo> photos) 
+	{
+		// Supprime si des photos étaient déjà dans galerie avant
+		galerie.removeAll();
 
-		//Créations des miniPhotos à partir du ArrayList passé en paramètre
-		for (int i = 0; i < photos.size(); i++) {
+		// Créations des miniPhotos à partir du ArrayList passé en paramètre
+		for (int i = 0; i < photos.size(); i++) 
+		{
 
 			// Affichage des images taille icone
-			 ImageIcon imageOriginale = new ImageIcon(liste.get(i).getLocation()); // load
-			 Image monImage = imageOriginale.getImage(); // transform it
-			 Image newimg = monImage.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-			
-			 ImageIcon imageIcon = new ImageIcon(newimg); // transform it back
+			ImageIcon imageOriginale = new ImageIcon(liste.get(i).getLocation()); // load
+			Image monImage = imageOriginale.getImage(); // transform it
+			Image newimg = monImage.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+
+			ImageIcon imageIcon = new ImageIcon(newimg); // transform it back
 
 			// //création de la MiniPhoto (JButton)
-			 MiniPhoto miniBouton = new MiniPhoto(imageIcon, liste.get(i).getPath());
+			MiniPhoto miniBouton = new MiniPhoto(imageIcon, liste.get(i).getPath());
 
 			// //ActionListener sur les icones
-			 miniBouton.addActionListener(new ShowImage());
-			 galerie.add(miniBouton);
+			miniBouton.addActionListener(new ShowImage());
+			galerie.add(miniBouton);
 
 		}
 
 	}
-	
-	
-	//*******ActionListener & MouseListeners ********
-	
+
+	/**
+	 * Récupérer l'extension d'un Fichier
+	 * @param file
+	 * @return
+	 */
+	private static String getFileExtension(File file) {
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		else
+			return "";
+	}
+
+	// *******ActionListener & MouseListeners ********
+
 	class ShowImage implements ActionListener {
 
-		//Affiche l'image choisie dans aperçu en grand
+		// Affiche l'image choisie dans aperçu en grand
 		public void actionPerformed(ActionEvent e) {
 
 			// récupère l'url de l'image
 			Object event = e.getSource();
 			MiniPhoto bouton = (MiniPhoto) event;
 			System.out.println(bouton.getPathPhoto());
+			ImageIcon imageOriginal = new ImageIcon(bouton.getPathPhoto());
 
-			ImageIcon photoChoisie = new ImageIcon(bouton.getPathPhoto());
+			// Test si taille de l'image dépasse pas les 480 et 800
+			double height = imageOriginal.getIconHeight();
+			double width = imageOriginal.getIconWidth();
+			ImageIcon photoChoisie;
+			double ratio;
+
+			while (height > 600 || width > 480) {
+
+				if (width > 480) {
+					// Reconvertir la taille selon la taille de l'écran (ratio)
+					ratio = 480 / width; // ratio qu'on doit garder pour changer la hauteur
+					width = 480;
+					height = height * ratio;
+				} else {
+					ratio = 600 / height;
+					height = 600;
+					width = width * ratio;
+				}
+
+			}
+			Image monImage = imageOriginal.getImage(); // transform it
+			Image newimg = monImage.getScaledInstance((int) width, (int) height, java.awt.Image.SCALE_SMOOTH);
+			photoChoisie = new ImageIcon(newimg);
+
 			JLabel photoZoom = new JLabel(photoChoisie);
-			
-			
+
 			apercu.add(photoZoom);
-			
 
 			// apercu.add(app);
 			cardLayout.show(mainPanel, "aperçu");
@@ -242,26 +280,54 @@ public class GalerieApp extends AppTemplate {
 		}
 
 	}
-	
-	class AddImage implements MouseListener{
+
+	class AddImage implements MouseListener 
+	{
+		
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
-//		 OUVETURE DU BROWSER
-		JFileChooser chooser = new JFileChooser();//création dun nouveau filechosser
-		chooser.setApproveButtonText("Ajouter"); //intitulé du bouton
-		chooser.showOpenDialog(null); //affiche la boite de dialogue
-		FileFilter imagesFilter = new FileNameExtensionFilter("Images", "jpg", "jpeg", "png");
-		chooser.setFileFilter(imagesFilter);
-		File image = chooser.getSelectedFile();
-		System.out.println(image);
-		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-	    	{	
-			//si un fichier est selectionné, récupérer le fichier puis sont path et l'afficher dans le champs de texte
-			//status.setText(chooser.getSelectedFile().getAbsolutePath()); 
-	    	}
+		public void mouseClicked(MouseEvent e) 
+		{
+
+			// filtre
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif", "jpeg","png", "Images");
+
+			chooser.setFileFilter(filter); // affiche que les fichiers
+			chooser.setMultiSelectionEnabled(true); // Choix multipple
+
+			int reponse = chooser.showOpenDialog(null);
+
+			if (reponse == chooser.APPROVE_OPTION) 
+			{
+
+				File[] fs = chooser.getSelectedFiles();
+				String location = getDossier() + "\\";
+
+				for (int i = 0; i < fs.length; i++) 
+				{
+					File destination = new File(location + fs[i].getName());
+					Photo photo;
+
+					try 
+					{
+						Files.copy(fs[i].toPath(), destination.toPath());
+						photo = new Photo(fs[i].getName());
+						liste.add(photo);
+					} 
+					catch (IOException e1) 
+					{
+						e1.printStackTrace();
+					}
+				}
+
+			}
+			if(reponse == chooser.CANCEL_OPTION)
+			{
+				chooser.cancelSelection();
+				return;
+			}
+			return;
 		}
-		
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -276,14 +342,25 @@ public class GalerieApp extends AppTemplate {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {
+		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {}
-		
-	}
-	
+		public void mouseReleased(MouseEvent e) {
+		}
 
+	}
+
+	class resetGalerie implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (apercu.isShowing()) {
+				getApercu().remove(2);
+			}
+			cardLayout.first(getMainPanel());
+		}
+	}
 
 	// ****** Getter *******
 	public ImageIcon getGalerieIcon() {
@@ -293,6 +370,7 @@ public class GalerieApp extends AppTemplate {
 	public ImageIcon getGalerieIconHover() {
 		return galerieIconHover;
 	}
+
 	public JPanel getMainPanel() {
 		return mainPanel;
 	}
@@ -316,9 +394,11 @@ public class GalerieApp extends AppTemplate {
 	public void setApercu(ShowPanel apercu) {
 		this.apercu = apercu;
 	}
+
 	public JLabel getAjout() {
 		return ajout;
 	}
+
 	public void setAjout(JLabel ajout) {
 		this.ajout = ajout;
 	}
@@ -330,7 +410,13 @@ public class GalerieApp extends AppTemplate {
 	public void setMainGalerie(JPanel mainGalerie) {
 		this.mainGalerie = mainGalerie;
 	}
-	
 
-	
+	public File getDossier() {
+		return dossier;
+	}
+
+	public void setDossier(File dossier) {
+		this.dossier = dossier;
+	}
+
 }
