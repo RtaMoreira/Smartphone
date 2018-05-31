@@ -38,9 +38,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.composants.MiniPhoto;
 import GUI.composants.Photo;
+import GUI.composants.Resizable;
 import GUI.composants.ShowPanel;
 
-public class GalerieApp extends AppTemplate {
+public class GalerieApp extends AppTemplate implements Resizable{
 	// icon du menu
 	private ImageIcon galerieIcon = new ImageIcon("image\\icon\\galerie.png");
 	private ImageIcon galerieIconHover = new ImageIcon("image\\icon\\galerieHOVER.png");
@@ -48,7 +49,6 @@ public class GalerieApp extends AppTemplate {
 	private File dossier = new File("image\\image");
 	private String path = "image/image/";
 	private ArrayList<Photo> liste = new ArrayList<>();
-	
 	private JFileChooser chooser = new JFileChooser();
 
 
@@ -202,14 +202,11 @@ public class GalerieApp extends AppTemplate {
 		for (int i = 0; i < photos.size(); i++) 
 		{
 
-			// Affichage des images taille icone
-			ImageIcon imageOriginale = new ImageIcon(liste.get(i).getLocation()); // load
-			Image monImage = imageOriginale.getImage(); // transform it
-			Image newimg = monImage.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-
-			ImageIcon imageIcon = new ImageIcon(newimg); // transform it back
-
-			// //création de la MiniPhoto (JButton)
+			// Affichage des images taille icon
+			ImageIcon imageOriginale = new ImageIcon(liste.get(i).getLocation()); 
+			
+			ImageIcon imageIcon = Resizable.resizePhotoIcon(100, imageOriginale);
+			// création de la MiniPhoto (en JButton)
 			MiniPhoto miniBouton = new MiniPhoto(imageIcon, liste.get(i).getPath());
 
 			// //ActionListener sur les icones
@@ -246,30 +243,8 @@ public class GalerieApp extends AppTemplate {
 			System.out.println(bouton.getPathPhoto());
 			ImageIcon imageOriginal = new ImageIcon(bouton.getPathPhoto());
 
-			// Test si taille de l'image dépasse pas les 480 et 800
-			double height = imageOriginal.getIconHeight();
-			double width = imageOriginal.getIconWidth();
-			ImageIcon photoChoisie;
-			double ratio;
-
-			while (height > 600 || width > 480) {
-
-				if (width > 480) {
-					// Reconvertir la taille selon la taille de l'écran (ratio)
-					ratio = 480 / width; // ratio qu'on doit garder pour changer la hauteur
-					width = 480;
-					height = height * ratio;
-				} else {
-					ratio = 600 / height;
-					height = 600;
-					width = width * ratio;
-				}
-
-			}
-			Image monImage = imageOriginal.getImage(); // transform it
-			Image newimg = monImage.getScaledInstance((int) width, (int) height, java.awt.Image.SCALE_SMOOTH);
-			photoChoisie = new ImageIcon(newimg);
-
+			ImageIcon photoChoisie = Resizable.resizePhotoRatio(480, 600, imageOriginal);
+			
 			JLabel photoZoom = new JLabel(photoChoisie);
 
 			apercu.add(photoZoom);
