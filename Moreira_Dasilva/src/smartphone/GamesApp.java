@@ -25,6 +25,7 @@ public class GamesApp extends AppTemplate{
 	private JPanel gamePanel = new JPanel(cardlayout);
 	private JPanel mainPanel = new JPanel();
 	private Snake snake = new Snake();
+	private Demineur demineur= new Demineur();
 	
 	private JLabel snakeButton = new JLabel(snake.getSnakeIcon());
 	
@@ -45,6 +46,7 @@ public class GamesApp extends AppTemplate{
 		
 		gamePanel.add(mainPanel,"main");
 		gamePanel.add(snake,"snake");
+//		gamePanel.add(demineur,"snake");
 		
 		add(gamePanel);
 		

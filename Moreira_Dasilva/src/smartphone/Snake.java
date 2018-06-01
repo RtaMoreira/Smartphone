@@ -11,12 +11,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,11 +24,11 @@ public class Snake extends JPanel implements ActionListener{
 	private ImageIcon snakeIconHover = new ImageIcon("image/icon/snakeHOVER.png");
 	
 	private final int DELAY = 100;
-    private JPanel[][] pixels = new JPanel[100][100];
+    private JPanel[][] pixels = new JPanel[100][60];
 
     /* The coordinates of the snake. */
-    private int[] x = new int[10000];//possible d'avoir le tout accupé par le snake
-    private int[] y = new int[10000];
+    private int[] x = new int[pixels[0].length*pixels.length];//possible d'avoir le tout accupé par le snake
+    private int[] y = new int[pixels[0].length*pixels.length];
 
     /* Coordinates for apple. */
     private int apple_x, apple_y;
@@ -46,8 +43,8 @@ public class Snake extends JPanel implements ActionListener{
     	addMouseListener(new changeDirection());
     	setBackground(Color.GREEN);
     	setLayout(new BorderLayout());
-    	setPreferredSize(new Dimension(600, 600));
-    	setLayout(new GridLayout(100,100));
+    	setPreferredSize(new Dimension(200, 600));
+    	setLayout(new GridLayout(pixels.length,pixels[0].length));
        	for (int i = 0; i <snakeSize; i++) {
 			y[i]=50;
 			x[i]=50-i;
@@ -78,7 +75,7 @@ public class Snake extends JPanel implements ActionListener{
 	}
 	public void paint() {
     	for (int i = 0; i < pixels.length; i++) {
-			for (int j = 0; j < pixels.length; j++) {
+			for (int j = 0; j < pixels[0].length; j++) {
 				pixels[i][j].setBackground(Color.BLACK);
 			}
 		}
@@ -91,8 +88,8 @@ public class Snake extends JPanel implements ActionListener{
     }
     
     public void randomFood() {
-        apple_x=(int)(Math.random()*100);
-        apple_y=(int)(Math.random()*100);
+        apple_x=(int)(Math.random()*pixels.length);
+        apple_y=(int)(Math.random()*pixels[0].length);
     }
     
     public boolean checkpixel() {
@@ -104,7 +101,7 @@ public class Snake extends JPanel implements ActionListener{
     	}
     	
     	//si ça dépasse le tableau GAMEOVER
-    	if(x[0]==100||x[0]<0||y[0]==100||y[0]<0) {
+    	if(x[0]==pixels.length||x[0]<0||y[0]==pixels[0].length||y[0]<0) {
 			return true;
     	}
     	

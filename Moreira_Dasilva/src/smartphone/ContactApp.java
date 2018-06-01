@@ -9,40 +9,50 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class ContactApp extends AppTemplate{
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
-	//cardLayout manager
+	//cardLayout management
 	private CardLayout cardlayout = new CardLayout();
 	private JPanel myPanel = new JPanel();
 	private MainContact maincontact = new MainContact();
 	private NewContact newcontact = new NewContact();
-	private ContactInfo contactinfo = new ContactInfo();
 	
+	//boutons pour NavigationBar
 	private JButton add = new JButton ("+");
+	private JButton delete = new JButton ("d");
+	private JPanel buttonHolder = new JPanel();
+	
+	//icones d'appli
 	private ImageIcon contactIcon =new ImageIcon("image/icon/contact.png");
 	private ImageIcon contactIconHover =new ImageIcon("image/icon/contactHOVER.png");
-	private Timer timer = new Timer(2000,new Selection());
+	
+	//gerer quel contact est activé
+	private int enabled;
 	
 	public ContactApp() {
 		super("contacts", Color.GREEN);
 		
+		delete.addActionListener(new returnMain());
+		delete.addActionListener(new erase());
 		add.addActionListener(new showAddContact());
-		super.getNavigation().add(add, BorderLayout.EAST);
+		buttonHolder.setOpaque(false);
+		super.getNavigation().add(buttonHolder, BorderLayout.EAST);
+		super.getNavigation().getBackButton().addActionListener(new returnMain());
+		buttonHolder.add(add);
 		
-		//manage CardLayout avec tous les panels possibles
 		myPanel.setLayout(cardlayout);
 		myPanel.add(maincontact, "main");
 		myPanel.add(newcontact, "new");
-		myPanel.add(contactinfo, "info");
 		add(myPanel);
 		
 		deserializeContacts();
 		for (int i = 0; i < contacts.size(); i++) {
-			contacts.get(i).getbutton().addMouseListener(new getInfo());
+			contacts.get(i).getButton().addMouseListener(new getInfo());
 		}
 		insertLabels();
 	}
@@ -55,9 +65,9 @@ public class ContactApp extends AppTemplate{
 		return contactIconHover;
 	}
 	
-	private void insertLabels() {//rajoute un panel a l'arraylist pour chaque contact trouvé
+	private void insertLabels() {//rajoute un panel a liste pour chaque contact trouvé
 		for (int i = 0; i < contacts.size(); i++) {
-			maincontact.liste.add(contacts.get(i).getbutton());
+			maincontact.liste.add(contacts.get(i).getButton());
 		}
 	}
 
@@ -89,7 +99,7 @@ public class ContactApp extends AppTemplate{
 	class MainContact extends JPanel{//le panel d'affichage de tous les contacts
 		private JTextField recherche = new JTextField();
 		private JPanel liste = new JPanel();
-		private JScrollPane scroll = new JScrollPane(liste,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		private JScrollPane scroll = new JScrollPane(liste,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		MainContact(){
 			paint();
@@ -108,51 +118,94 @@ public class ContactApp extends AppTemplate{
 	}
 	
 	class NewContact extends JPanel{//panel pour inserer un nouveau contact
+		
+		//display infos
 		private JLabel lnom = new JLabel("Nom: ");
 		private JLabel lprenom = new JLabel("Prenom: ");
-		private JLabel lnumero = new JLabel("Numéro: ");
+		private JLabel lnatel = new JLabel("Numéro natel: ");
+		private JLabel ltelephone = new JLabel("Numéro téléphone: ");
+		private JLabel lmail = new JLabel("Mail: ");
+		private JLabel ladresse = new JLabel("Adresse: ");
 		private JTextField tnom = new JTextField();
 		private JTextField tprenom = new JTextField();
-		private JTextField tnumero = new JTextField();
-		private JButton save = new JButton("save");
+		private JTextField tnatel = new JTextField();
+		private JTextField ttelephone = new JTextField();
+		private JTextField tmail = new JTextField();
+		private JTextField tadresse = new JTextField();
+		
+		//boutons possibles pour cahque état
+		private JButton save = new JButton("enregistrer");
+		private JButton modify = new JButton("modifier");
+		private JButton update = new JButton("modifier");
+		
+		//gestion des panels et espaces vides
+		private JPanel imagePanel = new JPanel();
+		private JPanel infoPanel = new JPanel();
+		private ImageIcon image=new ImageIcon("image/icon/backicon.png");
 		
 		NewContact(){
-			setLayout(new GridLayout(4,2));
-			add(lnom);
-			add(tnom);
-			add(lprenom);
-			add(tprenom);
-			add(lnumero);
-			add(tnumero);
-			add(new JLabel());
+			setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+			
+			//image de contact
+			imagePanel.setMaximumSize(new Dimension(200,200));
+			imagePanel.setMinimumSize(new Dimension(200,200));
+			imagePanel.setPreferredSize(new Dimension(200,200));
+			imagePanel.add(new JLabel(image));
+/**			ImageChoice mouselistener = new ImageChoice();
+*/			add(imagePanel);
+			
+			//panel avec infos
+			infoPanel.setLayout(new GridLayout(7,2));
+			infoPanel.add(lnom);
+			infoPanel.add(tnom);
+			infoPanel.add(lprenom);
+			infoPanel.add(tprenom);
+			infoPanel.add(lnatel);
+			infoPanel.add(tnatel);
+			infoPanel.add(ltelephone);
+			infoPanel.add(ttelephone);
+			infoPanel.add(lmail);
+			infoPanel.add(tmail);
+			infoPanel.add(ladresse);
+			infoPanel.add(tadresse);
+			
+			infoPanel.add(new JLabel());
+			add(infoPanel);
+			
+			//listeners das boutons possibles
 			save.addActionListener(new addContact());
-			add(save);
+			modify.addActionListener(new showModify());
+			update.addActionListener(new addContact());
+			update.addActionListener(new erase());
+			
+			add(new JPanel());
 		}
 		
 	}
 	
-	class ContactInfo extends JPanel{//panel pour afficher l'info d'un contact
-		private JLabel lnom1=new JLabel();
-		private JLabel lprenom1=new JLabel();
-		private JLabel lnumero1=new JLabel();
-		private JButton returnToMain = new JButton("retour");
-		
-		ContactInfo(){
-			setLayout(new BoxLayout(this,1));
-			add(lnom1);
-			add(lprenom1);
-			add(lnumero1);
-			returnToMain.addActionListener(new returnMain());
-			add(returnToMain);
-		}
-		
-	}
 	
 	class showAddContact implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			cardlayout.show(myPanel, "new");
+			newcontact.tnom.setText("");
+			newcontact.tnom.setEditable(true);
+			newcontact.tprenom.setText("");
+			newcontact.tprenom.setEditable(true);
+			newcontact.tnatel.setText("");
+			newcontact.tnatel.setEditable(true);
+			
+			buttonHolder.removeAll();
+			
+			//choix des boutons a afficher
+			newcontact.infoPanel.remove(newcontact.modify);
+			newcontact.infoPanel.remove(newcontact.update);
+			newcontact.infoPanel.add(newcontact.save);
+			
+			//ajouter le listenner a l'image
+/**			newcontact.image.addMouseListener(newcontact.mouselistener);
+ * 
+*/			cardlayout.show(myPanel, "new");
 		}
 		
 	}
@@ -162,28 +215,32 @@ public class ContactApp extends AppTemplate{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			buttonHolder.removeAll();
+			buttonHolder.add(add);
 			cardlayout.show(myPanel, "main");
 		}
 		
 	}
 	
+	
 	class addContact implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnumero.getText());
+			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
+										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.image);
 			
 			maincontact.removeAll();
 			
 		//ajouter le nouveau contact au bon endroit alphabetiquement
-			String newPers=newcontact.tnom.getText() + newcontact.tprenom.getText();
+			String newPers=newcontact.tnom.getText() +" "+ newcontact.tprenom.getText();
 			int next=0;
 			boolean last=true;
 			
 			if (contacts.size()>0) {
 				for (int j = 0; j < contacts.size(); j++) {
 					last=true;
-					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+contacts.get(j).getPrenom())<0) {
+					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+" "+contacts.get(j).getPrenom())<0) {
 						next=j;
 						last=false;//si je trouve un négatif c'est que le nouveau contact n'est pas dernier
 						break;
@@ -200,12 +257,16 @@ public class ContactApp extends AppTemplate{
 			else
 				contacts.add(next,p1);
 			
-			p1.getbutton().addMouseListener(new getInfo());
+			System.out.println(p1.getNom()+"added");
+			p1.getButton().addMouseListener(new getInfo());
 			
 			
 			newcontact.tnom.setText("");
 			newcontact.tprenom.setText("");
-			newcontact.tnumero.setText("");
+			newcontact.tnatel.setText("");
+			newcontact.ttelephone.setText("");
+			newcontact.tmail.setText("");
+			newcontact.tadresse.setText("");
 			
 			serializeContacts();
 			maincontact.paint();
@@ -220,50 +281,85 @@ public class ContactApp extends AppTemplate{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			
-			Contact contact=null;
+			int selected=0;
 			
 			for (int i = 0; i < contacts.size(); i++) {
-				if(e.getSource()==contacts.get(i).getbutton()) {
-					contact=contacts.get(i);
+				if(e.getSource()==contacts.get(i).getButton()) {
+					selected=i;
 					break;
 				}
 			}
 			
-			contactinfo.lnom1.setText(contact.getNom());
-			contactinfo.lprenom1.setText(contact.getPrenom());
-			contactinfo.lnumero1.setText(contact.getNumero());
-			cardlayout.show(myPanel, "info");
+				enabled=selected;
+				System.out.println("enabled in getInfo: "+selected);
+				newcontact.tnom.setText(contacts.get(selected).getNom());
+				newcontact.tnom.setEditable(false);
+				newcontact.tprenom.setText(contacts.get(selected).getPrenom());
+				newcontact.tprenom.setEditable(false);
+				newcontact.tnatel.setText(contacts.get(selected).getNatel());
+				newcontact.tnatel.setEditable(false);
+				newcontact.ttelephone.setText(contacts.get(selected).getTelephone());
+				newcontact.ttelephone.setEditable(false);
+				newcontact.tmail.setText(contacts.get(selected).getMail());
+				newcontact.tmail.setEditable(false);
+				newcontact.tadresse.setText(contacts.get(selected).getAdresse());
+				newcontact.tadresse.setEditable(false);
+				newcontact.image=contacts.get(selected).photo;
+	/**			newcontact.image.removeMouseListenner(mouseListener);
+	*/			
+				newcontact.infoPanel.remove(newcontact.update);
+				newcontact.infoPanel.remove(newcontact.save);
+				newcontact.infoPanel.add(newcontact.modify);
+				
+				buttonHolder.removeAll();
+				buttonHolder.add(delete);
+				updateUI();
+				cardlayout.show(myPanel, "new");
 			
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {}
-
-		@Override
-		public void mouseExited(MouseEvent e) {}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			timer.start();
+		public void mouseEntered(MouseEvent e) {
+			for (int i = 0; i < contacts.size(); i++) {
+				if(e.getSource()==contacts.get(i).getButton()) {
+					contacts.get(i).getButton().setBackground(Color.GRAY);
+					break;
+				}
+			}
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			timer.stop();
+		public void mouseExited(MouseEvent e) {
+			for (int i = 0; i < contacts.size(); i++) {
+				if(e.getSource()==contacts.get(i).getButton()) {
+					contacts.get(i).getButton().setBackground(Color.WHITE);
+					break;
+				}
+			}
 		}
-		
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 	}
 	
-	class Selection implements ActionListener{
+	class showModify implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			for (int i = 0; i < contacts.size(); i++) {
-				JPanel panel=contacts.get(i).getbutton();
-				panel.add(new JLabel(new ImageIcon("image/icon/backicon.png")));
-				contacts.get(i).setbutton(panel);
-			}
-			cardlayout.show(myPanel, "main");
+			newcontact.tnom.setEditable(true);
+			newcontact.tprenom.setEditable(true);
+			newcontact.tnatel.setEditable(true);
+			newcontact.ttelephone.setEditable(true);
+			newcontact.tmail.setEditable(true);
+			newcontact.tadresse.setEditable(true);
+/**			newcontact.image.addMouseListenner(newcontact.mouselistener);
+*/			newcontact.infoPanel.remove(newcontact.modify);
+			newcontact.infoPanel.add(newcontact.update);
+			
+			buttonHolder.removeAll();
 		}
 		
 	}
@@ -281,7 +377,7 @@ public class ContactApp extends AppTemplate{
 			
 			for (int i = 0; i < contacts.size(); i++) {
 				if((contacts.get(i).getNom()+contacts.get(i).getPrenom()).toLowerCase().indexOf(sub)!=-1) {
-					maincontact.liste.add(contacts.get(i).getbutton());
+					maincontact.liste.add(contacts.get(i).getButton());
 				}
 			}
 			maincontact.scroll.repaint();
@@ -291,6 +387,23 @@ public class ContactApp extends AppTemplate{
 		@Override
 		public void keyTyped(KeyEvent arg0) {}
 		
+	}
+	
+	
+	class erase implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			maincontact.liste.remove(contacts.get(enabled).getButton());
+			System.out.println(contacts.get(enabled).getNom()+"deleted from liste");
+			
+
+			System.out.println(contacts.get(enabled).getNom()+"deleted from contacts");
+			contacts.remove(enabled);
+			serializeContacts();
+			
+			maincontact.scroll.repaint();
+		}
 	}
 
 }

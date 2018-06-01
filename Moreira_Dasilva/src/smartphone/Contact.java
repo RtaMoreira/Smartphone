@@ -8,6 +8,10 @@ package smartphone;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.Serializable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -28,16 +32,25 @@ public class Contact implements Serializable{
 
 	String nom;
 	String prenom;
-	String numero;
+	String natel;
+	String telephone;
+	String mail;
+	String adresse;
 	ImageIcon photo = new ImageIcon("image/icon/backicon.png");
 	JPanel button=new JPanel();
+	JButton erase = new JButton();
 	boolean selected = false;
 	
-	public Contact(String nom, String prenom, String numero) {
+	public Contact(String nom, String prenom, String natel, String telephone,String mail,String adresse, ImageIcon photo) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
-		this.numero = numero;
+		this.natel = natel;
+		this.telephone=telephone;
+		this.mail=mail;
+		this.adresse=adresse;
+		this.photo=photo;
+		erase.setIcon(new ImageIcon("image/icon/delete.png"));
 		createButton();
 	}
 
@@ -52,14 +65,6 @@ public class Contact implements Serializable{
 		button.setMaximumSize(new Dimension(485, 55));
 	}
 
-	public void setbutton(JPanel button) {
-		this.button=button;
-	}
-	
-	public JPanel getbutton() {
-		return button;
-	}
-	
 	public String getNom() {
 		return nom;
 	}
@@ -76,13 +81,55 @@ public class Contact implements Serializable{
 		this.prenom = prenom;
 	}
 
-	public String getNumero() {
-		return numero;
+	public String getNatel() {
+		return natel;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setNatel(String natel) {
+		this.natel = natel;
 	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public String getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+
+	public ImageIcon getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(ImageIcon photo) {
+		this.photo = photo;
+	}
+
+	public JPanel getButton() {
+		return button;
+	}
+
+	public void setButton(JPanel button) {
+		this.button = button;
+	}
+
+	
 	
 }
 
