@@ -9,6 +9,7 @@ package smartphone;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -54,6 +55,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	private File dossier = new File("image\\image");
 	
 	private ArrayList<Photo> listePhotos = new ArrayList<>();
+	private ArrayList<MiniPhoto> BoutonsIcons = new ArrayList<>();
 	private MiniPhoto photoTemp; //photo cliquée gardée en mémoire
 	private JFileChooser chooser = new JFileChooser();
 
@@ -250,7 +252,8 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		return liste;
 
 	}
-
+	//Modifier en "GénèreGalerie"
+	//pour le refresh faire autre méthodes qui travaille avec arraylist
 	public void showGalery(ArrayList<Photo> photos) {
 		// Supprime si des photos étaient déjà dans galerie avant
 		galerie.removeAll();
@@ -264,7 +267,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			ImageIcon imageIcon = Resizable.resizePhotoIcon(120, imageOriginale);
 			// création de la MiniPhoto (en JButton)
 			MiniPhoto miniBouton = new MiniPhoto(imageIcon, listePhotos.get(i).getPath());
-
+			BoutonsIcons.add(miniBouton);
 			// //ActionListener sur les icones
 			miniBouton.addActionListener(new ShowImage());
 			galerie.add(miniBouton);
@@ -338,7 +341,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			JLabel photoZoom = new JLabel(photoChoisie);
 
 			apercu.add(photoZoom);
-			System.out.println("APERCU IS SHOWING?"+apercu.isShowing());
 			// apercu.add(app);
 			cardLayout.show(mainPanel, "aperçu");
 
@@ -379,7 +381,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				}
 				refreshGalerie();
 				cardLayout.first(getMainPanel());
-
 			}
 			if (reponse == chooser.CANCEL_OPTION) {
 				chooser.cancelSelection();
@@ -482,6 +483,13 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 	public void setListePhotos(ArrayList<Photo> listePhotos) {
 		this.listePhotos = listePhotos;
+	}
+	
+	public ArrayList<MiniPhoto> getBoutonsIcons() {
+		return BoutonsIcons;
+	}
+	public void setBoutonsIcons(ArrayList<MiniPhoto> boutonsIcons) {
+		BoutonsIcons = boutonsIcons;
 	}
 	
 	
