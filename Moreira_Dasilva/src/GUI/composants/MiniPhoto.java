@@ -7,12 +7,14 @@
 package GUI.composants;
 
 import java.awt.Image;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class MiniPhoto extends JButton {
 	private String pathPhoto;
+	private String nomPhoto;
 	private ImageIcon photoRedimensionne;
 	
 	public MiniPhoto(ImageIcon photoRedim, String pathPhoto) {
@@ -20,11 +22,17 @@ public class MiniPhoto extends JButton {
 		this.setIcon(photoRedim);
 		this.pathPhoto = pathPhoto;
 		this.photoRedimensionne = photoRedim;
-		
+		this.nomPhoto = recupNom(pathPhoto);
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
 	
+	}
+	
+	public String recupNom(String path) {
+		File f = new File(path);
+		System.out.println(f.getName());
+		return f.getName();
 	}
 
 	public String getPathPhoto() {
@@ -42,6 +50,16 @@ public class MiniPhoto extends JButton {
 	public void setPhotoRedimensionne(ImageIcon photoRedimensionne) {
 		this.photoRedimensionne = photoRedimensionne;
 	}
+
+	public String getNomPhoto() {
+		return nomPhoto;
+	}
+
+	public void setNomPhoto(String nomPhoto) {
+		this.nomPhoto = nomPhoto;
+	}
+	
+	
 	
 	
 }
