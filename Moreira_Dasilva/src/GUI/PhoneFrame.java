@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
+import com.github.sarxos.webcam.WebcamPanel;
+
 import GUI.composants.AppGrid;
 import GUI.composants.ImagePanel;
 import GUI.composants.NorthPanel;
@@ -69,7 +71,8 @@ public class PhoneFrame extends JFrame {
 	private JLabel turnOffIcon = new JLabel(new ImageIcon("image/icon/off.png"));
 
 	public PhoneFrame() {// c'est la JFrame
-
+		camera.getWebcam().close();
+		
 		// frame settings
 		this.setSize(480, 860);
 		this.setLocationRelativeTo(null);// fenetre au centre
@@ -186,8 +189,10 @@ public class PhoneFrame extends JFrame {
 						if(app==settingsIcon) 
 							cardLayout.show(screen, "settings");
 						else {
-							if(app==cameraIcon)
+							if(app==cameraIcon) {
+								camera.start();
 								cardLayout.show(screen, "camera");
+							}
 							else {
 								if(app==meteoIcon)
 									cardLayout.show(screen, "meteo");
