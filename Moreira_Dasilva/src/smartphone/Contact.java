@@ -8,25 +8,9 @@ package smartphone;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.Serializable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
-/* a ajouter:
- * long click insert cercle dans la 3e case du panel et si on click il devient vert et bool selected devienttrue
- * 	apres le long click le bouton plus change et on met celui de la poubelle qui efface tous ceux que selected=true
- * 
- * set image change l'image de base en une choisie
- * avec un new galerie et ActionListenner dans chaque image pour l'ajouter au contact et fermer galerie
- * 
- * modify contact avec le new contact qui s'ouvre mais avec les champs remplis
- * 
- * tests si pas num valide ou champs obligatoires vides le textField devient rouge jusqu'a ce qu'on clique dessous
- */
 
 public class Contact implements Serializable{
 
@@ -36,12 +20,12 @@ public class Contact implements Serializable{
 	String telephone;
 	String mail;
 	String adresse;
-	ImageIcon photo = new ImageIcon("image/icon/backicon.png");
+	String photoPath;
 	JPanel button=new JPanel();
-	JButton erase = new JButton();
+	JLabel imageLabel = new JLabel();
 	boolean selected = false;
 	
-	public Contact(String nom, String prenom, String natel, String telephone,String mail,String adresse, ImageIcon photo) {
+	public Contact(String nom, String prenom, String natel, String telephone,String mail,String adresse, String photoPath) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
@@ -49,14 +33,14 @@ public class Contact implements Serializable{
 		this.telephone=telephone;
 		this.mail=mail;
 		this.adresse=adresse;
-		this.photo=photo;
-		erase.setIcon(new ImageIcon("image/icon/delete.png"));
+		this.photoPath=photoPath;
 		createButton();
 	}
 
 	private void createButton() {
 		button.setLayout(new GridLayout(0,3));
-		button.add(new JLabel(photo));
+		imageLabel.setIcon(new ImageIcon(photoPath));
+		button.add(imageLabel);
 		button.add(new JLabel(nom+" "+prenom));
 		button.setBackground(Color.WHITE);
 		button.setBorder(new LineBorder(Color.GRAY));
@@ -92,6 +76,10 @@ public class Contact implements Serializable{
 	public String getTelephone() {
 		return telephone;
 	}
+	
+	public JLabel getImageLabel() {
+		return imageLabel;
+	}
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
@@ -113,12 +101,12 @@ public class Contact implements Serializable{
 		this.adresse = adresse;
 	}
 
-	public ImageIcon getPhoto() {
-		return photo;
+	public String getPhotoPath() {
+		return photoPath;
 	}
 
-	public void setPhoto(ImageIcon photo) {
-		this.photo = photo;
+	public void setPhoto(String photoPath) {
+		this.photoPath = photoPath;
 	}
 
 	public JPanel getButton() {

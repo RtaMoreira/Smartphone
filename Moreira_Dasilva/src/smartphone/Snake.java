@@ -87,6 +87,17 @@ public class Snake extends JPanel implements ActionListener{
 		}
     }
     
+	public void restart() {
+		for (int i = 0; i <snakeSize; i++) {
+			y[i]=50;
+			x[i]=50-i;
+		}
+		
+		snakeSize=3;
+		
+		randomFood();
+    	paint();
+	}
     public void randomFood() {
         apple_x=(int)(Math.random()*pixels.length);
         apple_y=(int)(Math.random()*pixels[0].length);
@@ -129,8 +140,7 @@ public class Snake extends JPanel implements ActionListener{
 			paint();
 	        t.start();
     	}
-    	else
-    	System.exit(0);
+    
     }
     
 	@Override
@@ -189,15 +199,7 @@ class restart implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		for (int i = 0; i <snakeSize; i++) {
-			y[i]=50;
-			x[i]=50-i;
-		}
-		
-		snakeSize=3;
-		
-		randomFood();
-    	paint();
+		restart();
         t.start();
 	}
 

@@ -15,7 +15,9 @@ public class Demineur extends JPanel implements ActionListener{
 
 	int[][] cases = new int[10][10];
 	JButton[][] boutons = new JButton[cases.length][cases[0].length];
-	int nbBombes=5;
+	int nbBombes=10;
+	private ImageIcon demineurIcon = new ImageIcon("image/icon/demineur.png");
+	private ImageIcon demineurIconHover = new ImageIcon("image/icon/demineurHOVER.png");
 	
 	Demineur() {
 		bombes();
@@ -28,15 +30,16 @@ public class Demineur extends JPanel implements ActionListener{
 				add(boutons[i][j]);
 			}
 		}
-		for (int i = 0; i < cases.length; i++) {
-			for (int j = 0; j < cases[0].length; j++) {
-				System.out.print(cases[i][j]);
-			}
-			System.out.println();
-		}
 	}
 	
+	 public ImageIcon getDemineurIcon() {
+			return demineurIcon;
+	}
 
+	public ImageIcon getDemineurIconHover() {
+			return demineurIconHover;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		for (int i = 0; i < boutons.length; i++) {

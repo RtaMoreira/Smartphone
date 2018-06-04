@@ -24,9 +24,12 @@ import GUI.composants.AppGrid;
 import GUI.composants.ImagePanel;
 import GUI.composants.NorthPanel;
 import GUI.composants.SouthPanel;
+import smartphone.Camera;
 import smartphone.ContactApp;
 import smartphone.GalerieApp;
 import smartphone.GamesApp;
+import smartphone.Meteo;
+import smartphone.Settings;
 
 public class PhoneFrame extends JFrame {
 
@@ -46,6 +49,9 @@ public class PhoneFrame extends JFrame {
 	private GalerieApp galerie = new GalerieApp();
 	private ContactApp contacts = new ContactApp();
 	private GamesApp games = new GamesApp();
+	private Settings settings = new Settings();
+	private Camera camera = new Camera();
+	private Meteo meteo = new Meteo();
 	// ecran verrou
 	LockScrean lockscrean = new LockScrean();
 
@@ -57,6 +63,9 @@ public class PhoneFrame extends JFrame {
 	private JLabel galerieIcon = new JLabel(galerie.getGalerieIcon());
 	private JLabel contactIcon = new JLabel(contacts.getContactIcon());
 	private JLabel gamesIcon = new JLabel(games.getGamesIcon());
+	private JLabel settingsIcon = new JLabel(settings.getSettingsIcon());
+	private JLabel cameraIcon = new JLabel(camera.getCameraIcon());
+	private JLabel meteoIcon = new JLabel(meteo.getMeteoIcon());
 	private JLabel turnOffIcon = new JLabel(new ImageIcon("image/icon/off.png"));
 
 	public PhoneFrame() {// c'est la JFrame
@@ -95,6 +104,15 @@ public class PhoneFrame extends JFrame {
 		gamesIcon.addMouseListener(new accesApp());
 		appsPanel.addIcon(gamesIcon);
 		
+		settingsIcon.addMouseListener(new accesApp());
+		appsPanel.addIcon(settingsIcon);
+		
+		cameraIcon.addMouseListener(new accesApp());
+		appsPanel.addIcon(cameraIcon);
+		
+		meteoIcon.addMouseListener(new accesApp());
+		appsPanel.addIcon(meteoIcon);
+		
 		//Fermeture Smartphone
 		turnOffIcon.addMouseListener(new turnOff());
 		appsPanel.addIcon(turnOffIcon);
@@ -104,11 +122,17 @@ public class PhoneFrame extends JFrame {
 		this.galerie.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		this.contacts.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		this.games.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		this.settings.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		this.camera.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		this.meteo.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 
 		screen.add(wpp, "menu");// add card to card panel
 		screen.add(games, "games");
 		screen.add(galerie, "galerie");
 		screen.add(contacts, "contacts");
+		screen.add(settings, "settings");
+		screen.add(camera, "camera");
+		screen.add(meteo, "meteo");
 		
 		screen.add(lockscrean, "lockscreen");
 		lockscrean.getVerrou().addActionListener(new UnlockClick());
@@ -156,8 +180,19 @@ public class PhoneFrame extends JFrame {
 				if (app == contactIcon)
 					cardLayout.show(screen, "contacts");
 				else {
-					if (app == gamesIcon) {
+					if (app == gamesIcon) 
 						cardLayout.show(screen, "games");
+					else {
+						if(app==settingsIcon) 
+							cardLayout.show(screen, "settings");
+						else {
+							if(app==cameraIcon)
+								cardLayout.show(screen, "camera");
+							else {
+								if(app==meteoIcon)
+									cardLayout.show(screen, "meteo");
+							}
+						}
 					}
 				}
 			}
@@ -174,8 +209,19 @@ public class PhoneFrame extends JFrame {
 				if (app == contactIcon)
 					app.setIcon(contacts.getContactIconHover());
 				else {
-					if (app == gamesIcon) {
+					if (app == gamesIcon)
 						app.setIcon(games.getGamesIconHover());
+					else {
+						if(app==settingsIcon) 
+							app.setIcon(settings.getSettingsIconHover());
+						else {
+							if(app==cameraIcon)
+								app.setIcon(camera.getCameraIconHover());
+							else {
+								if(app==meteoIcon)
+									app.setIcon(meteo.getMeteoIconHover());
+							}
+						}
 					}
 				}
 			}
@@ -190,8 +236,19 @@ public class PhoneFrame extends JFrame {
 				if (app == contactIcon)
 					app.setIcon(contacts.getContactIcon());
 				else {
-					if (app == gamesIcon) {
+					if (app == gamesIcon)
 						app.setIcon(games.getGamesIcon());
+					else {
+						if(app==settingsIcon) 
+							app.setIcon(settings.getSettingsIcon());
+						else {
+							if(app==cameraIcon)
+								app.setIcon(camera.getCameraIcon());
+							else {
+								if(app==meteoIcon)
+									app.setIcon(meteo.getMeteoIcon());
+							}
+						}
 					}
 				}
 			}

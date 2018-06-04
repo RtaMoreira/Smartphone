@@ -26,8 +26,11 @@ public class GamesApp extends AppTemplate{
 	private JPanel mainPanel = new JPanel();
 	private Snake snake = new Snake();
 	private Demineur demineur= new Demineur();
+	private Pendu pendu= new Pendu();
 	
 	private JLabel snakeButton = new JLabel(snake.getSnakeIcon());
+	private JLabel demineurButton = new JLabel(demineur.getDemineurIcon());
+	private JLabel penduButton = new JLabel(pendu.getPenduIconHover());
 	
 	public ImageIcon getGamesIcon() {
 		return gamesIcon;
@@ -42,11 +45,16 @@ public class GamesApp extends AppTemplate{
 		super("Games", Color.BLUE);
 		// TODO Auto-generated constructor stub
 		snakeButton.addMouseListener(new OpenSnake());
+		demineurButton.addMouseListener(new OpenDemineur());
+		penduButton.addMouseListener(new OpenPendu());
 		mainPanel.add(snakeButton);
+		mainPanel.add(demineurButton);
+		mainPanel.add(penduButton);
 		
 		gamePanel.add(mainPanel,"main");
 		gamePanel.add(snake,"snake");
-//		gamePanel.add(demineur,"snake");
+		gamePanel.add(demineur,"demineur");
+		gamePanel.add(pendu,"pendu");
 		
 		add(gamePanel);
 		
@@ -58,6 +66,7 @@ public class GamesApp extends AppTemplate{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			snake.getTimer().stop();
+			snake.restart();
 			cardlayout.show(gamePanel, "main");
 		}
 		
@@ -79,6 +88,56 @@ public class GamesApp extends AppTemplate{
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			snakeButton.setIcon(snake.getSnakeIcon());
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class OpenDemineur implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			cardlayout.show(gamePanel, "demineur");
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			demineurButton.setIcon(demineur.getDemineurIconHover());
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			demineurButton.setIcon(demineur.getDemineurIcon());
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
+	}
+	
+	class OpenPendu implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			cardlayout.show(gamePanel, "pendu");
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			penduButton.setIcon(pendu.getPenduIconHover());
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			penduButton.setIcon(pendu.getPenduIcon());
 		}
 
 		@Override

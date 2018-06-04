@@ -12,7 +12,16 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class ContactApp extends AppTemplate{
+import GUI.composants.MonButton;
+import GUI.composants.MonField;
+import GUI.composants.MonLabel;
+import GUI.composants.Resizable;
+/**ActionListenner sur toutes les images de galerie qui
+ * retournent un URL
+ * show("new")
+ * galerie=null
+ */
+public class ContactApp extends AppTemplate implements Resizable{
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
@@ -22,9 +31,13 @@ public class ContactApp extends AppTemplate{
 	private MainContact maincontact = new MainContact();
 	private NewContact newcontact = new NewContact();
 	
+	//pour ouvrir la galerie
+	private GalerieApp galerieapp;
+	private JPanel galerie;
+	
 	//boutons pour NavigationBar
-	private JButton add = new JButton ("+");
-	private JButton delete = new JButton ("d");
+	private MonButton add = new MonButton (new ImageIcon("image/icon/Plusicon.png"),new ImageIcon("image/icon/PlusiconHOVER.png"));
+	private MonButton delete = new MonButton (new ImageIcon("image/icon/delete.png"),new ImageIcon("image/icon/deleteHOVER.png"));
 	private JPanel buttonHolder = new JPanel();
 	
 	//icones d'appli
@@ -36,6 +49,8 @@ public class ContactApp extends AppTemplate{
 	
 	public ContactApp() {
 		super("contacts", Color.GREEN);
+		maincontact.setOpaque(false);
+		newcontact.setOpaque(false);
 		
 		delete.addActionListener(new returnMain());
 		delete.addActionListener(new erase());
@@ -67,6 +82,7 @@ public class ContactApp extends AppTemplate{
 	
 	private void insertLabels() {//rajoute un panel a liste pour chaque contact trouvé
 		for (int i = 0; i < contacts.size(); i++) {
+			contacts.get(i).getImageLabel().setIcon(Resizable.resizePhotoIcon(50, new ImageIcon(contacts.get(i).getPhotoPath())));
 			maincontact.liste.add(contacts.get(i).getButton());
 		}
 	}
@@ -120,39 +136,62 @@ public class ContactApp extends AppTemplate{
 	class NewContact extends JPanel{//panel pour inserer un nouveau contact
 		
 		//display infos
-		private JLabel lnom = new JLabel("Nom: ");
-		private JLabel lprenom = new JLabel("Prenom: ");
-		private JLabel lnatel = new JLabel("Numéro natel: ");
-		private JLabel ltelephone = new JLabel("Numéro téléphone: ");
-		private JLabel lmail = new JLabel("Mail: ");
-		private JLabel ladresse = new JLabel("Adresse: ");
-		private JTextField tnom = new JTextField();
-		private JTextField tprenom = new JTextField();
-		private JTextField tnatel = new JTextField();
-		private JTextField ttelephone = new JTextField();
-		private JTextField tmail = new JTextField();
-		private JTextField tadresse = new JTextField();
+		private MonLabel lnom = new MonLabel("Nom: ");
+		private MonLabel lprenom = new MonLabel("Prenom: ");
+		private MonLabel lnatel = new MonLabel("Numéro natel: ");
+		private MonLabel ltelephone = new MonLabel("Numéro téléphone: ");
+		private MonLabel lmail = new MonLabel("Mail: ");
+		private MonLabel ladresse = new MonLabel("Adresse: ");
+		private MonField tnom = new MonField();
+		private MonField tprenom = new MonField();
+		private MonField tnatel = new MonField();
+		private MonField ttelephone = new MonField();
+		private MonField tmail = new MonField();
+		private MonField tadresse = new MonField();
 		
 		//boutons possibles pour cahque état
-		private JButton save = new JButton("enregistrer");
-		private JButton modify = new JButton("modifier");
-		private JButton update = new JButton("modifier");
+		private MonButton save = new MonButton("enregistrer");
+		private MonButton modify = new MonButton("modifier");
+		private MonButton update = new MonButton("modifier");
 		
-		//gestion des panels et espaces vides
+		//gestion des panels
 		private JPanel imagePanel = new JPanel();
 		private JPanel infoPanel = new JPanel();
-		private ImageIcon image=new ImageIcon("image/icon/backicon.png");
+		private String imagePath="image/icon/contactIcon.png";
+		
+		//Listener pour l'image
+		private MouseListener mouselistener = new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				galerieapp=new GalerieApp();
+				galerie=galerieapp.getGalerie();
+				
+				for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) {
+					galerieapp.getBoutonsIcons().get(i).addMouseListener(new getURL());
+				}
+				myPanel.add(galerie, "galerie");
+				cardlayout.show(myPanel, "galerie");
+			}
+		};
 		
 		NewContact(){
 			setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 			
 			//image de contact
-			imagePanel.setMaximumSize(new Dimension(200,200));
-			imagePanel.setMinimumSize(new Dimension(200,200));
-			imagePanel.setPreferredSize(new Dimension(200,200));
-			imagePanel.add(new JLabel(image));
-/**			ImageChoice mouselistener = new ImageChoice();
-*/			add(imagePanel);
+			imagePanel.setMaximumSize(new Dimension(480,200));
+			imagePanel.setMinimumSize(new Dimension(480,200));
+			imagePanel.setPreferredSize(new Dimension(480,200));
+			imagePanel.setBackground(Color.DARK_GRAY);
+			imagePanel.add(new JLabel(new ImageIcon(imagePath)));
+			add(imagePanel);
 			
 			//panel avec infos
 			infoPanel.setLayout(new GridLayout(7,2));
@@ -170,6 +209,9 @@ public class ContactApp extends AppTemplate{
 			infoPanel.add(tadresse);
 			
 			infoPanel.add(new JLabel());
+			infoPanel.setMaximumSize(new Dimension(400,250));
+			infoPanel.setMinimumSize(new Dimension(400,250));
+			infoPanel.setPreferredSize(new Dimension(400,250));
 			add(infoPanel);
 			
 			//listeners das boutons possibles
@@ -177,13 +219,34 @@ public class ContactApp extends AppTemplate{
 			modify.addActionListener(new showModify());
 			update.addActionListener(new addContact());
 			update.addActionListener(new erase());
-			
-			add(new JPanel());
 		}
 		
 	}
 	
-	
+	class getURL implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) {
+				if(galerieapp.getBoutonsIcons().get(i)==arg0.getSource()) {
+					newcontact.imagePath=galerieapp.getBoutonsIcons().get(i).getPathPhoto();
+					break;
+				}
+			}
+			newcontact.imagePanel.removeAll();
+			newcontact.imagePanel.add(new JLabel(Resizable.resizePhotoRatio(480, 200, new ImageIcon(newcontact.imagePath))));
+			cardlayout.show(myPanel, "new");
+		}
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+
+		
+	}
 	class showAddContact implements ActionListener{
 
 		@Override
@@ -203,9 +266,11 @@ public class ContactApp extends AppTemplate{
 			newcontact.infoPanel.add(newcontact.save);
 			
 			//ajouter le listenner a l'image
-/**			newcontact.image.addMouseListener(newcontact.mouselistener);
- * 
-*/			cardlayout.show(myPanel, "new");
+			newcontact.imagePanel.removeAll();
+			newcontact.imagePanel.add(new JLabel(new ImageIcon("image/icon/contactIcon.png")));
+			newcontact.imagePanel.addMouseListener(newcontact.mouselistener);
+			newcontact.imagePath="image/icon/contactIcon.png";
+			cardlayout.show(myPanel, "new");
 		}
 		
 	}
@@ -217,6 +282,7 @@ public class ContactApp extends AppTemplate{
 		public void actionPerformed(ActionEvent arg0) {
 			buttonHolder.removeAll();
 			buttonHolder.add(add);
+			updateUI();
 			cardlayout.show(myPanel, "main");
 		}
 		
@@ -228,7 +294,7 @@ public class ContactApp extends AppTemplate{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
-										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.image);
+										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.imagePath);
 			
 			maincontact.removeAll();
 			
@@ -257,7 +323,6 @@ public class ContactApp extends AppTemplate{
 			else
 				contacts.add(next,p1);
 			
-			System.out.println(p1.getNom()+"added");
 			p1.getButton().addMouseListener(new getInfo());
 			
 			
@@ -271,6 +336,10 @@ public class ContactApp extends AppTemplate{
 			serializeContacts();
 			maincontact.paint();
 			insertLabels();
+			
+			buttonHolder.removeAll();
+			buttonHolder.add(add);
+			updateUI();
 			cardlayout.show(myPanel, "main");
 		}
 		
@@ -291,7 +360,6 @@ public class ContactApp extends AppTemplate{
 			}
 			
 				enabled=selected;
-				System.out.println("enabled in getInfo: "+selected);
 				newcontact.tnom.setText(contacts.get(selected).getNom());
 				newcontact.tnom.setEditable(false);
 				newcontact.tprenom.setText(contacts.get(selected).getPrenom());
@@ -304,9 +372,13 @@ public class ContactApp extends AppTemplate{
 				newcontact.tmail.setEditable(false);
 				newcontact.tadresse.setText(contacts.get(selected).getAdresse());
 				newcontact.tadresse.setEditable(false);
-				newcontact.image=contacts.get(selected).photo;
-	/**			newcontact.image.removeMouseListenner(mouseListener);
-	*/			
+				newcontact.imagePath=contacts.get(selected).photoPath;
+				newcontact.imagePanel.removeAll();
+				ImageIcon image = new ImageIcon(contacts.get(selected).photoPath);
+				image=Resizable.resizePhotoRatio(480, 200, image);
+				newcontact.imagePanel.add(new JLabel(image));
+				newcontact.imagePanel.removeMouseListener(newcontact.mouselistener);
+				
 				newcontact.infoPanel.remove(newcontact.update);
 				newcontact.infoPanel.remove(newcontact.save);
 				newcontact.infoPanel.add(newcontact.modify);
@@ -355,8 +427,8 @@ public class ContactApp extends AppTemplate{
 			newcontact.ttelephone.setEditable(true);
 			newcontact.tmail.setEditable(true);
 			newcontact.tadresse.setEditable(true);
-/**			newcontact.image.addMouseListenner(newcontact.mouselistener);
-*/			newcontact.infoPanel.remove(newcontact.modify);
+			newcontact.imagePanel.addMouseListener(newcontact.mouselistener);
+			newcontact.infoPanel.remove(newcontact.modify);
 			newcontact.infoPanel.add(newcontact.update);
 			
 			buttonHolder.removeAll();
@@ -395,10 +467,8 @@ public class ContactApp extends AppTemplate{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			maincontact.liste.remove(contacts.get(enabled).getButton());
-			System.out.println(contacts.get(enabled).getNom()+"deleted from liste");
 			
 
-			System.out.println(contacts.get(enabled).getNom()+"deleted from contacts");
 			contacts.remove(enabled);
 			serializeContacts();
 			
