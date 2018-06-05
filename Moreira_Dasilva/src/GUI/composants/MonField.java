@@ -12,6 +12,7 @@ import javax.swing.*;
 public class MonField extends JPanel{
 	
 private JTextField t1 = new JTextField();
+private JPasswordField p1 = new JPasswordField();
 	
 	public MonField(){
 		add(t1);
@@ -22,6 +23,19 @@ private JTextField t1 = new JTextField();
 		setOpaque(false);
 	}
 	
+	public MonField(int i){
+		add(p1);
+		p1.setMinimumSize(new Dimension(200,30));
+		p1.setMaximumSize(new Dimension(200,30));
+		p1.setPreferredSize(new Dimension(200, 30));
+		p1.setBorder(null);
+		p1.setBackground(Color.GRAY);
+		setOpaque(false);
+	}
+	
+	public JPasswordField getField() {
+		return p1;
+	}
 	public String getText() {
 		return t1.getText();
 	}
@@ -33,5 +47,10 @@ private JTextField t1 = new JTextField();
 	public void setEditable(Boolean bol) {
 		t1.setEditable(bol);
 		t1.setBackground(Color.WHITE);
+	}
+
+	public void setFieldBackground(Color bg) {
+		t1.setBackground(bg);
+		
 	}
 }

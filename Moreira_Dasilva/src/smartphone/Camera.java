@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -25,20 +26,39 @@ public class Camera extends AppTemplate {
 
 	private ImageIcon cameraIcon = new ImageIcon("image/icon/camera.png");
 	private ImageIcon cameraIconHover = new ImageIcon("image/icon/cameraHOVER.png");
+	private ImageIcon capture = new ImageIcon("C:/Users/jcfds/Desktop/cam.png");
+	private JPanel mainPanel=new JPanel();
 	
 	Webcam webcam = Webcam.getDefault();
-	File dossier = new File ("images/image");
+	File dossier = new File ("image/image");
 	File fichier=new File(dossier, "capture.jpg");
 
 	JLabel label = new JLabel();
 	JButton button = new JButton("capture");
 	WebcamPanel cam =new WebcamPanel(webcam);
 	
+	//panel sud avec bouton et access galerie
+	private JPanel south = new JPanel(new BorderLayout());
+	
 	public Camera() {
 		super("Appareil Photo", Color.WHITE);
+		
 		cam=new WebcamPanel(webcam);
 		webcam.setViewSize(new Dimension(320,240));
-		add(cam);
+		
+		JButton button = new JButton(capture);
+		button.addActionListener(new Capture());
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		south.add(button, BorderLayout.CENTER);
+		mainPanel.setLayout(new BorderLayout());
+		
+		mainPanel.add(south, BorderLayout.AFTER_LAST_LINE);
+		south.setBackground(Color.BLACK);
+		
+		add(mainPanel);
+
 		
 		button.addActionListener(new Capture());
 		super.getNavigation().getBackButton().addActionListener(new Close());
@@ -47,8 +67,8 @@ public class Camera extends AppTemplate {
 	public void start() {
 		cam =new WebcamPanel(webcam);
 		webcam.open();
-		remove(cam);
-		add(cam);
+		mainPanel.remove(cam);
+		mainPanel.add(cam,BorderLayout.CENTER);
 	}
 	
 	public Webcam getWebcam() {
@@ -63,13 +83,11 @@ public class Camera extends AppTemplate {
 		return cameraIconHover;
 	}
 	class Capture implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				ImageIO.write(webcam.getImage(), "JPG", fichier);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

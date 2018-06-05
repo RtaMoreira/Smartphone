@@ -16,11 +16,8 @@ import GUI.composants.MonButton;
 import GUI.composants.MonField;
 import GUI.composants.MonLabel;
 import GUI.composants.Resizable;
-/**ActionListenner sur toutes les images de galerie qui
- * retournent un URL
- * show("new")
- * galerie=null
- */
+
+
 public class ContactApp extends AppTemplate implements Resizable{
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
