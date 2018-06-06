@@ -18,7 +18,8 @@ import java.util.Calendar;
 
 import javax.swing.*;
 
-public class Meteo extends AppTemplate {
+public class Meteo extends AppTemplate 
+{
 
 	private ImageIcon meteoIcon = new ImageIcon("image/icon/meteo.png");
 	private ImageIcon meteoIconHover = new ImageIcon("image/icon/meteoHOVER.png");
@@ -41,10 +42,11 @@ public class Meteo extends AppTemplate {
 	private JPanel infoPanel = new JPanel(new GridLayout(3,2));
 	private JPanel sunPanel = new JPanel(new BorderLayout());
 	
-	public Meteo() {
+	public Meteo() 
+	{
 		super("meteo", Color.WHITE);
 		
-		ok.addActionListener(new changeCity());
+		ok.addActionListener(new ChangeCity());
 		
 		status[0]=new ImageIcon("image/icon/meteo/0.png");
 		status[1]=new ImageIcon("image/icon/meteo/1.png");
@@ -81,86 +83,91 @@ public class Meteo extends AppTemplate {
 			
 	}
 	
-	public void initializeCity() {
+	public void initializeCity() 
+	{
 		getDate();
 		getCity();
 		getStatus();
 		getTemp();
 		getInfos();
-		getSun();
 	}
 
-	public void getDate() {
+	public void getDate() 
+	{
 		datePanel.removeAll();
 		Calendar cal = Calendar.getInstance();
 		datePanel.add(new JLabel(dmy.format(cal.getTime())));
 	}
 	
-	public void getCity() {
+	public void getCity() 
+	{
 		String city=infoJSON.substring((infoJSON.indexOf("name")+7),(infoJSON.indexOf("cod")-3))+", "+
 				infoJSON.substring((infoJSON.indexOf("country")+10),(infoJSON.indexOf("sunrise")-3));
 		cityPanel.removeAll();
 		cityPanel.add(new JLabel(city));
 	}
 	
-	public void getStatus() {
+	public void getStatus() 
+	{
 		String status;
 		status=infoJSON.substring((infoJSON.indexOf("icon")+7),(infoJSON.indexOf("base")-5));
 		
-		switch (status) {
-		case "01d":
-		case "01n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[0]));
-			break;
-		case "02d":
-		case "02n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[1]));
-			break;
-		case "03d":
-		case "03n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[2]));
-			break;
-		case "04d":
-		case "04n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[3]));
-			break;
-		case "09d":
-		case "09n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[4]));
-			break;
-		case "10d":
-		case "10n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[5]));
-			break;
-		case "11d":
-		case "11n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[6]));
-			break;
-		case "13d":
-		case "13n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[7]));
-			break;
-		case "50d":
-		case "50n":
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[8]));
-			break;
-		default:
-			imagePanel.removeAll();
-			imagePanel.add(new JLabel(this.status[8]));
-			break;
+		switch (status) 
+		{
+			case "01d":
+			case "01n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[0]));
+				break;
+			case "02d":
+			case "02n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[1]));
+				break;
+			case "03d":
+			case "03n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[2]));
+				break;
+			case "04d":
+			case "04n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[3]));
+				break;
+			case "09d":
+			case "09n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[4]));
+				break;
+			case "10d":
+			case "10n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[5]));
+				break;
+			case "11d":
+			case "11n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[6]));
+				break;
+			case "13d":
+			case "13n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[7]));
+				break;
+			case "50d":
+			case "50n":
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[8]));
+				break;
+			default:
+				imagePanel.removeAll();
+				imagePanel.add(new JLabel(this.status[8]));
+				break;
 		}
 	}
 	
-	public void getTemp() {
+	public void getTemp() 
+	{
 		String actual="Temperature: "+ infoJSON.substring((infoJSON.indexOf("temp")+6),(infoJSON.indexOf("pressure")-2));
 		String min="Maximum: "+ infoJSON.substring((infoJSON.indexOf("temp_min")+10),(infoJSON.indexOf("temp_max")-2));
 		String max="Minimum: "+ infoJSON.substring((infoJSON.indexOf("temp_max")+10),(infoJSON.indexOf("visibility")-3));
@@ -170,53 +177,52 @@ public class Meteo extends AppTemplate {
 		tempPanel.add(new JLabel(max));
 	}
 	
-	public void getInfos() {
+	public void getInfos() 
+	{
 		
 		String pressure = "Pression:\t"+ infoJSON.substring((infoJSON.indexOf("pressure")+10),(infoJSON.indexOf("humidity")-2));
 		String humidity = "Humidité:\t"+ infoJSON.substring((infoJSON.indexOf("humidity")+10),(infoJSON.indexOf("temp_min")-2));
-		String windSpeed = "Vitesse vent:\t"+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf("deg")-2));
-		String windDegree = "Angle du vent:\t"+ infoJSON.substring((infoJSON.indexOf("deg")+5),(infoJSON.lastIndexOf("clouds")-3));
+		String windSpeed = "Vitesse vent:\t"+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.lastIndexOf("clouds")-3));
 		String sunRise = "Lever du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunrise")+9),(infoJSON.indexOf("sunset")-2));
 		String sunSet = "Coucher du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("id")-3));
 		
 		infoPanel.add(new JLabel(pressure));
 		infoPanel.add(new JLabel(humidity));
 		infoPanel.add(new JLabel(windSpeed));
-		infoPanel.add(new JLabel(windDegree));
 		infoPanel.add(new JLabel(sunRise));
 		infoPanel.add(new JLabel(sunSet));
 
 	}
 	
-	public void getSun() {
-		
-	}
-	
-	public void getInfo(int cityCode) {
-		try {
+	public void getInfo(int cityCode) 
+	{
+		try 
+		{
 			weather = new URL("http://api.openweathermap.org/data/2.5/weather?id="+cityCode+"&units=metric&APPID=a4a10487d22d8f957424c1b2c4b645f2");
 			InputStreamReader in = new InputStreamReader(weather.openStream());
 			BufferedReader bin = new BufferedReader(in);
 	        infoJSON=bin.readLine();
-	        System.out.println(infoJSON);
 	        in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) 
+			{e.printStackTrace();}
 	}
 	
-	public ImageIcon getMeteoIcon() {
+	public ImageIcon getMeteoIcon() 
+	{
 		return meteoIcon;
 	}
 
-	public ImageIcon getMeteoIconHover() {
+	public ImageIcon getMeteoIconHover() 
+	{
 		return meteoIconHover;
 	}
 
-	class changeCity implements ActionListener{
+	class ChangeCity implements ActionListener
+	{
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			String input=search.getText().toLowerCase();
 			
 			switch (input) {

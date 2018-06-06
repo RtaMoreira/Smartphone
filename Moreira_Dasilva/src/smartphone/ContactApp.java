@@ -18,7 +18,8 @@ import GUI.composants.MonLabel;
 import GUI.composants.Resizable;
 
 
-public class ContactApp extends AppTemplate implements Resizable{
+public class ContactApp extends AppTemplate implements Resizable
+{
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
@@ -44,17 +45,18 @@ public class ContactApp extends AppTemplate implements Resizable{
 	//gerer quel contact est activé
 	private int enabled;
 	
-	public ContactApp() {
+	public ContactApp() 
+	{
 		super("contacts", Color.GREEN);
 		maincontact.setOpaque(false);
 		newcontact.setOpaque(false);
 		
-		delete.addActionListener(new returnMain());
-		delete.addActionListener(new erase());
-		add.addActionListener(new showAddContact());
+		delete.addActionListener(new ReturnMain());
+		delete.addActionListener(new Erase());
+		add.addActionListener(new ShowAddContact());
 		buttonHolder.setOpaque(false);
 		super.getNavigation().add(buttonHolder, BorderLayout.EAST);
-		super.getNavigation().getBackButton().addActionListener(new returnMain());
+		super.getNavigation().getBackButton().addActionListener(new ReturnMain());
 		buttonHolder.add(add);
 		
 		myPanel.setLayout(cardlayout);
@@ -64,27 +66,34 @@ public class ContactApp extends AppTemplate implements Resizable{
 		
 		deserializeContacts();
 		for (int i = 0; i < contacts.size(); i++) {
-			contacts.get(i).getButton().addMouseListener(new getInfo());
+			contacts.get(i).getButton().addMouseListener(new GetInfo());
 		}
 		insertLabels();
 	}
 	
-	public ImageIcon getContactIcon() {
+	public ImageIcon getContactIcon() 
+	{
 		return contactIcon;
 	}
 
-	public ImageIcon getContactIconHover() {
+	public ImageIcon getContactIconHover() 
+	{
 		return contactIconHover;
 	}
 	
-	private void insertLabels() {//rajoute un panel a liste pour chaque contact trouvé
-		for (int i = 0; i < contacts.size(); i++) {
+	private void insertLabels() 
+	//rajoute un panel a liste pour chaque contact trouvé
+	{
+		for (int i = 0; i < contacts.size(); i++) 
+		{
 			contacts.get(i).getImageLabel().setIcon(Resizable.resizePhotoIcon(50, new ImageIcon(contacts.get(i).getPhotoPath())));
 			maincontact.liste.add(contacts.get(i).getButton());
 		}
 	}
 
-	public void deserializeContacts() { //affiche tous les panels dans l'appli
+	public void deserializeContacts() 
+	//affiche tous les panels dans l'appli
+	{ 
 		try {
 			FileInputStream fichier;
 			fichier = new FileInputStream("serials/contacts.ser");
@@ -92,33 +101,39 @@ public class ContactApp extends AppTemplate implements Resizable{
 			ObjectInputStream obfichier = new ObjectInputStream(bfichier);
 			this.contacts = (ArrayList<Contact>) obfichier.readObject();
 			obfichier.close();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+		} catch (IOException | ClassNotFoundException e) 
+			{e.printStackTrace();}
+		
+		for (int i = 0; i < contacts.size(); i++) {
+			contacts.get(i).createButton();
 		}
 	}
 	
-	public void serializeContacts() {
+	public void serializeContacts() 
+	{
 		try {
 			FileOutputStream fichier;
 			fichier = new FileOutputStream("serials/contacts.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
 			oos.writeObject(contacts);
 			oos.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		} catch (IOException e1) 
+			{e1.printStackTrace();}
 	}
 	
-	class MainContact extends JPanel{//le panel d'affichage de tous les contacts
+	class MainContact extends JPanel//le panel d'affichage de tous les contacts
+	{
 		private JTextField recherche = new JTextField();
 		private JPanel liste = new JPanel();
 		private JScrollPane scroll = new JScrollPane(liste,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		MainContact(){
+		MainContact()
+		{
 			paint();
 		}
 
-		public  void paint() {
+		public  void paint() 
+		{
 			liste.setLayout(new BoxLayout(liste, BoxLayout.Y_AXIS));//boxLayout vertical a ma liste de contacts
 			liste.setBackground(Color.WHITE);			
 			
@@ -130,8 +145,8 @@ public class ContactApp extends AppTemplate implements Resizable{
 		}	
 	}
 	
-	class NewContact extends JPanel{//panel pour inserer un nouveau contact
-		
+	class NewContact extends JPanel//panel pour inserer un nouveau contact
+	{
 		//display infos
 		private MonLabel lnom = new MonLabel("Nom: ");
 		private MonLabel lprenom = new MonLabel("Prenom: ");
@@ -157,7 +172,8 @@ public class ContactApp extends AppTemplate implements Resizable{
 		private String imagePath="image/icon/contactIcon.png";
 		
 		//Listener pour l'image
-		private MouseListener mouselistener = new MouseListener() {
+		private MouseListener mouselistener = new MouseListener() 
+		{
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
@@ -167,19 +183,22 @@ public class ContactApp extends AppTemplate implements Resizable{
 			@Override
 			public void mouseEntered(MouseEvent e) {}
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) 
+			{
 				galerieapp=new GalerieApp();
 				galerie=galerieapp.getGalerie();
 				
-				for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) {
-					galerieapp.getBoutonsIcons().get(i).addMouseListener(new getURL());
+				for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) 
+				{
+					galerieapp.getBoutonsIcons().get(i).addMouseListener(new GetURL());
 				}
 				myPanel.add(galerie, "galerie");
 				cardlayout.show(myPanel, "galerie");
 			}
 		};
 		
-		NewContact(){
+		NewContact()
+		{
 			setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 			
 			//image de contact
@@ -213,18 +232,22 @@ public class ContactApp extends AppTemplate implements Resizable{
 			
 			//listeners das boutons possibles
 			save.addActionListener(new addContact());
-			modify.addActionListener(new showModify());
+			modify.addActionListener(new ShowModify());
 			update.addActionListener(new addContact());
-			update.addActionListener(new erase());
+			update.addActionListener(new Erase());
 		}
 		
 	}
 	
-	class getURL implements MouseListener{
+	class GetURL implements MouseListener
+	{
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) {
-				if(galerieapp.getBoutonsIcons().get(i)==arg0.getSource()) {
+		public void mouseClicked(MouseEvent arg0) 
+		{
+			for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) 
+			{
+				if(galerieapp.getBoutonsIcons().get(i)==arg0.getSource()) 
+				{
 					newcontact.imagePath=galerieapp.getBoutonsIcons().get(i).getPathPhoto();
 					break;
 				}
@@ -233,21 +256,17 @@ public class ContactApp extends AppTemplate implements Resizable{
 			newcontact.imagePanel.add(new JLabel(Resizable.resizePhotoRatio(480, 200, new ImageIcon(newcontact.imagePath))));
 			cardlayout.show(myPanel, "new");
 		}
-		@Override
 		public void mouseEntered(MouseEvent arg0) {}
-		@Override
 		public void mouseExited(MouseEvent arg0) {}
-		@Override
 		public void mousePressed(MouseEvent arg0) {}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {}
-
-		
+		public void mouseReleased(MouseEvent arg0) {}	
 	}
-	class showAddContact implements ActionListener{
-
+	
+	class ShowAddContact implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			newcontact.tnom.setText("");
 			newcontact.tnom.setEditable(true);
 			newcontact.tprenom.setText("");
@@ -273,23 +292,24 @@ public class ContactApp extends AppTemplate implements Resizable{
 	}
 	
 	
-	class returnMain implements ActionListener{
-
+	class ReturnMain implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			buttonHolder.removeAll();
 			buttonHolder.add(add);
 			updateUI();
 			cardlayout.show(myPanel, "main");
 		}
-		
 	}
 	
 	
-	class addContact implements ActionListener{
-
+	class addContact implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
 										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.imagePath);
 			
@@ -300,27 +320,28 @@ public class ContactApp extends AppTemplate implements Resizable{
 			int next=0;
 			boolean last=true;
 			
-			if (contacts.size()>0) {
-				for (int j = 0; j < contacts.size(); j++) {
+			if (contacts.size()>0) 
+			{
+				for (int j = 0; j < contacts.size(); j++) 
+				{
 					last=true;
-					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+" "+contacts.get(j).getPrenom())<0) {
+					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+" "+contacts.get(j).getPrenom())<0) 
+					{
 						next=j;
 						last=false;//si je trouve un négatif c'est que le nouveau contact n'est pas dernier
 						break;
 					}
 				}
 				
-				if(last) {
+				if(last)
 					contacts.add(contacts.size(),p1);
-				}
-				else {
+				else
 					contacts.add(next,p1);
-				}
 			}
 			else
 				contacts.add(next,p1);
 			
-			p1.getButton().addMouseListener(new getInfo());
+			p1.getButton().addMouseListener(new GetInfo());
 			
 			
 			newcontact.tnom.setText("");
@@ -339,23 +360,23 @@ public class ContactApp extends AppTemplate implements Resizable{
 			updateUI();
 			cardlayout.show(myPanel, "main");
 		}
-		
 	}
 	
-	class getInfo implements MouseListener{
-
+	class GetInfo implements MouseListener
+	{
 		@Override
-		public void mouseClicked(MouseEvent e) {
-			
+		public void mouseClicked(MouseEvent e) 
+		{
 			int selected=0;
 			
-			for (int i = 0; i < contacts.size(); i++) {
-				if(e.getSource()==contacts.get(i).getButton()) {
+			for (int i = 0; i < contacts.size(); i++) 
+			{
+				if(e.getSource()==contacts.get(i).getButton()) 
+				{
 					selected=i;
 					break;
 				}
 			}
-			
 				enabled=selected;
 				newcontact.tnom.setText(contacts.get(selected).getNom());
 				newcontact.tnom.setEditable(false);
@@ -369,9 +390,9 @@ public class ContactApp extends AppTemplate implements Resizable{
 				newcontact.tmail.setEditable(false);
 				newcontact.tadresse.setText(contacts.get(selected).getAdresse());
 				newcontact.tadresse.setEditable(false);
-				newcontact.imagePath=contacts.get(selected).photoPath;
+				newcontact.imagePath=contacts.get(selected).getPhotoPath();
 				newcontact.imagePanel.removeAll();
-				ImageIcon image = new ImageIcon(contacts.get(selected).photoPath);
+				ImageIcon image = new ImageIcon(contacts.get(selected).getPhotoPath());
 				image=Resizable.resizePhotoRatio(480, 200, image);
 				newcontact.imagePanel.add(new JLabel(image));
 				newcontact.imagePanel.removeMouseListener(newcontact.mouselistener);
@@ -384,13 +405,14 @@ public class ContactApp extends AppTemplate implements Resizable{
 				buttonHolder.add(delete);
 				updateUI();
 				cardlayout.show(myPanel, "new");
-			
 		}
-
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			for (int i = 0; i < contacts.size(); i++) {
-				if(e.getSource()==contacts.get(i).getButton()) {
+		public void mouseEntered(MouseEvent e) 
+		{
+			for (int i = 0; i < contacts.size(); i++) 
+			{
+				if(e.getSource()==contacts.get(i).getButton()) 
+				{
 					contacts.get(i).getButton().setBackground(Color.GRAY);
 					break;
 				}
@@ -406,18 +428,15 @@ public class ContactApp extends AppTemplate implements Resizable{
 				}
 			}
 		}
-
-		@Override
 		public void mousePressed(MouseEvent e) {}
-
-		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
 	
-	class showModify implements ActionListener{
-
+	class ShowModify implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			newcontact.tnom.setEditable(true);
 			newcontact.tprenom.setEditable(true);
 			newcontact.tnatel.setEditable(true);
@@ -430,41 +449,36 @@ public class ContactApp extends AppTemplate implements Resizable{
 			
 			buttonHolder.removeAll();
 		}
-		
 	}
 	
-	class Recherche implements KeyListener{
-
-		@Override
+	class Recherche implements KeyListener
+	{
 		public void keyPressed(KeyEvent arg0) {}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
+		public void keyReleased(KeyEvent arg0) 
+		{
 			maincontact.liste.removeAll();
 			
 			String sub = maincontact.recherche.getText().toLowerCase();
 			
-			for (int i = 0; i < contacts.size(); i++) {
-				if((contacts.get(i).getNom()+contacts.get(i).getPrenom()).toLowerCase().indexOf(sub)!=-1) {
+			for (int i = 0; i < contacts.size(); i++) 
+			{
+				if((contacts.get(i).getNom()+contacts.get(i).getPrenom()).toLowerCase().indexOf(sub)!=-1) 
+				{
 					maincontact.liste.add(contacts.get(i).getButton());
 				}
 			}
 			maincontact.scroll.repaint();
 			maincontact.recherche.requestFocus();
 		}
-
-		@Override
 		public void keyTyped(KeyEvent arg0) {}
-		
 	}
 	
-	
-	class erase implements ActionListener{
-
+	class Erase implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
 			maincontact.liste.remove(contacts.get(enabled).getButton());
-			
 
 			contacts.remove(enabled);
 			serializeContacts();
@@ -472,5 +486,4 @@ public class ContactApp extends AppTemplate implements Resizable{
 			maincontact.scroll.repaint();
 		}
 	}
-
 }

@@ -21,26 +21,27 @@ import javax.swing.JPanel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
+//Copyright (C) 2012 - 2015 Bartosz Firyn (https://github.com/sarxos)
 
-public class Camera extends AppTemplate {
-
+public class Camera extends AppTemplate 
+{
 	private ImageIcon cameraIcon = new ImageIcon("image/icon/camera.png");
 	private ImageIcon cameraIconHover = new ImageIcon("image/icon/cameraHOVER.png");
 	private ImageIcon capture = new ImageIcon("image/icon/cam.png");
 	private JPanel mainPanel=new JPanel();
 	
-	Webcam webcam = Webcam.getDefault();
-	File dossier = new File ("image/image");
-	File fichier=new File(dossier, "capture.jpg");
+	private Webcam webcam = Webcam.getDefault();
+	private File dossier = new File ("image/image");
 
-	JLabel label = new JLabel();
-	JButton button = new JButton("capture");
-	WebcamPanel cam =new WebcamPanel(webcam);
+	private JLabel label = new JLabel();
+	private JButton button = new JButton("capture");
+	private WebcamPanel cam =new WebcamPanel(webcam);
 	
 	//panel sud avec bouton et access galerie
 	private JPanel south = new JPanel(new BorderLayout());
 	
-	public Camera() {
+	public Camera() 
+	{
 		super("Appareil Photo", Color.WHITE);
 		
 		cam=new WebcamPanel(webcam);
@@ -59,47 +60,66 @@ public class Camera extends AppTemplate {
 		
 		add(mainPanel);
 
-		
-		button.addActionListener(new Capture());
 		super.getNavigation().getBackButton().addActionListener(new Close());
 	}
 	
-	public void start() {
+	public void start() 
+	{
 		cam =new WebcamPanel(webcam);
 		webcam.open();
 		mainPanel.remove(cam);
 		mainPanel.add(cam,BorderLayout.CENTER);
 	}
 	
-	public Webcam getWebcam() {
+	public Webcam getWebcam() 
+	{
 		return webcam;
 	}
 	
-	public ImageIcon getCameraIcon() {
+	public ImageIcon getCameraIcon() 
+	{
 		return cameraIcon;
 	}
 
-	public ImageIcon getCameraIconHover() {
+	public ImageIcon getCameraIconHover() 
+	{
 		return cameraIconHover;
 	}
-	class Capture implements ActionListener{
+	
+	class Capture implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			int numero=1;
+			String nom="capture"+numero+".jpg";
+			File list[]=dossier.listFiles();
+
+			for (int i = 0; i < list.length; i++) {
+				if (list[i].getName().indexOf(nom.substring(0,nom.indexOf("e")+1))!=-1) {
+					if (numero<=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf("."))))
+						numero=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf(".")))+1;
+				}
+			}
+			
+			nom="capture"+numero+".jpg";
+			File fichier=new File(dossier, nom);
+			GalerieApp app = new GalerieApp();
+			app.createAddMiniIcon(dossier+"/"+nom);
+			
 			try {
 				ImageIO.write(webcam.getImage(), "JPG", fichier);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException e) 
+				{e.printStackTrace();}
 		}
-		
 	}
 	
-	class Close implements ActionListener{
-
+	class Close implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			webcam.close();
 		}
-		
 	}
 }

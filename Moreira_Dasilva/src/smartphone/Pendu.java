@@ -25,8 +25,8 @@ import javax.swing.JTextField;
 
 import GUI.composants.MonField;
 
-public class Pendu extends JPanel{
-
+public class Pendu extends JPanel
+{
 	private ImageIcon penduIcon = new ImageIcon("image/icon/galerie.png");
 	private ImageIcon penduIconHover = new ImageIcon("image/icon/galerieHOVER.png");
 	private CardLayout cardlayout = new CardLayout();
@@ -35,7 +35,8 @@ public class Pendu extends JPanel{
 	private Gameover gameover = new Gameover();
 	private JPanel mainPanel = new JPanel(cardlayout);
 	
-	public Pendu() {
+	public Pendu() 
+	{
 		mainPanel.add(menu,"menu");
 		mainPanel.add(game,"game");
 		mainPanel.add(gameover,"gameover");
@@ -45,26 +46,30 @@ public class Pendu extends JPanel{
 		mainPanel.setOpaque(false);
 	}
 	
-	public Icon getPenduIconHover() {
+	public Icon getPenduIconHover() 
+	{
 		return penduIconHover;
 	}
 	
-	public Icon getPenduIcon() {
+	public Icon getPenduIcon() 
+	{
 		return penduIcon;
 	}
 	
-	class Menu extends JPanel{
+	class Menu extends JPanel
+	{
 		ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
 		JPanel vide = new JPanel();
 		MonField field = new MonField(2);
 		JButton ok = new JButton("ok");
 		JPanel mot = new JPanel();
 		
-		Menu(){
+		Menu()
+		{
 			setLayout(new BorderLayout());
 			setOpaque(false);
 			
-			ok.addActionListener(new startGame());
+			ok.addActionListener(new StartGame());
 			vide.setPreferredSize(new Dimension(400,150));
 			vide.setOpaque(false);
 			field.setFieldBackground(Color.GRAY);
@@ -80,14 +85,18 @@ public class Pendu extends JPanel{
 		}
 	}
 	
-	class Gameover extends JPanel{
-		Gameover(){
+	class Gameover extends JPanel
+	{
+		Gameover()
+		{
 			setOpaque(false);
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			addMouseListener(new restart());
+			addMouseListener(new Restart());
 		}
 	}
-	class Game extends JPanel{
+	
+	class Game extends JPanel
+	{
 		String mot;
 		
 		private JPanel letters = new JPanel(new FlowLayout());
@@ -99,7 +108,8 @@ public class Pendu extends JPanel{
 		private int fails=0;
 		ImageIcon[] pendu=new ImageIcon[7];
 		
-		Game(){
+		Game()
+		{
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			pendu[0]=new ImageIcon("image/icon/pendu/pendu0.png");
@@ -114,7 +124,7 @@ public class Pendu extends JPanel{
 			playerInput.setOpaque(false);
 			letters.setOpaque(false);
 			
-			tryBut.addActionListener(new letter());
+			tryBut.addActionListener(new Letter());
 			
 			input.setPreferredSize(new Dimension(20, 20));
 			input.setMaximumSize(new Dimension(20, 20));
@@ -123,7 +133,8 @@ public class Pendu extends JPanel{
 			playerInput.add(tryBut);
 		}
 		
-		public void start() {
+		public void start() 
+		{
 			removeAll();
 			letters.removeAll();
 			input.setText("");
@@ -133,7 +144,8 @@ public class Pendu extends JPanel{
 			
 			add(imageHolder);
 			
-			for (int i = 0; i < cases.length; i++) {
+			for (int i = 0; i < cases.length; i++) 
+			{
 				cases[i]=new JTextField();
 				cases[i].setEnabled(false);
 				cases[i].setPreferredSize(new Dimension(20, 20));
@@ -149,45 +161,47 @@ public class Pendu extends JPanel{
 		
 	}
 	
-	class startGame implements ActionListener{
-		
+	class StartGame implements ActionListener
+	{
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			game.mot=String.valueOf(menu.field.getField().getPassword());
 			System.out.println(menu.field.getField().getPassword());
 			game.cases=new JTextField[game.mot.length()];
 			game.start();
 			cardlayout.show(mainPanel,"game");
 		}
-		
 	}
 	
-	class restart implements MouseListener{
-
+	class Restart implements MouseListener
+	{
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent arg0) 
+		{
 			menu.field.getField().setText("");
 			cardlayout.show(mainPanel,"menu");
 			game.imageHolder.removeAll();
 		}
-		
 		public void mouseEntered(MouseEvent arg0) {}
 		public void mouseExited(MouseEvent arg0) {}
 		public void mousePressed(MouseEvent arg0) {}
 		public void mouseReleased(MouseEvent arg0) {}
-		
 	}
 	
-	class letter implements ActionListener{
-		
+	class Letter implements ActionListener
+	{
 		char letter;
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) 
+		{
 			letter = game.input.getText().charAt(0);
 			
-			if(game.mot.indexOf(letter)==-1) {
+			if(game.mot.indexOf(letter)==-1) 
+			{
 				game.fails++;
-				if(game.fails>6) {
+				if(game.fails>6) 
+				{
 					gameover.removeAll();
 					gameover.add(new JLabel("Vous avez perdu"));
 					gameover.add(new JLabel("Le mot était : "+game.mot));

@@ -18,8 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Snake extends JPanel implements ActionListener{
-
+public class Snake extends JPanel implements ActionListener
+{
 	private ImageIcon snakeIcon = new ImageIcon("image/icon/snake.png");
 	private ImageIcon snakeIconHover = new ImageIcon("image/icon/snakeHOVER.png");
 	
@@ -36,22 +36,26 @@ public class Snake extends JPanel implements ActionListener{
     /* Pressed Key. */
     private int snakeSize = 3;//commence a 3
     private Timer t = new Timer(DELAY, this);
-    int direction = 1;
-    boolean over=false;
+    private int direction = 1;
+    private boolean over=false;
     
-    public Snake() {
-    	addMouseListener(new changeDirection());
+    public Snake() 
+    {
+    	addMouseListener(new ChangeDirection());
     	setBackground(Color.GREEN);
     	setLayout(new BorderLayout());
     	setPreferredSize(new Dimension(200, 600));
     	setLayout(new GridLayout(pixels.length,pixels[0].length));
-       	for (int i = 0; i <snakeSize; i++) {
+       	for (int i = 0; i <snakeSize; i++) 
+       	{
 			y[i]=50;
 			x[i]=50-i;
 		}
        	
-       	for (int i = 0; i < pixels.length; i++) {
-			for (int j = 0; j < pixels[0].length; j++) {
+       	for (int i = 0; i < pixels.length; i++) 
+       	{
+			for (int j = 0; j < pixels[0].length; j++) 
+			{
 				pixels[i][j]=new JPanel();
 				pixels[i][j].setBackground(Color.BLACK);
 				pixels[i][j].setOpaque(true);
@@ -62,33 +66,43 @@ public class Snake extends JPanel implements ActionListener{
     	paint();	
     }
     
-    public ImageIcon getSnakeIcon() {
+    public ImageIcon getSnakeIcon() 
+    {
 		return snakeIcon;
 	}
 
-	public ImageIcon getSnakeIconHover() {
+	public ImageIcon getSnakeIconHover() 
+	{
 		return snakeIconHover;
 	}
 
-	public Timer getTimer() {
+	public Timer getTimer() 
+	{
 		return t;
 	}
-	public void paint() {
-    	for (int i = 0; i < pixels.length; i++) {
-			for (int j = 0; j < pixels[0].length; j++) {
+	
+	public void paint() 
+	{
+    	for (int i = 0; i < pixels.length; i++) 
+    	{
+			for (int j = 0; j < pixels[0].length; j++) 
+			{
 				pixels[i][j].setBackground(Color.BLACK);
 			}
 		}
     	
     	pixels[apple_x][apple_y].setBackground(Color.GREEN);
     	
-    	for (int i = 0; i < snakeSize; i++) {
+    	for (int i = 0; i < snakeSize; i++) 
+    	{
 			pixels[x[i]][y[i]].setBackground(Color.GREEN);
 		}
     }
     
-	public void restart() {
-		for (int i = 0; i <snakeSize; i++) {
+	public void restart() 
+	{
+		for (int i = 0; i <snakeSize; i++) 
+		{
 			y[i]=50;
 			x[i]=50-i;
 		}
@@ -98,21 +112,24 @@ public class Snake extends JPanel implements ActionListener{
 		randomFood();
     	paint();
 	}
-    public void randomFood() {
+    public void randomFood() 
+    {
         apple_x=(int)(Math.random()*pixels.length);
         apple_y=(int)(Math.random()*pixels[0].length);
     }
     
-    public boolean checkpixel() {
-    	//si c'es une pomme on rajoute 1 pixel de longueur
-    	if(x[0]==apple_x&&y[0]==apple_y) {
+    public boolean checkpixel() //si c'es une pomme on rajoute 1 pixel de longueur
+    {
+    	if(x[0]==apple_x&&y[0]==apple_y) 
+    	{
     		snakeSize++;
     		randomFood();
     		return false;
     	}
     	
     	//si ça dépasse le tableau GAMEOVER
-    	if(x[0]==pixels.length||x[0]<0||y[0]==pixels[0].length||y[0]<0) {
+    	if(x[0]==pixels.length||x[0]<0||y[0]==pixels[0].length||y[0]<0) 
+    	{
 			return true;
     	}
     	
@@ -125,11 +142,13 @@ public class Snake extends JPanel implements ActionListener{
     	return false;
     }
     
-    public void gameover() {
+    public void gameover() 
+    {
     	t.stop();
     	if(	JOptionPane.showConfirmDialog(null,"Voulez vous recommencer?")==JOptionPane.YES_OPTION)
     	{
-    		for (int i = 0; i <snakeSize; i++) {
+    		for (int i = 0; i <snakeSize; i++) 
+    		{
 				y[i]=50;
 				x[i]=50-i;
 			}
@@ -140,80 +159,53 @@ public class Snake extends JPanel implements ActionListener{
 			paint();
 	        t.start();
     	}
-    
     }
     
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) 
+	{
+		for (int i = (snakeSize-1); i > 0; i--) 
+		{
+			x[i]=x[i-1];
+			y[i]=y[i-1];
+		}
+		if (direction==1)
+		x[0]++;
+		if (direction==2)
+		y[0]++;
+		if (direction==3)
+		x[0]--;
+		if (direction==4)
+		y[0]--;
 		
-	for (int i = (snakeSize-1); i > 0; i--) {
-		x[i]=x[i-1];
-		y[i]=y[i-1];
-	}
-	if (direction==1)
-	x[0]++;
-	if (direction==2)
-	y[0]++;
-	if (direction==3)
-	x[0]--;
-	if (direction==4)
-	y[0]--;
-	
-	over = checkpixel();
-	if(over) 
-		gameover();
-	else
-		paint();
+		over = checkpixel();
+		if(over) 
+			gameover();
+		else
+			paint();
 	}
 	
-	class changeDirection implements MouseListener{
-
+	class ChangeDirection implements MouseListener
+	{
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			if (direction<4) {
+		public void mouseClicked(MouseEvent arg0) 
+		{
+			if (direction<4) 
+			{
 				direction++;
-			return;
+				return;
 			}
 			
-			if ( direction==4) {
+			if ( direction==4) 
+			{
 				direction=1;
 			}
 
 		}
 
-		@Override
 		public void mouseEntered(MouseEvent arg0) {}
-
-		@Override
 		public void mouseExited(MouseEvent arg0) {}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {}
-
-		@Override
 		public void mouseReleased(MouseEvent arg0) {}
-
-		
 	}
-class restart implements MouseListener{
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		restart();
-        t.start();
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {}
-	
-}
 }

@@ -12,20 +12,21 @@ import java.io.Serializable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-public class Contact implements Serializable{
-
-	String nom;
-	String prenom;
-	String natel;
-	String telephone;
-	String mail;
-	String adresse;
-	String photoPath;
-	JPanel button=new JPanel();
-	JLabel imageLabel = new JLabel();
+public class Contact implements Serializable
+{
+	private String nom;
+	private String prenom;
+	private String natel;
+	private String telephone;
+	private String mail;
+	private String adresse;
+	private String photoPath;
+	private transient JPanel button;
+	private JLabel imageLabel = new JLabel();
 	boolean selected = false;
 	
-	public Contact(String nom, String prenom, String natel, String telephone,String mail,String adresse, String photoPath) {
+	public Contact(String nom, String prenom, String natel, String telephone,String mail,String adresse, String photoPath) 
+	{
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
@@ -37,7 +38,9 @@ public class Contact implements Serializable{
 		createButton();
 	}
 
-	private void createButton() {
+	public void createButton() 
+	{
+		button=new JPanel();
 		button.setLayout(new GridLayout(0,3));
 		imageLabel.setIcon(new ImageIcon(photoPath));
 		button.add(imageLabel);
@@ -49,72 +52,49 @@ public class Contact implements Serializable{
 		button.setMaximumSize(new Dimension(485, 55));
 	}
 
-	public String getNom() {
+	public String getNom() 
+	{
 		return nom;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getPrenom() {
+	public String getPrenom() 
+	{
 		return prenom;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
-
-	public String getNatel() {
+	public String getNatel() 
+	{
 		return natel;
 	}
 
-	public void setNatel(String natel) {
-		this.natel = natel;
-	}
-
-	public String getTelephone() {
+	public String getTelephone() 
+	{
 		return telephone;
 	}
 	
-	public JLabel getImageLabel() {
+	public JLabel getImageLabel() 
+	{
 		return imageLabel;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public String getMail() {
+	public String getMail() 
+	{
 		return mail;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	public String getAdresse() {
+	public String getAdresse() 
+	{
 		return adresse;
 	}
 
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
-	}
-
-	public String getPhotoPath() {
+	public String getPhotoPath() 
+	{
 		return photoPath;
 	}
 
-	public void setPhoto(String photoPath) {
-		this.photoPath = photoPath;
-	}
-
-	public JPanel getButton() {
+	public JPanel getButton() 
+	{
 		return button;
-	}
-
-	public void setButton(JPanel button) {
-		this.button = button;
 	}
 
 	

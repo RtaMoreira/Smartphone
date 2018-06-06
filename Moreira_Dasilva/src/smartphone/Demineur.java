@@ -11,20 +11,24 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class Demineur extends JPanel implements ActionListener{
+public class Demineur extends JPanel implements ActionListener
+{
 
-	int[][] cases = new int[10][10];
-	JButton[][] boutons = new JButton[cases.length][cases[0].length];
-	int nbBombes=10;
+	private int[][] cases = new int[10][10];
+	private JButton[][] boutons = new JButton[cases.length][cases[0].length];
+	private int nbBombes=10;
 	private ImageIcon demineurIcon = new ImageIcon("image/icon/demineur.png");
 	private ImageIcon demineurIconHover = new ImageIcon("image/icon/demineurHOVER.png");
 	
-	Demineur() {
+	Demineur() 
+	{
 		bombes();
 		numeros();
 		setLayout(new GridLayout(cases.length,cases[0].length));
-		for (int i = 0; i < boutons.length; i++) {
-			for (int j = 0; j < boutons[0].length; j++) {
+		for (int i = 0; i < boutons.length; i++) 
+		{
+			for (int j = 0; j < boutons[0].length; j++) 
+			{
 				boutons[i][j]=new JButton();
 				boutons[i][j].addActionListener(this);
 				add(boutons[i][j]);
@@ -32,19 +36,25 @@ public class Demineur extends JPanel implements ActionListener{
 		}
 	}
 	
-	 public ImageIcon getDemineurIcon() {
+	 public ImageIcon getDemineurIcon() 
+	 {
 			return demineurIcon;
-	}
+	 }
 
-	public ImageIcon getDemineurIconHover() {
+	public ImageIcon getDemineurIconHover() 
+	{
 			return demineurIconHover;
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		for (int i = 0; i < boutons.length; i++) {
-			for (int j = 0; j < boutons[0].length; j++) {
-				if (arg0.getSource()==boutons[i][j]) {
+	public void actionPerformed(ActionEvent arg0) 
+	{
+		for (int i = 0; i < boutons.length; i++) 
+		{
+			for (int j = 0; j < boutons[0].length; j++) 
+			{
+				if (arg0.getSource()==boutons[i][j]) 
+				{
 					boutons[i][j].setEnabled(false);
 					if(cases[i][j]>0)
 						boutons[i][j].setText(String.valueOf(cases[i][j]));
@@ -57,7 +67,8 @@ public class Demineur extends JPanel implements ActionListener{
 		}
 	}
 	
-	private void bombes() {
+	private void bombes() 
+	{
 		for (int i = 0; i<nbBombes; i++)
 		{
 			//tirage aléatoire d'une ligne et d'une colonne pour mettre les bombes
@@ -74,16 +85,22 @@ public class Demineur extends JPanel implements ActionListener{
 		}
 	}
 	
-	private void numeros() {
-		for (int i = 0; i < cases.length; i++) {
-			for (int j = 0; j < cases[0].length; j++) {
-				if(cases[i][j]==9) {//quand on trouve une bombe
-					for (int k = i-1; k <=(i+1); k++) {//on va regarder tout le tableau de 3 sur 3 autour
-						for (int l = j-1; l<=(j+1); l++) {
-							if(k>= 0 && l>=0 && k<cases.length && l<cases[i].length) {//si  sa depasse pas le tableau
-								if(cases[k][l] != 9) {//si c'est pas la bombe
+	private void numeros() 
+	{
+		for (int i = 0; i < cases.length; i++) 
+		{
+			for (int j = 0; j < cases[0].length; j++) 
+			{
+				if(cases[i][j]==9) //quand on trouve une bombe
+				{
+					for (int k = i-1; k <=(i+1); k++) //on va regarder tout le tableau de 3 sur 3 autour
+					{
+						for (int l = j-1; l<=(j+1); l++) 
+						{
+							if(k>= 0 && l>=0 && k<cases.length && l<cases[i].length) //si  sa depasse pas le tableau
+							{
+								if(cases[k][l] != 9) //si c'est pas la bombe
 									cases[k][l]++;//on ajoute un 
-								}
 							}
 						}
 					}
@@ -91,8 +108,4 @@ public class Demineur extends JPanel implements ActionListener{
 			}	
 		}	
 	}
-
-	
-	
-	
 }
