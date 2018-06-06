@@ -5,7 +5,7 @@
 */
 package GUI;
 public class MainClass {
-
+	
 	public static void main(String[] args) {
 		PhoneFrame phone = new PhoneFrame ();
 	}

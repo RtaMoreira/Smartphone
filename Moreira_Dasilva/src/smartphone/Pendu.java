@@ -20,12 +20,10 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import GUI.composants.MonField;
-import GUI.composants.MonLabel;
 
 public class Pendu extends JPanel{
 
@@ -56,7 +54,7 @@ public class Pendu extends JPanel{
 	}
 	
 	class Menu extends JPanel{
-		ImageIcon logo = new ImageIcon("C:/Users/jcfds/Desktop/p.png");
+		ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
 		JPanel vide = new JPanel();
 		MonField field = new MonField(2);
 		JButton ok = new JButton("ok");
@@ -104,13 +102,13 @@ public class Pendu extends JPanel{
 		Game(){
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			pendu[0]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu0.png");
-			pendu[1]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu1.png");
-			pendu[2]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu2.png");
-			pendu[3]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu3.png");
-			pendu[4]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu4.png");
-			pendu[5]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu5.png");
-			pendu[6]=new ImageIcon("F:/WorkspaceFiles/pendu/pendu6.png");
+			pendu[0]=new ImageIcon("image/icon/pendu/pendu0.png");
+			pendu[1]=new ImageIcon("image/icon/pendu/pendu1.png");
+			pendu[2]=new ImageIcon("image/icon/pendu/pendu2.png");
+			pendu[3]=new ImageIcon("image/icon/pendu/pendu3.png");
+			pendu[4]=new ImageIcon("image/icon/pendu/pendu4.png");
+			pendu[5]=new ImageIcon("image/icon/pendu/pendu5.png");
+			pendu[6]=new ImageIcon("image/icon/pendu/pendu6.png");
 			setOpaque(false);
 			imageHolder.setOpaque(false);
 			playerInput.setOpaque(false);

@@ -26,7 +26,7 @@ public class Camera extends AppTemplate {
 
 	private ImageIcon cameraIcon = new ImageIcon("image/icon/camera.png");
 	private ImageIcon cameraIconHover = new ImageIcon("image/icon/cameraHOVER.png");
-	private ImageIcon capture = new ImageIcon("C:/Users/jcfds/Desktop/cam.png");
+	private ImageIcon capture = new ImageIcon("image/icon/cam.png");
 	private JPanel mainPanel=new JPanel();
 	
 	Webcam webcam = Webcam.getDefault();
