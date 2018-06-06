@@ -14,17 +14,25 @@ public class Settings extends AppTemplate {
 
 	private ImageIcon settingsIcon = new ImageIcon("image/icon/reglage.png");
 	private ImageIcon settingsIconHover = new ImageIcon("image/icon/reglageHOVER.png");
+//
+//	//Panel fond d'écran
+//	private JPanel fondEcran = new 
 	
-	public ImageIcon getSettingsIcon() {
+	public Settings() 
+	{
+		super("Parametres", Color.WHITE);
+		
+	}
+	
+	
+	public ImageIcon getSettingsIcon() 
+	{
 		return settingsIcon;
 	}
 
-	public ImageIcon getSettingsIconHover() {
+	public ImageIcon getSettingsIconHover() 
+	{
 		return settingsIconHover;
-	}
-
-	public Settings() {
-		super("Parametres", Color.WHITE);
 	}
 
 }

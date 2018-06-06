@@ -6,16 +6,7 @@
 
 package GUI.composants;
 
-
-
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /* 
  * Classe : IMAGE 
@@ -26,33 +17,20 @@ import javax.swing.JPanel;
  */
 public class Photo extends File{
 	private String nom;
-	
-	private int width;
-	private int height;
 	private String location;
-	private JButton bouton;
 	
 	
 	/**
 	 * Constructeur Image
-	 * @param ID
 	 * @param nom
 	 */
 	
-	public Photo(String nom){
+	public Photo(String nom)
+	{
 		super("image/image/"+nom);
 		this.nom = nom;
 		this.location = "image/image/"+nom;
 	
-		BufferedImage bimg;
-			try {
-				bimg = ImageIO.read(this);
-				this.height = bimg.getHeight();
-				this.width = bimg.getWidth();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 	}
 	
 	
@@ -65,21 +43,6 @@ public class Photo extends File{
 		this.nom = nom;
 	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
 
 	public String getLocation() {
 		return location;

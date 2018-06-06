@@ -31,6 +31,7 @@ import smartphone.ContactApp;
 import smartphone.GalerieApp;
 import smartphone.GamesApp;
 import smartphone.Meteo;
+import smartphone.NotesApp;
 import smartphone.Settings;
 
 public class PhoneFrame extends JFrame {
@@ -54,6 +55,7 @@ public class PhoneFrame extends JFrame {
 	private Settings settings = new Settings();
 	private Camera camera = new Camera();
 	private Meteo meteo = new Meteo();
+	private NotesApp notes = new NotesApp();
 	// ecran verrou
 	LockScrean lockscrean = new LockScrean();
 
@@ -68,6 +70,7 @@ public class PhoneFrame extends JFrame {
 	private JLabel settingsIcon = new JLabel(settings.getSettingsIcon());
 	private JLabel cameraIcon = new JLabel(camera.getCameraIcon());
 	private JLabel meteoIcon = new JLabel(meteo.getMeteoIcon());
+	private JLabel notesIcon = new JLabel(notes.getNotesIcon());
 	private JLabel turnOffIcon = new JLabel(new ImageIcon("image/icon/off.png"));
 
 	public PhoneFrame() {// c'est la JFrame
@@ -116,6 +119,9 @@ public class PhoneFrame extends JFrame {
 		meteoIcon.addMouseListener(new accesApp());
 		appsPanel.addIcon(meteoIcon);
 		
+		notesIcon.addMouseListener(new accesApp());
+		appsPanel.addIcon(notesIcon);
+		
 		//Fermeture Smartphone
 		turnOffIcon.addMouseListener(new turnOff());
 		appsPanel.addIcon(turnOffIcon);
@@ -128,7 +134,8 @@ public class PhoneFrame extends JFrame {
 		this.settings.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		this.camera.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		this.meteo.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-
+		this.notes.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		
 		screen.add(wpp, "menu");// add card to card panel
 		screen.add(games, "games");
 		screen.add(galerie, "galerie");
@@ -136,6 +143,7 @@ public class PhoneFrame extends JFrame {
 		screen.add(settings, "settings");
 		screen.add(camera, "camera");
 		screen.add(meteo, "meteo");
+		screen.add(notes, "notes");
 		
 		screen.add(lockscrean, "lockscreen");
 		lockscrean.getVerrou().addActionListener(new UnlockClick());
@@ -196,6 +204,10 @@ public class PhoneFrame extends JFrame {
 							else {
 								if(app==meteoIcon)
 									cardLayout.show(screen, "meteo");
+								else {
+									if(app==notesIcon)
+										cardLayout.show(screen, "notes");
+								}
 							}
 						}
 					}
@@ -225,6 +237,10 @@ public class PhoneFrame extends JFrame {
 							else {
 								if(app==meteoIcon)
 									app.setIcon(meteo.getMeteoIconHover());
+								else {
+									if(app==notesIcon)
+										app.setIcon(notes.getNotesIconHover());
+								}
 							}
 						}
 					}
@@ -252,6 +268,10 @@ public class PhoneFrame extends JFrame {
 							else {
 								if(app==meteoIcon)
 									app.setIcon(meteo.getMeteoIcon());
+								else {
+									if(app==notesIcon)
+										app.setIcon(notes.getNotesIcon());
+								}
 							}
 						}
 					}

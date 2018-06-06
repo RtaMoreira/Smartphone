@@ -9,28 +9,20 @@ package smartphone;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Savepoint;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.awt.Image;
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,7 +31,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.composants.MiniPhoto;
@@ -54,7 +45,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 	private File dossier = new File("image\\image");
 	
-//	private ArrayList<Photo> listePhotos = new ArrayList<>();
 	private ArrayList<MiniPhoto> BoutonsIcons = new ArrayList<>();
 	private MiniPhoto photoTemp; //photo cliquée gardée en mémoire
 	private JFileChooser chooser = new JFileChooser();
@@ -68,17 +58,15 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
 	private JPanel galerie = new JPanel(new FlowLayout());
 	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
-	private ShowPanel apercu = new ShowPanel();
+	private ShowPanel apercu = new ShowPanel(this);
 
 	public GalerieApp() 
 	{
 		super("Galerie Photo", Color.CYAN);
 
-//		listePhotos = recupImages();
-//		creationGalerie(listePhotos);
+
 		creationGalerie(recupImages());
-//		showGalery(listePhotos);
-		showGalery(BoutonsIcons);
+		refreshGalerie();
 		
 		super.getNavigation().getBackButton().addActionListener(new resetGalerie());
 
@@ -109,113 +97,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 	// *******Autres classes*******
 
-	public class ShowPanel extends JPanel {
-
-		private JLabel delete = new JLabel(new ImageIcon("image/icon/delete.png"));
-		private JLabel quit = new JLabel(new ImageIcon("image/icon/crossBL.png"));
-
-		public ShowPanel() {
-			super();
-			this.setLayout(new BorderLayout());
-			this.setBackground(new Color(000, 000, 000, 180));
-
-			// Création partie gestion (supprimer, quitter aperçu)
-			JPanel gestion = new JPanel(new FlowLayout(FlowLayout.CENTER, 170, 5));
-			gestion.setBackground(Color.CYAN);
-
-			delete.addMouseListener(new Options());
-			quit.addMouseListener(new Options());
-
-			// Panel qui contient la croix pour quitter aperçu
-			JPanel quitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-			quitPanel.setOpaque(false);
-			quitPanel.add(quit);
-
-			gestion.add(delete);
-
-			add(quitPanel, BorderLayout.NORTH);
-			add(gestion, BorderLayout.SOUTH);
-		}
-
-		class Options implements MouseListener {
-
-			public void mouseClicked(MouseEvent e) {
-				JLabel event = (JLabel) e.getSource();
-
-				if (event == getDelete()) 
-				{
-					try {
-						
-						Files.delete((Paths.get(photoTemp.getPathPhoto()))); //supprime fichier
-					
-						File recupNom = new File(photoTemp.getPathPhoto()); //supprime de ArrayListe Liste
-						for (int i = 0; i < BoutonsIcons.size(); i++) 
-						{
-
-							if(recupNom.getName().equals(BoutonsIcons.get(i).getNomPhoto()) ) {
-								System.out.println("SUPPRRESSSOOOOON SA MERE");
-								galerie.remove(BoutonsIcons.get(i));
-								BoutonsIcons.remove(i);	
-								// reset le ShowPanel "aperçu"
-								getApercu().remove(2);
-								cardLayout.show(mainPanel, "galerie");
-							}
-						}
-						
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.getMessage();
-						}
-				} else if (event == getQuit()) 
-				{
-					refreshGalerie();
-					
-					// reset le reste du ShowPanel "aperçu" si on était sur aperçu
-					getApercu().remove(2);
-				}
-
-			}
-
-			public void mouseEntered(MouseEvent e) {
-				JLabel event = (JLabel) e.getSource();
-				if (event == getDelete())
-					getDelete().setIcon(new ImageIcon("image/icon/deleteHOVER.png"));
-			}
-
-			public void mouseExited(MouseEvent e) {
-				JLabel event = (JLabel) e.getSource();
-				if (event == getDelete())
-					getDelete().setIcon(new ImageIcon("image/icon/delete.png"));
-
-			}
-
-			public void mousePressed(MouseEvent e) {
-			}
-
-			public void mouseReleased(MouseEvent e) {
-			}
-		}
-
-		public JLabel getDelete() {
-			return delete;
-		}
-
-		public void setDelete(JLabel delete) {
-			this.delete = delete;
-		}
-
-		public JLabel getQuit() {
-			return quit;
-		}
-
-		public void setQuit(JLabel quit) {
-			this.quit = quit;
-		}
-
-	}
+//SHOWPANEL
 	// FIN autres classes
 
 	// *******Méthodes********
+	
 	/**
 	 * Methode qui attribue une dimension à la galerie 
 	 * Utilisée à chaque affichage de galerie
@@ -244,12 +130,13 @@ public class GalerieApp extends AppTemplate implements Resizable {
 						nbLignes += 1;
 					}
 					
-				//Calcule de la hauteur selon taille icons (setter à 120)
-				int hauteur = nbLignes*(120+20);
+				//Calcule de la hauteur selon taille icons (setter à 135)
+				int hauteur = nbLignes*(135+7);
 				
 			return hauteur;
 			}
 
+	
 	public ArrayList<Photo> recupImages() {
 		ArrayList<Photo> liste = new ArrayList<Photo>();
 		Photo image;
@@ -262,40 +149,18 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		return liste;
 
 	}
-	//Modifier en "GénèreGalerie"
-	//pour le refresh faire autre méthodes qui travaille avec arraylist
-//	public void showGalery(ArrayList<Photo> photos) {
-//		// Supprime si des photos étaient déjà dans galerie avant
-//		galerie.removeAll();
-//
-//		// Créations des miniPhotos à partir du ArrayList passé en paramètre
-//		for (int i = 0; i < photos.size(); i++) {
-//
-//			// Affichage des images taille icon
-//			ImageIcon imageOriginale = new ImageIcon(listePhotos.get(i).getLocation());
-//
-//			ImageIcon imageIcon = Resizable.resizePhotoIcon(120, imageOriginale);
-//			// création de la MiniPhoto (en JButton)
-//			MiniPhoto miniBouton = new MiniPhoto(imageIcon, listePhotos.get(i).getPath());
-//			BoutonsIcons.add(miniBouton);
-//			// //ActionListener sur les icones
-//			miniBouton.addActionListener(new ShowImage());
-//			galerie.add(miniBouton);
-//
-//		}
-//		System.out.println("SHOW GALERY FINI");
-//	}
+
 	public void showGalery(ArrayList<MiniPhoto> icons) {
 		// Supprime si des photos étaient déjà dans galerie avant
 		galerie.removeAll();
 
-		// Créations des miniPhotos à partir du ArrayList passé en paramètre
+		// Créations des miniPhotos à partir du ArrayList
 		for (int i = 0; i < icons.size(); i++) 
 		{
 			galerie.add(icons.get(i));
-
 		}
 	}
+	
 	/**
 	 * Selon photos récupérées (ArrayList)
 	 * Crée des MiniPhoto qu'on ajoute à ArrayList
@@ -307,19 +172,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 		// Créations des miniPhotos à partir du ArrayList passé en paramètre
 		for (int i = 0; i < photos.size(); i++) {
-
-			// Affichage des images taille icon
-			ImageIcon imageOriginale = new ImageIcon(photos.get(i).getLocation());
-
-			ImageIcon imageIcon = Resizable.resizePhotoIcon(120, imageOriginale);
-			// création de la MiniPhoto (en JButton)
-			MiniPhoto miniBouton = new MiniPhoto(imageIcon, photos.get(i).getPath());
-
-			// //ActionListener sur les icones
-			miniBouton.addActionListener(new ShowImage());
-			BoutonsIcons.add(miniBouton);
-//			galerie.add(miniBouton);
-
+			
+			String path = photos.get(i).getLocation();
+			createAddMiniIcon(path);
 		}
 	}
 
@@ -346,9 +201,37 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	{
 		galerie.setPreferredSize(setDimension(480));
 		showGalery(BoutonsIcons);
-		//retour à la galerie principale
-		cardLayout.first(getMainPanel());
 
+	}
+	
+	
+	/**
+	 * Contrôle des images ajoutées 
+	 * uniquement accepté : JPEG, JPG, PNG
+	 * 
+	 * @author Rita Moreira
+	 *@return boolean (true = extension valide)
+	 */
+	private boolean checkExtension(File fichier) {
+		String ext = getFileExtension(fichier);
+		if(ext.toLowerCase().equals("jpeg")|| ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("png")) {
+			return true;
+		}else 
+			return false;
+	}
+	
+	/**
+	 * Création MiniIcon et ajout à ArrayListe BoutonIcon
+	 * @author Rita Moreira
+	 *
+	 */
+	public void createAddMiniIcon(String path) 
+	{
+		ImageIcon creationIcon = Resizable.resizePhotoIcon(135, new ImageIcon(path)); //crée icon
+		MiniPhoto icon = new MiniPhoto(creationIcon, path);
+		
+		icon.addActionListener(new ShowImage()); //ajoute action
+		BoutonsIcons.add(icon);	//ajoute au tableau d'icons
 	}
 
 	// *******ActionListener & MouseListeners ********
@@ -366,86 +249,158 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			ImageIcon imageOriginal = new ImageIcon(photoTemp.getPathPhoto()); 
 
 			ImageIcon photoChoisie = Resizable.resizePhotoRatio(480, 600, imageOriginal);
-
+			
 			JLabel photoZoom = new JLabel(photoChoisie);
 
-			apercu.add(photoZoom);
-			// apercu.add(app);
+			photoZoom.addMouseListener(new NextImage());
+			getApercu().setBackground(Color.BLACK);
+			getApercu().add(photoZoom);
+			
+
 			cardLayout.show(mainPanel, "aperçu");
 
+		}
+		
+		class NextImage implements MouseListener
+		{
+
+			@Override
+			public void mouseClicked(MouseEvent e) 
+			{
+				
+				JLabel nextPhotoGrd = null;
+
+				int j;
+				for (j = 0; j < getBoutonsIcons().size(); j++) 
+				{
+					if(photoTemp.getNomPhoto().equals(getBoutonsIcons().get(j).getNomPhoto())) 
+					{
+						if(j != getBoutonsIcons().size()-1) 
+						{
+							photoTemp=getBoutonsIcons().get(j+1);
+						}else{
+							photoTemp=getBoutonsIcons().get(0);	//recommence à zero quand dernière image
+						}
+						break;
+					}
+
+				}
+				ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin selon positions dans icons
+				
+				nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Création image taille grande
+				nextPhotoGrd = new JLabel(nextPhoto);
+				nextPhotoGrd.setOpaque(false);
+				
+				getApercu().remove(2);
+				getApercu().add(nextPhotoGrd);
+				nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
+				
+			}
+			public void mouseEntered(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseReleased(MouseEvent e) {}
+			
 		}
 
 	}
 
-	class AddImage implements MouseListener {
+	class AddImage implements MouseListener 
+	{
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseClicked(MouseEvent e) 
+		{
 
-			// filtre
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif", "jpeg",
-					"png", "Images");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "jpeg","png", "Images");
 
-			chooser.setFileFilter(filter); // affiche que les fichiers
-			chooser.setMultiSelectionEnabled(true); // Choix multipple
+			chooser.setFileFilter(filter);
+			chooser.setMultiSelectionEnabled(true); // Choix multiple accepté
 
 			int reponse = chooser.showOpenDialog(null);
 
-			if (reponse == chooser.APPROVE_OPTION) {
+			if (reponse == chooser.APPROVE_OPTION) 
+			{
 
 				File[] fs = chooser.getSelectedFiles();
 				String location = getDossier() + "\\";
-
-				for (int i = 0; i < fs.length; i++) {
+				int cptExistantImage=0;
+				MiniPhoto icon;
+				
+				for (int i = 0; i < fs.length; i++) 
+				{
 					String chemin = location + fs[i].getName();
-					File destination = new File(chemin); 		//création fichier à la destination
-					MiniPhoto icon;
+					File destination;
+					
+					Path source = fs[i].toPath();
 
-					try {
-						Files.copy(fs[i].toPath(), destination.toPath()); //copie fichier sélectionner à la dest.
-						
-						ImageIcon creationIcon = Resizable.resizePhotoIcon(120, new ImageIcon(chemin)); //Crée icon
-						icon = new MiniPhoto(creationIcon, chemin);
-						
-						icon.addActionListener(new ShowImage()); //ajoute action
-						BoutonsIcons.add(icon);	//ajoute au tableau d'icons
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					if(checkExtension(fs[i])== true) //CONTROLE: extension (ajout uniquement si ok)
+					{
+						String nomFChoisi  = fs[i].getName().substring(0, fs[i].getName().lastIndexOf("."));
+
+						for (int j = 0; j < getBoutonsIcons().size(); j++) //vérifie si fichier déjà présent
+						{	
+							String nomFExistant = getBoutonsIcons().get(j).getNomPhoto();
+							nomFExistant = nomFExistant.substring(0,nomFExistant.lastIndexOf("."));
+							if(nomFChoisi.equals(nomFExistant)== true ||nomFChoisi.compareTo(nomFExistant)==-3) 
+							{
+								cptExistantImage++;	//compte nb de fois qu'il est déjà présent
+							}
+							
+							int cpt=0;
+						}
+								try 
+								{
+									if(cptExistantImage>0) 
+									{
+										String recupNom = fs[i].getName().substring(0, fs[i].getName().lastIndexOf("."));
+										String recupExt = getFileExtension(fs[i]);
+										destination= new File(location+recupNom+"("+cptExistantImage+")."+recupExt); //création fichier à doublon
+									}else{
+										destination= new File(chemin); 		//création fichier normal
+									}
+									Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
+									createAddMiniIcon(chemin);
+									
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+								break;
+							
 				}
+			}
 				refreshGalerie();
 				cardLayout.first(getMainPanel());
 			}
-			if (reponse == chooser.CANCEL_OPTION) {
+			if (reponse == chooser.CANCEL_OPTION) 
+			{
 				chooser.cancelSelection();
 				return;
 			}
 			return;
 		}
 
-		@Override
-		public void mouseEntered(MouseEvent e) {
+		public void mouseEntered(MouseEvent e) 
+		{
 			getAjout().setIcon(new ImageIcon("image/icon/PlusiconHOVER.png"));
 		}
 
-		@Override
-		public void mouseExited(MouseEvent e) {
+		public void mouseExited(MouseEvent e) 
+		{
 			getAjout().setIcon(new ImageIcon("image/icon/Plusicon.png"));
-			}
+		}
 
-		@Override
 		public void mousePressed(MouseEvent e) {}
-
-		@Override
 		public void mouseReleased(MouseEvent e) {}
-
 	}
 
-	class resetGalerie implements ActionListener {
-
+	class resetGalerie implements ActionListener 
+	{
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (apercu.isShowing()) {
+		public void actionPerformed(ActionEvent e) 
+		{
+			if (apercu.isShowing()) 
+			{
 				getApercu().remove(2);
 			}
 			cardLayout.first(getMainPanel());
@@ -453,75 +408,58 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 
 	// ****** Getter *******
-	public ImageIcon getGalerieIcon() {
+	public ImageIcon getGalerieIcon() 
+	{
 		return galerieIcon;
 	}
 
-	public ImageIcon getGalerieIconHover() {
+	public ImageIcon getGalerieIconHover() 
+	{
 		return galerieIconHover;
 	}
 
-	public JPanel getMainPanel() {
+	public JPanel getMainPanel() 
+	{
 		return mainPanel;
 	}
 
-	public void setMainPanel(JPanel mainPanel) {
-		this.mainPanel = mainPanel;
-	}
-
-	public JPanel getGalerie() {
+	public JPanel getGalerie() 
+	{
 		return galerie;
 	}
 
-	public void setGalerie(JPanel galerie) {
-		this.galerie = galerie;
-	}
-
-	public ShowPanel getApercu() {
+	public ShowPanel getApercu() 
+	{
 		return apercu;
 	}
 
-	public void setApercu(ShowPanel apercu) {
-		this.apercu = apercu;
-	}
-
-	public JLabel getAjout() {
+	public JLabel getAjout() 
+	{
 		return ajout;
 	}
 
-	public void setAjout(JLabel ajout) {
-		this.ajout = ajout;
-	}
-
-	public JPanel getMainGalerie() {
+	public JPanel getMainGalerie() 
+	{
 		return mainGalerie;
 	}
 
-	public void setMainGalerie(JPanel mainGalerie) {
-		this.mainGalerie = mainGalerie;
-	}
-
-	public File getDossier() {
+	public File getDossier() 
+	{
 		return dossier;
 	}
 
-	public void setDossier(File dossier) {
-		this.dossier = dossier;
-	}
-//	public ArrayList<Photo> getListePhotos() {
-//		return listePhotos;
-//	}
-//	public void setListePhotos(ArrayList<Photo> listePhotos) {
-//		this.listePhotos = listePhotos;
-//	}
-	
-	public ArrayList<MiniPhoto> getBoutonsIcons() {
+	public ArrayList<MiniPhoto> getBoutonsIcons() 
+	{
 		return BoutonsIcons;
 	}
-	public void setBoutonsIcons(ArrayList<MiniPhoto> boutonsIcons) {
-		BoutonsIcons = boutonsIcons;
-	}
-	
-	
 
+	public MiniPhoto getPhotoTemp() 
+	{
+		return photoTemp;
+	}
+
+	public CardLayout getCardLayout() 
+	{
+		return cardLayout;
+	}
 }

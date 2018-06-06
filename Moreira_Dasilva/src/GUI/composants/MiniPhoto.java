@@ -6,6 +6,8 @@
 
 package GUI.composants;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 
@@ -19,6 +21,8 @@ public class MiniPhoto extends JButton {
 	
 	public MiniPhoto(ImageIcon photoRedim, String pathPhoto) {
 		super(photoRedim);
+		Dimension icon = new Dimension(135, 135);
+		this.setPreferredSize(icon);
 		this.setIcon(photoRedim);
 		this.pathPhoto = pathPhoto;
 		this.photoRedimensionne = photoRedim;
@@ -31,7 +35,6 @@ public class MiniPhoto extends JButton {
 	
 	public String recupNom(String path) {
 		File f = new File(path);
-		System.out.println(f.getName());
 		return f.getName();
 	}
 
