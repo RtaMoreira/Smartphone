@@ -53,7 +53,7 @@ public class PhoneFrame extends JFrame {
 	private ContactApp contacts = new ContactApp();
 	private GamesApp games = new GamesApp();
 	private Settings settings = new Settings();
-	private Camera camera = new Camera();
+	private Camera camera = new Camera(galerie);
 	private Meteo meteo = new Meteo();
 	private NotesApp notes = new NotesApp();
 	// ecran verrou

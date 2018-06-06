@@ -40,10 +40,12 @@ public class Camera extends AppTemplate
 	//panel sud avec bouton et access galerie
 	private JPanel south = new JPanel(new BorderLayout());
 	
-	public Camera() 
+	private GalerieApp galerie;
+	
+	public Camera(GalerieApp galerie) 
 	{
 		super("Appareil Photo", Color.WHITE);
-		
+		this.galerie=galerie;
 		cam=new WebcamPanel(webcam);
 		webcam.setViewSize(new Dimension(320,240));
 		
@@ -104,13 +106,16 @@ public class Camera extends AppTemplate
 			
 			nom="capture"+numero+".jpg";
 			File fichier=new File(dossier, nom);
-			GalerieApp app = new GalerieApp();
-			app.createAddMiniIcon(dossier+"/"+nom);
+			
 			
 			try {
 				ImageIO.write(webcam.getImage(), "JPG", fichier);
 			} catch (IOException e) 
 				{e.printStackTrace();}
+
+			galerie.createAddMiniIcon("image/image/"+nom);
+			galerie.refreshGalerie();
+		
 		}
 	}
 	
