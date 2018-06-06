@@ -38,12 +38,27 @@ public class Demineur extends JPanel implements ActionListener
 	
 	 public ImageIcon getDemineurIcon() 
 	 {
-			return demineurIcon;
+		return demineurIcon;
+	 }
+	 
+	 public void restart() 
+	 {
+		bombes();
+		numeros();
+
+		for (int i = 0; i < boutons.length; i++) 
+		{
+			for (int j = 0; j < boutons[0].length; j++) 
+			{
+				boutons[i][j].setEnabled(true);
+				boutons[i][j].setText("");
+			}
+		}
 	 }
 
 	public ImageIcon getDemineurIconHover() 
 	{
-			return demineurIconHover;
+		return demineurIconHover;
 	}
 	
 	@Override

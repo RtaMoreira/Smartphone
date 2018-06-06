@@ -31,7 +31,7 @@ public class ContactApp extends AppTemplate implements Resizable
 	
 	//pour ouvrir la galerie
 	private GalerieApp galerieapp;
-	private JPanel galerie;
+	private JScrollPane galerie;
 	
 	//boutons pour NavigationBar
 	private MonButton add = new MonButton (new ImageIcon("image/icon/Plusicon.png"),new ImageIcon("image/icon/PlusiconHOVER.png"));
@@ -186,12 +186,14 @@ public class ContactApp extends AppTemplate implements Resizable
 			public void mouseClicked(MouseEvent e) 
 			{
 				galerieapp=new GalerieApp();
-				galerie=galerieapp.getGalerie();
+//				galerieapp.removeTemplate();
+				galerie=galerieapp.getScroll();
 				
 				for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) 
 				{
 					galerieapp.getBoutonsIcons().get(i).addMouseListener(new GetURL());
 				}
+				
 				myPanel.add(galerie, "galerie");
 				cardlayout.show(myPanel, "galerie");
 			}

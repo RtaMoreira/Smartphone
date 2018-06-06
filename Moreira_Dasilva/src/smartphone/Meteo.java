@@ -58,6 +58,7 @@ public class Meteo extends AppTemplate
 		status[7]=new ImageIcon("image/icon/meteo/7.png");
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
+		mainPanel.setBackground(new Color(104, 197, 212));
 		tempPanel.setLayout(new BoxLayout(tempPanel,BoxLayout.Y_AXIS));
 		
 		searchPanel.add(search,BorderLayout.CENTER);
@@ -66,21 +67,28 @@ public class Meteo extends AppTemplate
 		searchPanel.setMinimumSize(new Dimension(450, 35));
 		searchPanel.setMaximumSize(new Dimension(450, 35));
 		
+		imagePanel.setOpaque(false);
 		imageTemp.add(imagePanel,BorderLayout.WEST);
+		tempPanel.setOpaque(false);
 		imageTemp.add(tempPanel,BorderLayout.EAST);
 		
+		searchPanel.setOpaque(false);
 		mainPanel.add(searchPanel);
+		datePanel.setOpaque(false);
 		mainPanel.add(datePanel);
+		cityPanel.setOpaque(false);
 		mainPanel.add(cityPanel);
+		imageTemp.setOpaque(false);
 		mainPanel.add(imageTemp);
+		infoPanel.setOpaque(false);
 		mainPanel.add(infoPanel);
+		sunPanel.setOpaque(false);
 		mainPanel.add(sunPanel);
 		
 		add(mainPanel);
 		
 		getInfo(2658606);
-		initializeCity();
-			
+		initializeCity();	
 	}
 	
 	public void initializeCity() 
@@ -172,6 +180,14 @@ public class Meteo extends AppTemplate
 		String min="Maximum: "+ infoJSON.substring((infoJSON.indexOf("temp_min")+10),(infoJSON.indexOf("temp_max")-2));
 		String max="Minimum: "+ infoJSON.substring((infoJSON.indexOf("temp_max")+10),(infoJSON.indexOf("visibility")-3));
 		tempPanel.removeAll();
+		
+		JPanel vide = new JPanel();
+		vide.setPreferredSize(new Dimension(150,250));
+		vide.setMinimumSize(new Dimension(150,250));
+		vide.setMaximumSize(new Dimension(150,250));
+		vide.setOpaque(false);
+		tempPanel.add(vide);
+		
 		tempPanel.add(new JLabel(actual));
 		tempPanel.add(new JLabel(min));
 		tempPanel.add(new JLabel(max));
@@ -179,10 +195,10 @@ public class Meteo extends AppTemplate
 	
 	public void getInfos() 
 	{
-		
+		infoPanel.removeAll();
 		String pressure = "Pression:\t"+ infoJSON.substring((infoJSON.indexOf("pressure")+10),(infoJSON.indexOf("humidity")-2));
 		String humidity = "Humidité:\t"+ infoJSON.substring((infoJSON.indexOf("humidity")+10),(infoJSON.indexOf("temp_min")-2));
-		String windSpeed = "Vitesse vent:\t"+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.lastIndexOf("clouds")-3));
+		String windSpeed = "Vitesse vent:\t"+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf(",",infoJSON.indexOf("speed")+7)));
 		String sunRise = "Lever du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunrise")+9),(infoJSON.indexOf("sunset")-2));
 		String sunSet = "Coucher du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("id")-3));
 		
@@ -191,12 +207,12 @@ public class Meteo extends AppTemplate
 		infoPanel.add(new JLabel(windSpeed));
 		infoPanel.add(new JLabel(sunRise));
 		infoPanel.add(new JLabel(sunSet));
-
+		
 	}
 	
 	public void getInfo(int cityCode) 
 	{
-		try 
+		try
 		{
 			weather = new URL("http://api.openweathermap.org/data/2.5/weather?id="+cityCode+"&units=metric&APPID=a4a10487d22d8f957424c1b2c4b645f2");
 			InputStreamReader in = new InputStreamReader(weather.openStream());
@@ -246,8 +262,16 @@ public class Meteo extends AppTemplate
 				getInfo(2659601);
 				initializeCity();
 				break;
-			case "villeneuve":
-				getInfo(2659495);
+			case "aigle":
+				getInfo(2661834);
+				initializeCity();
+				break;
+			case "collonges":
+				getInfo(2661146);
+				initializeCity();
+				break;
+			case "chatel-saint-denis":
+				getInfo(2661202);
 				initializeCity();
 				break;
 

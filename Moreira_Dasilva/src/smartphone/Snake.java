@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
@@ -42,6 +44,9 @@ public class Snake extends JPanel implements ActionListener
     public Snake() 
     {
     	addMouseListener(new ChangeDirection());
+    	addKeyListener(new ChangeDirect());
+    	setFocusable(true);
+    	requestFocus();
     	setBackground(Color.GREEN);
     	setLayout(new BorderLayout());
     	setPreferredSize(new Dimension(200, 600));
@@ -207,5 +212,20 @@ public class Snake extends JPanel implements ActionListener
 		public void mouseExited(MouseEvent arg0) {}
 		public void mousePressed(MouseEvent arg0) {}
 		public void mouseReleased(MouseEvent arg0) {}
+	}
+	
+	class ChangeDirect implements KeyListener{
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			System.out.println(arg0.getKeyCode());
+		}
+		public void keyReleased(KeyEvent arg0) {
+			System.out.println(arg0.getKeyCode());
+		}
+		public void keyTyped(KeyEvent arg0) {
+			System.out.println(arg0.getKeyCode());
+		}
+		
 	}
 }
