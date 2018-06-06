@@ -65,7 +65,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		super("Galerie Photo", Color.CYAN);
 
 
-		creationGalerie(recupImages());
+		creationGalerie(recupImages());//première génération de la galerie (création de ArrayList)
 		refreshGalerie();
 		
 		super.getNavigation().getBackButton().addActionListener(new resetGalerie());
@@ -94,11 +94,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		mainPanel.add(mainGalerie, "galerie");
 		mainPanel.add(apercu, "aperçu");
 	}
-
-	// *******Autres classes*******
-
-//SHOWPANEL
-	// FIN autres classes
 
 	// *******Méthodes********
 	
@@ -212,11 +207,12 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	 * @author Rita Moreira
 	 *@return boolean (true = extension valide)
 	 */
-	private boolean checkExtension(File fichier) {
+	private boolean checkExtension(File fichier) 
+	{
 		String ext = getFileExtension(fichier);
-		if(ext.toLowerCase().equals("jpeg")|| ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("png")) {
+		if(ext.toLowerCase().equals("jpeg")|| ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("png")) 
 			return true;
-		}else 
+		else
 			return false;
 	}
 	
@@ -347,7 +343,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 								cptExistantImage++;	//compte nb de fois qu'il est déjà présent
 							}
 							
-							int cpt=0;
 						}
 								try 
 								{
@@ -361,6 +356,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 									}
 									Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
 									createAddMiniIcon(chemin);
+									System.out.println("CHEMIN "+chemin);
 									
 								} catch (IOException e1) {
 									e1.printStackTrace();

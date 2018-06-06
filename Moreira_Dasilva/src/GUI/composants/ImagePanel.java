@@ -9,14 +9,17 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class ImagePanel extends JComponent {
+public class ImagePanel extends JComponent 
+{
     private ImageIcon image;
     
-    public ImagePanel(ImageIcon image) {
+    public ImagePanel(ImageIcon image) 
+    {
         this.image = image;
     }
  
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) 
+    {
     	g.drawImage(image.getImage(), 0, 0, getWidth(), getHeight(), null);
     }
 }

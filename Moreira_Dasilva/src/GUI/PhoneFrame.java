@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -40,9 +41,13 @@ public class PhoneFrame extends JFrame {
 	private NorthPanel hour = new NorthPanel();// barre nord
 	private SouthPanel buttons = new SouthPanel();// barre sud
 	// forme du natel (PNJ)
-	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/background/phone.png"));
+	
+//	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
+	private String backgroundPath;
+	private File settingsInfo = new File("serials/SettingsInfo.txt");
+	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
 	// wallpaper
-	private ImagePanel wpp = new ImagePanel(new ImageIcon("image/background/samsung.jpg"));
+	private ImagePanel wpp = new ImagePanel(new ImageIcon(backgroundPath));
 	// menu
 	private AppGrid appsPanel = new AppGrid();// JPanel ac GridLayout avec les icos
 
@@ -52,7 +57,7 @@ public class PhoneFrame extends JFrame {
 	private GalerieApp galerie = new GalerieApp();
 	private ContactApp contacts = new ContactApp();
 	private GamesApp games = new GamesApp();
-	private Settings settings = new Settings();
+	private Settings settings = new Settings(this);
 	private Camera camera = new Camera(galerie);
 	private Meteo meteo = new Meteo();
 	private NotesApp notes = new NotesApp();
@@ -281,7 +286,6 @@ public class PhoneFrame extends JFrame {
 
 		@Override
 		public void mousePressed(MouseEvent e) {}
-
 		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
@@ -327,5 +331,21 @@ public class PhoneFrame extends JFrame {
 		}
 
 	}
+	
+	String recupBackground(File settingFile) {
+		
+		return backgroundPath;
+		
+	}
+
+	public File getSettingsInfo() {
+		return settingsInfo;
+	}
+
+	public void setSettingsInfo(File settingsInfo) {
+		this.settingsInfo = settingsInfo;
+	}
+
+	
 
 }
