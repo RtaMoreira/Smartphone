@@ -15,16 +15,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.BrokenBarrierException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import GUI.PhoneFrame;
-import GUI.composants.ImagePanel;
 import GUI.composants.MiniPhoto;
 import GUI.composants.Resizable;
 

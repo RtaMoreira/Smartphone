@@ -77,9 +77,12 @@ public class ShowPanel extends JPanel
 								break;
 							}
 						}
+						
+						galerieApp.getMessage().setText("Suppression réussie");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.getMessage();
+						
 					}
 			} else if (event == getQuit()) 
 			{

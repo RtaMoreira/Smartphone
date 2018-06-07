@@ -11,6 +11,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,15 +57,18 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 	// Jpanel qui contient la galerie et le JLabel d'Ajout de photo, etc.
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
-	private JPanel galerie = new JPanel(new FlowLayout());
+	private JPanel galerie = new JPanel(new GridLayout(0,3));
+	
 	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
+	private JLabel message = new JLabel(" ") ;
+	private JPanel south = new JPanel(new BorderLayout());
 	private ShowPanel apercu = new ShowPanel(this);
 
 	public GalerieApp() 
 	{
 		super("Galerie Photo", Color.CYAN);
 
-
+		
 		creationGalerie(recupImages());//première génération de la galerie (création de ArrayList)
 		refreshGalerie();
 		
@@ -72,24 +76,22 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 		mainPanel.setLayout(cardLayout);
 		this.add(mainPanel);
-
-		galerie.setPreferredSize(setDimension(480));
-		
+	
+		//Panel Sud 
 		ajout.addMouseListener(new AddImage());
-		ajout.setBackground(Color.CYAN);
-		ajout.setOpaque(true);
 			Border border = ajout.getBorder();
 			Border margin = new EmptyBorder(5, 10, 5, 10);
 		ajout.setBorder(new CompoundBorder(border, margin));
-		
+		south.setBackground(Color.cyan);
+		south.add(ajout, BorderLayout.CENTER);
+		south.add(message, BorderLayout.SOUTH);
 
-		
 		scroll.setViewportView(galerie);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		mainGalerie.add(scroll, BorderLayout.CENTER);	
-		mainGalerie.add(ajout, BorderLayout.SOUTH);
+		mainGalerie.add(south, BorderLayout.SOUTH);
 		
 		mainPanel.add(mainGalerie, "galerie");
 		mainPanel.add(apercu, "aperçu");
@@ -102,34 +104,34 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	 * Utilisée à chaque affichage de galerie
 	 * @return
 	 */
-	public Dimension setDimension(int width) 
-	{
-		
-		int hauteur = CalculeHGal(); //Dépend du nb de photos
-		Dimension nouvDimension = new Dimension(width,hauteur);
-		return nouvDimension;
-	}
+//	public Dimension setDimension(int width) 
+//	{
+//		
+//		int hauteur = CalculeHGal(); //Dépend du nb de photos
+//		Dimension nouvDimension = new Dimension(width,hauteur);
+//		return nouvDimension;
+//	}
 	
 	/**
 	 * Méthode qui calcule la taille de la galerie
 	 * Pour définir la taille du la galerie et de son scroll
 	 * (Adapte le scroll à la galerie)
 	 */
-	public int CalculeHGal() {	//
-				int nbPhotos = BoutonsIcons.size();
-					//Calcule du nombre de lignes (3 photos par lignes)
-				int nbLignes = nbPhotos/3;
-					//vérifie si dernière ligne incomplète 
-					if(nbPhotos%3 != 0) 
-					{
-						nbLignes += 1;
-					}
-					
-				//Calcule de la hauteur selon taille icons (setter à 135)
-				int hauteur = nbLignes*(135+7);
-				
-			return hauteur;
-			}
+//	public int CalculeHGal() {	//
+//				int nbPhotos = BoutonsIcons.size();
+//					//Calcule du nombre de lignes (3 photos par lignes)
+//				int nbLignes = nbPhotos/3;
+//					//vérifie si dernière ligne incomplète 
+//					if(nbPhotos%3 != 0) 
+//					{
+//						nbLignes += 1;
+//					}
+//					
+//				//Calcule de la hauteur selon taille icons (setter à 135)
+//				int hauteur = nbLignes*(135+7);
+//				
+//			return hauteur;
+//			}
 
 	
 	public ArrayList<Photo> recupImages() {
@@ -194,9 +196,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	 */
 	public void refreshGalerie() 
 	{
-		galerie.setPreferredSize(setDimension(480));
+//		galerie.setPreferredSize(setDimension(480));
 		showGalery(BoutonsIcons);
-
+		message.setText("");
 	}
 	
 	
@@ -297,7 +299,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 	class AddImage implements MouseListener 
 	{
-
 		@Override
 		public void mouseClicked(MouseEvent e) 
 		{
@@ -344,16 +345,18 @@ public class GalerieApp extends AppTemplate implements Resizable {
 						}else{
 								destination= new File(chemin); 		//création fichier normal
 						}
-						try 
-						{
-						Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
-						createAddMiniIcon(chemin);
-						System.out.println("CHEMIN "+chemin);
-									
+						try {
+							
+							Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
+							createAddMiniIcon(chemin);
+							message.setText("Ajout réussi");
+							
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 							
+					}else {
+						message.setText("Fichier de type PNG,JPG et JPEG uniquement");
 					}
 				}
 				refreshGalerie();
@@ -361,6 +364,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			}
 			if (reponse == chooser.CANCEL_OPTION) 
 			{
+				message.setText("Ajout annulé");
 				chooser.cancelSelection();
 				return;
 			}
@@ -391,7 +395,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				getApercu().remove(2);
 			}
 			cardLayout.first(getMainPanel());
+			message.setText("");
 		}
+		
 	}
 
 	// ****** Getter *******
@@ -454,4 +460,14 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	{
 		return cardLayout;
 	}
+
+	public JLabel getMessage() {
+		return message;
+	}
+
+	public void setMessage(JLabel message) {
+		this.message = message;
+	}
+	
+	
 }
