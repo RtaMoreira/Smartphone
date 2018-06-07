@@ -85,6 +85,7 @@ public class GamesApp extends AppTemplate
 		{
 			snake.getTimer().start();
 			cardlayout.show(gamePanel, "snake");
+			snake.requestFocus();
 		}
 
 		@Override

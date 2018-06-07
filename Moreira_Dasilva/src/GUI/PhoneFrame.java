@@ -1,7 +1,9 @@
 /**
-* TP Week2
+* PhoneFrame
 *Author: Joao Silva
 *Date creation : 7 mai 2018
+*regroupe le wallpaper et toutes les icones d'application
+*aussi avec le cardLayout qui permet d'ouvrir les applications
 */
 package GUI;
 
@@ -12,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -33,25 +34,25 @@ import smartphone.Meteo;
 import smartphone.NotesApp;
 import smartphone.Settings;
 
-public class PhoneFrame extends JFrame {
-
-	// panels
-	private NorthPanel hour = new NorthPanel();// barre nord
-	private SouthPanel buttons = new SouthPanel();// barre sud
-	// forme du natel (PNJ)
-	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
-	//settings
-//	private String backgroundPath;
+	public class PhoneFrame extends JFrame 
+	{
+	/**barres haut et bas*/
+	private NorthPanel hour = new NorthPanel();
+	private SouthPanel buttons = new SouthPanel();
 	
-	// wallpaper
+	/** forme du natel (PNJ)*/
+	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
+	
+	/** wallpaper*/
 	private ImagePanel wpp;
 	
-	// menu
-	private AppGrid appsPanel = new AppGrid();// JPanel ac GridLayout avec les icos
+	/** menu ou on rajoute les icones*/
+	private AppGrid appsPanel = new AppGrid();
 
-	//Timer pour quitter
-	Timer timer = new Timer(3000, new calculeTimer());
-	// private AppTemplate appTemplate = new AppTemplate();
+	/**Timer pour quitter*/
+	private Timer timer = new Timer(3000, new CalculeTimer());
+	
+	/**applis*/
 	private GalerieApp galerie = new GalerieApp();
 	private ContactApp contacts = new ContactApp();
 	private GamesApp games = new GamesApp();
@@ -59,14 +60,15 @@ public class PhoneFrame extends JFrame {
 	private Camera camera = new Camera(galerie);
 	private Meteo meteo = new Meteo();
 	private NotesApp notes = new NotesApp();
-	// ecran verrou
-	LockScrean lockscrean = new LockScrean();
+	
+	/** ecran verrou*/
+	private LockScrean lockscrean = new LockScrean();
 
-	// Panel d'affichage
+	/** Panel d'affichage(principal)*/
 	private CardLayout cardLayout = new CardLayout();
 	private JPanel screen = new JPanel(cardLayout);
 
-	// essayer de chopper le clique sur l'app
+	/** icons des applis*/
 	private JLabel galerieIcon = new JLabel(galerie.getGalerieIcon());
 	private JLabel contactIcon = new JLabel(contacts.getContactIcon());
 	private JLabel gamesIcon = new JLabel(games.getGamesIcon());
@@ -76,36 +78,35 @@ public class PhoneFrame extends JFrame {
 	private JLabel notesIcon = new JLabel(notes.getNotesIcon());
 	private JLabel turnOffIcon = new JLabel(new ImageIcon("image/icon/off.png"));
 
-	public PhoneFrame() {// c'est la JFrame
+	public PhoneFrame() 
+	{
+		/**je dois l'initializer au debut mais je ferme, elle s'ouvrent qund on clique dans l'icon*/
 		camera.getWebcam().close();
 		
-		// frame settings
-		this.setSize(480, 860);
-		this.setLocationRelativeTo(null);// fenetre au centre
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setUndecorated(true); // pas afficher les boutons de la fenetre
-		setBackground(new Color(0, 0, 0, 0));// fond transparent
+		/** frame settings*/
+		setSize(480, 860);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setUndecorated(true);
+		setBackground(new Color(0, 0, 0, 0));
 
-		// forme natel(hardware)
+		/** forme natel(hardware)*/
 		setContentPane(phoneLayout);// on va mettre du contenu dans le phoneLayout
 		phoneLayout.setLayout(new BorderLayout());
 		phoneLayout.add(screen, BorderLayout.CENTER); // l'écran va au centre
 		phoneLayout.setBorder(new EmptyBorder(30, 0, 30, 0));// pour que l'ecran ne couvre pas l'entier de la fenetre
 
-		// barre nord et sud
+		/** barre nord et sud*/
 		phoneLayout.add(hour, BorderLayout.NORTH);
 		phoneLayout.add(buttons, BorderLayout.SOUTH);
 
-		//wallpaper
+		/**wallpaper*/
 		wpp = new ImagePanel();	//création wpp
 		wpp.setImage();	//ajout wpp sauvegardé
 		wpp.setLayout(new BorderLayout());
 		wpp.add(appsPanel, BorderLayout.CENTER);
 
-		// ici on ajoute les écrans possibles(menu, verou et applis)
-
-		// Applications :
-
+		/** Applications :*/
 		galerieIcon.addMouseListener(new accesApp());
 		appsPanel.addIcon(galerieIcon);
 
@@ -127,21 +128,22 @@ public class PhoneFrame extends JFrame {
 		notesIcon.addMouseListener(new accesApp());
 		appsPanel.addIcon(notesIcon);
 		
-		//Fermeture Smartphone
-		turnOffIcon.addMouseListener(new turnOff());
+		/**Fermeture Smartphone*/
+		turnOffIcon.addMouseListener(new TurnOff());
 		appsPanel.addIcon(turnOffIcon);
 		
 		
-
-		this.galerie.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.contacts.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.games.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.settings.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.camera.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.meteo.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
-		this.notes.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		/**ajouter le mouseListenner dans le bouton retour pour retourner au menu*/
+		galerie.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		contacts.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		games.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		settings.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		camera.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		meteo.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
+		notes.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		
-		screen.add(wpp, "menu");// add card to card panel
+		/**ajouter le cards au cardLayout*/
+		screen.add(wpp, "menu");
 		screen.add(games, "games");
 		screen.add(galerie, "galerie");
 		screen.add(contacts, "contacts");
@@ -156,60 +158,75 @@ public class PhoneFrame extends JFrame {
 		this.setVisible(true);
 	}
 
-	class UnlockClick implements ActionListener {
+	/**verifie le code de lockscrean et si juste vient au menu*/
+	class UnlockClick implements ActionListener 
+	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lockscrean.getCode().equals("1234"))
+			if (lockscrean.getCode().equals("1234")) 
+			{
 				cardLayout.show(screen, "menu");
+				lockscrean.refresh();
+			}
+				
+			else 
+			{
+				lockscrean.getCodeError().setText("Code erroné! Essayez de nouveau:");
+			}
 		}
 	}
 
-	class ReturnMenu implements MouseListener {
+	/**bouton de retour de chaque  appli*/
+	class ReturnMenu implements MouseListener 
+	{
 
-		public void mouseClicked(MouseEvent e) {
+		public void mouseClicked(MouseEvent e) 
+		{
 			cardLayout.show(screen, "menu");
 		}
 
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		public void mouseExited(MouseEvent e) {
-		}
-
-		public void mousePressed(MouseEvent e) {
-		}
-
-		public void mouseReleased(MouseEvent e) {
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 
 	}
 
-	class accesApp implements MouseListener {
-
+	/**acceder l'appli depuis l'icon et effet mmouseHover*/
+	class accesApp implements MouseListener 
+	{
 		@Override
-		public void mouseClicked(MouseEvent me) {
+		public void mouseClicked(MouseEvent me) 
+		{
 			Object event = me.getSource();
 			JLabel app = (JLabel) event;
 			if (app == galerieIcon)
 				cardLayout.show(screen, "galerie");
-			else {
+			else 
+			{
 				if (app == contactIcon)
 					cardLayout.show(screen, "contacts");
-				else {
+				else 
+				{
 					if (app == gamesIcon) 
 						cardLayout.show(screen, "games");
-					else {
+					else 
+					{
 						if(app==settingsIcon) 
 							cardLayout.show(screen, "settings");
-						else {
-							if(app==cameraIcon) {
+						else 
+						{
+							if(app==cameraIcon) 
+							{
 								camera.start();
 								cardLayout.show(screen, "camera");
 							}
-							else {
+							else 
+							{
 								if(app==meteoIcon)
 									cardLayout.show(screen, "meteo");
-								else {
+								else 
+								{
 									if(app==notesIcon)
 										cardLayout.show(screen, "notes");
 								}
@@ -218,30 +235,35 @@ public class PhoneFrame extends JFrame {
 					}
 				}
 			}
-				
-
 		}
 
-		public void mouseEntered(MouseEvent me) {
+		public void mouseEntered(MouseEvent me) 
+		{
 			JLabel app = (JLabel) me.getComponent();
 			if (app == galerieIcon)
 				app.setIcon(galerie.getGalerieIconHover());
-			else {
+			else 
+			{
 				if (app == contactIcon)
 					app.setIcon(contacts.getContactIconHover());
-				else {
+				else 
+				{
 					if (app == gamesIcon)
 						app.setIcon(games.getGamesIconHover());
-					else {
+					else 
+					{
 						if(app==settingsIcon) 
 							app.setIcon(settings.getSettingsIconHover());
-						else {
+						else 
+						{
 							if(app==cameraIcon)
 								app.setIcon(camera.getCameraIconHover());
-							else {
+							else 
+							{
 								if(app==meteoIcon)
 									app.setIcon(meteo.getMeteoIconHover());
-								else {
+								else 
+								{
 									if(app==notesIcon)
 										app.setIcon(notes.getNotesIconHover());
 								}
@@ -252,26 +274,33 @@ public class PhoneFrame extends JFrame {
 			}
 		}
 
-		public void mouseExited(MouseEvent me) {
+		public void mouseExited(MouseEvent me) 
+		{
 			JLabel app = (JLabel) me.getComponent();
 			if (app == galerieIcon)
 				app.setIcon(galerie.getGalerieIcon());
-			else {
+			else 
+			{
 				if (app == contactIcon)
 					app.setIcon(contacts.getContactIcon());
-				else {
+				else 
+				{
 					if (app == gamesIcon)
 						app.setIcon(games.getGamesIcon());
-					else {
+					else 
+					{
 						if(app==settingsIcon) 
 							app.setIcon(settings.getSettingsIcon());
-						else {
+						else 
+						{
 							if(app==cameraIcon)
 								app.setIcon(camera.getCameraIcon());
-							else {
+							else 
+							{
 								if(app==meteoIcon)
 									app.setIcon(meteo.getMeteoIcon());
-								else {
+								else 
+								{
 									if(app==notesIcon)
 										app.setIcon(notes.getNotesIcon());
 								}
@@ -282,16 +311,15 @@ public class PhoneFrame extends JFrame {
 			}
 		}
 
-		@Override
 		public void mousePressed(MouseEvent e) {}
-		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
 	
-	class turnOff implements MouseListener {
-
-		//Au clic : vérouillage du smartphone
-		public void mouseClicked(MouseEvent arg0) {
+	/**eteindre ou verouiller le natel*/
+	class TurnOff implements MouseListener 
+	{
+		public void mouseClicked(MouseEvent arg0) 
+		{
 			cardLayout.show(screen, "lockscreen");
 		}
 
@@ -300,7 +328,6 @@ public class PhoneFrame extends JFrame {
 			JLabel app = (JLabel) me.getComponent();
 				app.setIcon(new ImageIcon("image/icon/offHOVER.png"));
 		}
-
 	
 		public void mouseExited(MouseEvent me) 
 		{
@@ -308,74 +335,53 @@ public class PhoneFrame extends JFrame {
 				app.setIcon(new ImageIcon("image/icon/off.png"));
 		}
 
-		//Au presse de 3 secondes : quitter le logiciel
-		public void mousePressed(MouseEvent arg0) {
-
+		public void mousePressed(MouseEvent arg0) 
+		{
 		timer.start();
-
 		}
 
-		public void mouseReleased(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent arg0) 
+		{
 		timer.stop();
 		}
-		
-
-	}
-	class calculeTimer implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			System.exit(0);
-		}
-
 	}
 	
-//	String recupBackground(File settingFile) {
-//		String backgroundPath="";
-//	try {
-//			FileReader fr;
-//			fr = new FileReader(settingsInfo);
-//			BufferedReader br = new BufferedReader(fr);
-//
-//			backgroundPath = br.readLine();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		
-//		return backgroundPath;
-//		
-//	}
+	/**timer si longClick dans bouton eteindre*/
+	class CalculeTimer implements ActionListener 
+	{
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			System.exit(0);
+		}
+	}
 
-//	public File getSettingsInfo() {
-//		return settingsInfo;
-//	}
-
-
-	public ImagePanel getWpp() {
+	public ImagePanel getWpp() 
+	{
 		return wpp;
 	}
 
-	public void setWpp(String bg) {
+	public void setWpp(String bg) 
+	{
 		this.wpp = new ImagePanel(new ImageIcon(bg));
 	}
 
-	public JPanel getScreen() {
+	public JPanel getScreen() 
+	{
 		return screen;
 	}
 
-	public void setScreen(JPanel screen) {
+	public void setScreen(JPanel screen) 
+	{
 		this.screen = screen;
 	}
 
-	public AppGrid getAppsPanel() {
+	public AppGrid getAppsPanel() 
+	{
 		return appsPanel;
 	}
 
-	public void setAppsPanel(AppGrid appsPanel) {
+	public void setAppsPanel(AppGrid appsPanel) 
+	{
 		this.appsPanel = appsPanel;
 	}
-	
-	
-
-
 }

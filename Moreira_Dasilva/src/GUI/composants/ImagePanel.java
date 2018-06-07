@@ -1,5 +1,5 @@
 /**
-* TP Week2
+* ImagePanel
 *Author: Joao Silva
 *Date creation : 20 avr. 2018
 */
@@ -31,7 +31,8 @@ public class ImagePanel extends JPanel
     }
     
     
-    public void setImage() {
+    public void setImage() 
+    {
     	this.image=new ImageIcon(recupBackground());
     }
     
@@ -41,23 +42,22 @@ public class ImagePanel extends JPanel
      * @author Rita Moreira
      * @return String
      */
-	public String recupBackground() {
+	public String recupBackground() 
+	{
 		String backgroundPath="";
-	try {
+	try 
+	{
 			FileReader fr;
 			fr = new FileReader(settingsInfo);
 			BufferedReader br = new BufferedReader(fr);
 
 			backgroundPath = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
+		} catch (IOException e) 
+			{e.printStackTrace();}
+	
 		return backgroundPath;
-		
 	}
+	
 	
 	public File getSettingsInfo() 
 	{

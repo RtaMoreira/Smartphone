@@ -43,10 +43,8 @@ public class Snake extends JPanel implements ActionListener
     
     public Snake() 
     {
-    	addMouseListener(new ChangeDirection());
     	addKeyListener(new ChangeDirect());
     	setFocusable(true);
-    	requestFocus();
     	setBackground(Color.GREEN);
     	setLayout(new BorderLayout());
     	setPreferredSize(new Dimension(200, 600));
@@ -174,6 +172,7 @@ public class Snake extends JPanel implements ActionListener
 			x[i]=x[i-1];
 			y[i]=y[i-1];
 		}
+		
 		if (direction==1)
 		x[0]++;
 		if (direction==2)
@@ -190,42 +189,23 @@ public class Snake extends JPanel implements ActionListener
 			paint();
 	}
 	
-	class ChangeDirection implements MouseListener
+	class ChangeDirect implements KeyListener
 	{
+
 		@Override
-		public void mouseClicked(MouseEvent arg0) 
+		public void keyPressed(KeyEvent arg0) 
 		{
-			if (direction<4) 
-			{
-				direction++;
-				return;
-			}
-			
-			if ( direction==4) 
-			{
+			if(arg0.getKeyCode()==37)//gauche
+				direction=4;
+			if(arg0.getKeyCode()==39)//droite
+				direction=2;
+			if(arg0.getKeyCode()==38)//haut
+				direction=3;
+			if(arg0.getKeyCode()==40)//bas
 				direction=1;
-			}
-
 		}
-
-		public void mouseEntered(MouseEvent arg0) {}
-		public void mouseExited(MouseEvent arg0) {}
-		public void mousePressed(MouseEvent arg0) {}
-		public void mouseReleased(MouseEvent arg0) {}
-	}
-	
-	class ChangeDirect implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			System.out.println(arg0.getKeyCode());
-		}
-		public void keyReleased(KeyEvent arg0) {
-			System.out.println(arg0.getKeyCode());
-		}
-		public void keyTyped(KeyEvent arg0) {
-			System.out.println(arg0.getKeyCode());
-		}
+		public void keyReleased(KeyEvent arg0) {}
+		public void keyTyped(KeyEvent arg0) {}
 		
 	}
 }

@@ -1,7 +1,8 @@
 /**
-* TP Week2
+* LockScrean
 *Author: Joao Silva
 *Date creation : 7 mai 2018
+*ce Panel sera présent lors de l'ouverture de l'appkication et lorsqu'on le verouille
 */
 package GUI;
 
@@ -29,32 +30,34 @@ import GUI.composants.ImagePanel;
 public class LockScrean extends JPanel{
 	
 	private ImagePanel lock = new ImagePanel(new ImageIcon("image/background/samsung.jpg"));
-	private ImagePanel codeInput = new ImagePanel(new ImageIcon("image/background/cat-background.jpg"));
+	private ImagePanel codeInput = new ImagePanel(new ImageIcon("image/background/samsung.jpg"));
 	private JPanel clavier = new JPanel (new GridLayout(4,3));
 	
-	GridBagConstraints c = new GridBagConstraints();
+	private GridBagConstraints c = new GridBagConstraints();
 	protected CardLayout cardLayout = new CardLayout();
 	private JPanel cards= new JPanel(cardLayout);
-	int cpt=0;
+	private int cpt=0;
 	private JButton ok = new JButton("ok");
-	JTextField code = new JTextField();
+	private JPasswordField code = new JPasswordField();
 	
-	DateFormat hhmm = new SimpleDateFormat("HH:mm");
-	DateFormat dmy = new SimpleDateFormat("dd MMMM yyyy");
-	JLabel heure = new JLabel();
-	Timer timer = new Timer(0,new CurrentTime());
+	private DateFormat hhmm = new SimpleDateFormat("HH:mm");
+	private DateFormat dmy = new SimpleDateFormat("dd MMMM yyyy");
+	private JLabel heure = new JLabel();
+	private Timer timer = new Timer(0,new CurrentTime());
 	
-	JLabel date = new JLabel();
-	Font font = new Font("myFont", 10, 20);
-	JPanel datePanel = new JPanel(new GridLayout(2,1));
-	JLabel swipe = new JLabel("Swipe to unlock");
+	private JLabel date = new JLabel();
+	private Font font = new Font("myFont", 10, 20);
+	private JPanel datePanel = new JPanel(new GridLayout(2,1));
+	private JLabel swipe = new JLabel("Swipe to unlock");
+	private JLabel codeError = new JLabel("");
 	
-	public LockScrean() {
+	public LockScrean() 
+	{
 		setLayout(new BorderLayout());
 		timer.start();
 		add(cards);
 		
-	//ajouter les trucs dans l'écran vérouillé et le MouseLListenner
+	/**ajouter les trucs dans l'écran vérouillé et le MouseListenner*/
 		lock.setLayout(new BorderLayout());
 		datePanel.setOpaque(false);
 		
@@ -67,7 +70,6 @@ public class LockScrean extends JPanel{
 		date.setForeground(Color.WHITE);
 		date.setHorizontalAlignment(SwingConstants.CENTER);
 		datePanel.add(date);
-		
 
 		lock.add(datePanel,BorderLayout.PAGE_START);
 		
@@ -78,64 +80,82 @@ public class LockScrean extends JPanel{
 		lock.setBorder(new EmptyBorder(40, 0, 30, 0));
 		lock.addMouseMotionListener(new Drag());
 		
-//	clavier
-		for (int i = 0; i < 9; i++) {
+	/**creer le clavier*/
+		for (int i = 0; i < 9; i++) 
+		{
 			JLabel j = new JLabel(String.valueOf(i+1));
 			j.setForeground(Color.WHITE);
 			j.setFont(font);
 			
-			j.addMouseListener(new addNb());
+			j.addMouseListener(new AddNb());
 			clavier.add(j);
 		}
+		
 		JLabel retour = new JLabel("<");
 		retour.setFont(font);
 		retour.setForeground(Color.WHITE);
-		retour.addMouseListener(new addNb());
+		retour.addMouseListener(new AddNb());
 		clavier.add(retour);
 		
 		JLabel zero = new JLabel("0");
 		zero.setFont(font);
 		zero.setForeground(Color.WHITE);
-		zero.addMouseListener(new addNb());
+		zero.addMouseListener(new AddNb());
 		clavier.add(zero);
 		
 		clavier.add(ok);
 		
 		clavier.setOpaque(false);
 		
-	//change codeInput
+	/**change codeInput*/
 		codeInput.setLayout(new GridBagLayout());
-		c.gridx=0;
-		c.gridy=0;
+		codeError.setForeground(Color.WHITE);
 		code.setOpaque(false);
 		code.setPreferredSize(new Dimension(200, 30));
 		code.setHorizontalAlignment(SwingConstants.CENTER);
 		code.setFont(font);
 		code.setForeground(Color.WHITE);
 		code.setBorder(null);
-		codeInput.add(code, c);
 		
 		c.gridx=0;
+		c.gridy=0;
+		codeInput.add(codeError,c);
+		
 		c.gridy=1;
+		codeInput.add(code, c);
+
+		c.gridy=2;
 		codeInput.add(clavier,c);
 		
-		
-	//cards manager
+	/**manage cardLayout*/
 		cards.add(lock, "lock");
 		cards.add(codeInput, "codeInput");
 	}
 	
-	
-
-	public String getCode() {
+	public String getCode() 
+	{
 		return code.getText();
 	}
-	public JButton getVerrou() {
+	
+	public JButton getVerrou() 
+	{
 		return ok;
 	}
 	
+	public JLabel getCodeError() 
+	{
+		return codeError;
+	}
 	
+	public void refresh() 
+	{
+		code.setText("");
+		codeError.setText("");
+		cpt=0;
+		cardLayout.show(cards, "lock");
+	}
 	
+	/**class utilisée par le Timer*/
 	class CurrentTime implements ActionListener 
 	{
 		@Override
@@ -147,21 +167,22 @@ public class LockScrean extends JPanel{
 		}
 	}
 	
-	
-	
-	
-	class addNb implements MouseListener
+	/**MouseListener pour le clavier*/
+	class AddNb implements MouseListener
 	{
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent arg0) 
+		{
 			String text = code.getText();
 			char[] textinchar;
 			
-			if(((JLabel)arg0.getSource()).getText().equals("<")) {
+			if(((JLabel)arg0.getSource()).getText().equals("<")) 
+			{
 				textinchar=text.toCharArray();
 				
-				for (int i = code.getCaretPosition()-1; i < textinchar.length-1; i++) {
+				for (int i = code.getCaretPosition()-1; i < textinchar.length-1; i++) 
+				{
 					textinchar[i]=textinchar[i+1];
 				}
 				
@@ -174,36 +195,33 @@ public class LockScrean extends JPanel{
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
+		public void mouseEntered(MouseEvent arg0) 
+		{
 			((JLabel)arg0.getSource()).setBackground(Color.GRAY);
 			((JLabel)arg0.getSource()).setOpaque(true);
 		}
 			
 		@Override
-		public void mouseExited(MouseEvent arg0) {
+		public void mouseExited(MouseEvent arg0) 
+		
+		{
 			((JLabel)arg0.getSource()).setBackground(new Color(0,0,0,0));
 			((JLabel)arg0.getSource()).setOpaque(false);
 		}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {}
-
-		@Override
 		public void mouseReleased(MouseEvent arg0) {}
 
 	}
 	
-	class Drag implements MouseMotionListener{
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
+	/**mouseListener pour les swipe to unlock*/
+	class Drag implements MouseMotionListener
+	{
+		public void mouseDragged(MouseEvent e) 
+		{
 			cpt++;
-			if(cpt>30){
+			if(cpt>20)
 				cardLayout.show(cards, "codeInput");
-			}
 		}
-
-		@Override
 		public void mouseMoved(MouseEvent arg0) {}
 	}
-	
 }

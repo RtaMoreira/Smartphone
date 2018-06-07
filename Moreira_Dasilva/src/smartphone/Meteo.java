@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,6 +30,7 @@ public class Meteo extends AppTemplate
 	private String infoJSON;
 	
 	private DateFormat dmy = new SimpleDateFormat("dd MMMM yyyy");
+	private DateFormat hhmm = new SimpleDateFormat("HH : mm");
 	
 	private JPanel mainPanel = new JPanel();
 	private JTextField search = new JTextField();
@@ -196,11 +198,18 @@ public class Meteo extends AppTemplate
 	public void getInfos() 
 	{
 		infoPanel.removeAll();
-		String pressure = "Pression:\t"+ infoJSON.substring((infoJSON.indexOf("pressure")+10),(infoJSON.indexOf("humidity")-2));
-		String humidity = "Humidité:\t"+ infoJSON.substring((infoJSON.indexOf("humidity")+10),(infoJSON.indexOf("temp_min")-2));
-		String windSpeed = "Vitesse vent:\t"+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf(",",infoJSON.indexOf("speed")+7)));
-		String sunRise = "Lever du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunrise")+9),(infoJSON.indexOf("sunset")-2));
-		String sunSet = "Coucher du soleil:\t"+ infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("id")-3));
+		String pressure = "Pression:                  "+ infoJSON.substring((infoJSON.indexOf("pressure")+10),(infoJSON.indexOf("humidity")-2))+" hpa";
+		String humidity = "Humidité:                 "+ infoJSON.substring((infoJSON.indexOf("humidity")+10),(infoJSON.indexOf("temp_min")-2))+"%";
+		String windSpeed;
+		String sunRise =  "Lever du soleil :     "+ hhmm.format(new Date((Integer.parseInt(infoJSON.substring((infoJSON.indexOf("sunrise")+9),(infoJSON.indexOf("sunset")-2))))*1000L));
+		String sunSet =   "Coucher du soleil :  "+ hhmm.format(new Date((Integer.parseInt(infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("id")-3))))*1000L));
+		
+		if(infoJSON.indexOf("deg")!=-1)//parce que le degré du vent n'est pas toujours présent
+			windSpeed =   "Vitesse vent:            "+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf(",",infoJSON.indexOf("speed")+7)));
+		else
+			windSpeed =   "Vitesse vent:            "+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf("}",infoJSON.indexOf("speed")+7)));
+		windSpeed+=" m/s";
+
 		
 		infoPanel.add(new JLabel(pressure));
 		infoPanel.add(new JLabel(humidity));
@@ -274,7 +283,14 @@ public class Meteo extends AppTemplate
 				getInfo(2661202);
 				initializeCity();
 				break;
-
+			case "lisbonne":
+				getInfo(2267057);
+				initializeCity();
+				break;
+			case "brasilia":
+				getInfo(3459342);
+				initializeCity();
+				break;
 			default:
 				getInfo(2658606);
 				initializeCity();

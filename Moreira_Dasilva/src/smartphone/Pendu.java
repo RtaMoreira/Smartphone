@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import GUI.composants.MonField;
+import GUI.composants.FlatField;
 
 public class Pendu extends JPanel
 {
@@ -70,7 +70,7 @@ public class Pendu extends JPanel
 	{
 		ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
 		JPanel vide = new JPanel();
-		MonField field = new MonField(2);
+		FlatField field = new FlatField(2);
 		JButton ok = new JButton("ok");
 		JPanel mot = new JPanel();
 		

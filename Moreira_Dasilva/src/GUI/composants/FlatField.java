@@ -1,5 +1,5 @@
 /**
-* TP Week2
+* FlatField
 *Author: Joao Silva
 *Date creation : 1 juin 2018
 */
@@ -9,12 +9,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.*;
 
-public class MonField extends JPanel{
+public class FlatField extends JPanel{
 	
 private JTextField t1 = new JTextField();
 private JPasswordField p1 = new JPasswordField();
 	
-	public MonField(){
+	public FlatField()
+	{
 		add(t1);
 		t1.setMinimumSize(new Dimension(200,30));
 		t1.setMaximumSize(new Dimension(200,30));
@@ -23,7 +24,9 @@ private JPasswordField p1 = new JPasswordField();
 		setOpaque(false);
 	}
 	
-	public MonField(int i){
+	/**field est en passwordField en gris*/
+	public FlatField(int i)
+	{
 		add(p1);
 		p1.setMinimumSize(new Dimension(200,30));
 		p1.setMaximumSize(new Dimension(200,30));
@@ -33,24 +36,32 @@ private JPasswordField p1 = new JPasswordField();
 		setOpaque(false);
 	}
 	
-	public JPasswordField getField() {
+	public JPasswordField getField() 
+	{
 		return p1;
 	}
-	public String getText() {
+	
+	public String getText() 
+	{
 		return t1.getText();
 	}
 	
-	public void setText(String s) {
+	/**method pour setter le textField directement*/
+	public void setText(String s) 
+	{
 		t1.setText(s);
 	}
 	
-	public void setEditable(Boolean bol) {
+	/**method pour setter le textField directement*/
+	public void setEditable(Boolean bol) 
+	{
 		t1.setEditable(bol);
 		t1.setBackground(Color.WHITE);
 	}
-
-	public void setFieldBackground(Color bg) {
+	
+	/**method pour setter le textField directement*/
+	public void setFieldBackground(Color bg) 
+	{
 		t1.setBackground(bg);
-		
 	}
 }

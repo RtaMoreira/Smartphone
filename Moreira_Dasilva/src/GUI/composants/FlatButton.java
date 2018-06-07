@@ -1,5 +1,5 @@
 /**
-* TP Week2
+* FlatButton
 *Author: Joao Silva
 *Date creation : 1 juin 2018
 */
@@ -12,20 +12,24 @@ import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
-public class MonButton extends JPanel{
-
+public class FlatButton extends JPanel
+{
 	private JButton b1 = new JButton();
 	private ImageIcon im = new ImageIcon();
 	private ImageIcon imh = new ImageIcon();
 	
-	public MonButton(String s){
+	/**pour les bouttons avec un string*/
+	public FlatButton(String s)
+	{
 		b1.setBackground(Color.DARK_GRAY);
 		b1.setForeground(Color.WHITE);
 		b1.setText(s);
 		add(b1);
 	}
 	
-	public MonButton(ImageIcon im, ImageIcon imh){
+	/**pour les boutons avec un icon*/
+	public FlatButton(ImageIcon im, ImageIcon imh)
+	{
 		this.im=im;
 		this.imh=imh;
 		setOpaque(false);
@@ -39,32 +43,32 @@ public class MonButton extends JPanel{
 	}
 	
 	
-	public void addActionListener(ActionListener e) {
+	/**methode qui rajout l'actionListenner que je veux dans les autres classes*/
+	public void addActionListener(ActionListener e) 
+	{
 		b1.addActionListener(e);
 	}
 	
-	class MouseHover implements MouseListener{
-
-		@Override
+	/**gestion du MouseHover*/
+	class MouseHover implements MouseListener
+	{
 		public void mouseClicked(MouseEvent arg0) {}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
+		public void mouseEntered(MouseEvent arg0) 
+		{
 			b1.setIcon(imh);
 		}
 
 		@Override
-		public void mouseExited(MouseEvent arg0) {
+		public void mouseExited(MouseEvent arg0) 
+		{
 			b1.setIcon(im);
 		}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent arg0) 
+		{
 			b1.setIcon(im);
 		}
-		
 	}
 }

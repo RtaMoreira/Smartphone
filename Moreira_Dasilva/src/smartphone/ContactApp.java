@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import GUI.composants.MonButton;
-import GUI.composants.MonField;
-import GUI.composants.MonLabel;
+import GUI.composants.FlatButton;
+import GUI.composants.FlatField;
+import GUI.composants.FlatLabel;
 import GUI.composants.Resizable;
 
 
@@ -34,8 +34,8 @@ public class ContactApp extends AppTemplate implements Resizable
 	private JScrollPane galerie;
 	
 	//boutons pour NavigationBar
-	private MonButton add = new MonButton (new ImageIcon("image/icon/Plusicon.png"),new ImageIcon("image/icon/PlusiconHOVER.png"));
-	private MonButton delete = new MonButton (new ImageIcon("image/icon/delete.png"),new ImageIcon("image/icon/deleteHOVER.png"));
+	private FlatButton add = new FlatButton (new ImageIcon("image/icon/Plusicon.png"),new ImageIcon("image/icon/PlusiconHOVER.png"));
+	private FlatButton delete = new FlatButton (new ImageIcon("image/icon/delete.png"),new ImageIcon("image/icon/deleteHOVER.png"));
 	private JPanel buttonHolder = new JPanel();
 	
 	//icones d'appli
@@ -148,23 +148,23 @@ public class ContactApp extends AppTemplate implements Resizable
 	class NewContact extends JPanel//panel pour inserer un nouveau contact
 	{
 		//display infos
-		private MonLabel lnom = new MonLabel("Nom: ");
-		private MonLabel lprenom = new MonLabel("Prenom: ");
-		private MonLabel lnatel = new MonLabel("Numéro natel: ");
-		private MonLabel ltelephone = new MonLabel("Numéro téléphone: ");
-		private MonLabel lmail = new MonLabel("Mail: ");
-		private MonLabel ladresse = new MonLabel("Adresse: ");
-		private MonField tnom = new MonField();
-		private MonField tprenom = new MonField();
-		private MonField tnatel = new MonField();
-		private MonField ttelephone = new MonField();
-		private MonField tmail = new MonField();
-		private MonField tadresse = new MonField();
+		private FlatLabel lnom = new FlatLabel("Nom: ");
+		private FlatLabel lprenom = new FlatLabel("Prenom: ");
+		private FlatLabel lnatel = new FlatLabel("Numéro natel: ");
+		private FlatLabel ltelephone = new FlatLabel("Numéro téléphone: ");
+		private FlatLabel lmail = new FlatLabel("Mail: ");
+		private FlatLabel ladresse = new FlatLabel("Adresse: ");
+		private FlatField tnom = new FlatField();
+		private FlatField tprenom = new FlatField();
+		private FlatField tnatel = new FlatField();
+		private FlatField ttelephone = new FlatField();
+		private FlatField tmail = new FlatField();
+		private FlatField tadresse = new FlatField();
 		
 		//boutons possibles pour cahque état
-		private MonButton save = new MonButton("enregistrer");
-		private MonButton modify = new MonButton("modifier");
-		private MonButton update = new MonButton("modifier");
+		private FlatButton save = new FlatButton("enregistrer");
+		private FlatButton modify = new FlatButton("modifier");
+		private FlatButton update = new FlatButton("modifier");
 		
 		//gestion des panels
 		private JPanel imagePanel = new JPanel();
@@ -186,7 +186,6 @@ public class ContactApp extends AppTemplate implements Resizable
 			public void mouseClicked(MouseEvent e) 
 			{
 				galerieapp=new GalerieApp();
-//				galerieapp.removeTemplate();
 				galerie=galerieapp.getScroll();
 				
 				for (int i = 0; i < galerieapp.getBoutonsIcons().size(); i++) 

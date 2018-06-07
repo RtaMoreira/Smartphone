@@ -1,22 +1,23 @@
 /**
-* TP Week2
+* FlatLabel
 *Author: Joao Silva
 *Date creation : 1 juin 2018
 */
 package GUI.composants;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class MonLabel extends JPanel{
+public class FlatLabel extends JPanel
+{
 	
 	private JLabel t1 = new JLabel();
 	
-	public MonLabel(String s){
+	public FlatLabel(String s)
+	{
 		setBorder(new EmptyBorder(0, 100, 0, 0));
 		t1.setText(s);
 		add(t1,BorderLayout.CENTER);
@@ -28,11 +29,13 @@ public class MonLabel extends JPanel{
 		setOpaque(false);
 	}
 	
-	public String getText() {
+	public String getText() 
+	{
 		return t1.getText();
 	}
 	
-	public void setText(String s) {
+	public void setText(String s)
+	{
 		t1.setText(s);
 	}
 }

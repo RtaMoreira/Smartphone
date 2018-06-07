@@ -1,7 +1,8 @@
 /**
-* TP Week2
+* NorthPanel
 *Author: Joao Silva
 *Date creation : 20 avr. 2018
+*panel avec l'heure an haut du natel
 */
 package GUI.composants;
 import java.awt.Color;
@@ -18,7 +19,8 @@ public class NorthPanel extends JPanel{
 	JLabel time = new JLabel();
 	Timer timer = new Timer(0,new CurrentTime());
 	
-	public NorthPanel() {
+	public NorthPanel() 
+	{
 		this.setSize(700, 30);
 		this.setBackground(Color.BLACK);
 		time.setForeground(Color.WHITE);
