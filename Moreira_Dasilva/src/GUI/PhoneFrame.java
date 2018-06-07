@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
-
-import com.github.sarxos.webcam.WebcamPanel;
 
 import GUI.composants.AppGrid;
 import GUI.composants.ImagePanel;
@@ -41,13 +39,13 @@ public class PhoneFrame extends JFrame {
 	private NorthPanel hour = new NorthPanel();// barre nord
 	private SouthPanel buttons = new SouthPanel();// barre sud
 	// forme du natel (PNJ)
-	
-//	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
-	private String backgroundPath;
-	private File settingsInfo = new File("serials/SettingsInfo.txt");
 	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
+	//settings
+//	private String backgroundPath;
+	
 	// wallpaper
-	private ImagePanel wpp = new ImagePanel(new ImageIcon(backgroundPath));
+	private ImagePanel wpp;
+	
 	// menu
 	private AppGrid appsPanel = new AppGrid();// JPanel ac GridLayout avec les icos
 
@@ -98,7 +96,9 @@ public class PhoneFrame extends JFrame {
 		phoneLayout.add(hour, BorderLayout.NORTH);
 		phoneLayout.add(buttons, BorderLayout.SOUTH);
 
-		// on ajoute sur le wallpaper
+		//wallpaper
+		wpp = new ImagePanel();	//création wpp
+		wpp.setImage();	//ajout wpp sauvegardé
 		wpp.setLayout(new BorderLayout());
 		wpp.add(appsPanel, BorderLayout.CENTER);
 
@@ -223,7 +223,6 @@ public class PhoneFrame extends JFrame {
 		}
 
 		public void mouseEntered(MouseEvent me) {
-			Object event = me.getSource();
 			JLabel app = (JLabel) me.getComponent();
 			if (app == galerieIcon)
 				app.setIcon(galerie.getGalerieIconHover());
@@ -254,7 +253,6 @@ public class PhoneFrame extends JFrame {
 		}
 
 		public void mouseExited(MouseEvent me) {
-			Object event = me.getSource();
 			JLabel app = (JLabel) me.getComponent();
 			if (app == galerieIcon)
 				app.setIcon(galerie.getGalerieIcon());
@@ -299,7 +297,6 @@ public class PhoneFrame extends JFrame {
 
 		public void mouseEntered(MouseEvent me) 
 		{
-			Object event = me.getSource();
 			JLabel app = (JLabel) me.getComponent();
 				app.setIcon(new ImageIcon("image/icon/offHOVER.png"));
 		}
@@ -307,7 +304,6 @@ public class PhoneFrame extends JFrame {
 	
 		public void mouseExited(MouseEvent me) 
 		{
-			Object event = me.getSource();
 			JLabel app = (JLabel) me.getComponent();
 				app.setIcon(new ImageIcon("image/icon/off.png"));
 		}
@@ -332,20 +328,54 @@ public class PhoneFrame extends JFrame {
 
 	}
 	
-	String recupBackground(File settingFile) {
-		
-		return backgroundPath;
-		
+//	String recupBackground(File settingFile) {
+//		String backgroundPath="";
+//	try {
+//			FileReader fr;
+//			fr = new FileReader(settingsInfo);
+//			BufferedReader br = new BufferedReader(fr);
+//
+//			backgroundPath = br.readLine();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		
+//		return backgroundPath;
+//		
+//	}
+
+//	public File getSettingsInfo() {
+//		return settingsInfo;
+//	}
+
+
+	public ImagePanel getWpp() {
+		return wpp;
 	}
 
-	public File getSettingsInfo() {
-		return settingsInfo;
+	public void setWpp(String bg) {
+		this.wpp = new ImagePanel(new ImageIcon(bg));
 	}
 
-	public void setSettingsInfo(File settingsInfo) {
-		this.settingsInfo = settingsInfo;
+	public JPanel getScreen() {
+		return screen;
 	}
 
+	public void setScreen(JPanel screen) {
+		this.screen = screen;
+	}
+
+	public AppGrid getAppsPanel() {
+		return appsPanel;
+	}
+
+	public void setAppsPanel(AppGrid appsPanel) {
+		this.appsPanel = appsPanel;
+	}
 	
+	
+
 
 }

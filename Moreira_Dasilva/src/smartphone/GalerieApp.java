@@ -68,7 +68,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		creationGalerie(recupImages());//première génération de la galerie (création de ArrayList)
 		refreshGalerie();
 		
-		super.getNavigation().getBackButton().addActionListener(new resetGalerie());
+		super.getNavigation().getBackButton().addActionListener(new ResetGalerie());
 
 		mainPanel.setLayout(cardLayout);
 		this.add(mainPanel);
@@ -263,29 +263,23 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
-				
 				JLabel nextPhotoGrd = null;
-
-				int j;
-				for (j = 0; j < getBoutonsIcons().size(); j++) 
-				{
-					if(photoTemp.getNomPhoto().equals(getBoutonsIcons().get(j).getNomPhoto())) 
+				int j=0;
+					while(photoTemp.getNomPhoto().equals(getBoutonsIcons().get(j).getNomPhoto())==false) 
 					{
+						j++;
+					}
 						if(j != getBoutonsIcons().size()-1) 
 						{
 							photoTemp=getBoutonsIcons().get(j+1);
 						}else{
 							photoTemp=getBoutonsIcons().get(0);	//recommence à zero quand dernière image
 						}
-						break;
-					}
-
-				}
+					
 				ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin selon positions dans icons
 				
 				nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Création image taille grande
 				nextPhotoGrd = new JLabel(nextPhoto);
-				nextPhotoGrd.setOpaque(false);
 				
 				getApercu().remove(2);
 				getApercu().add(nextPhotoGrd);
@@ -321,7 +315,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				File[] fs = chooser.getSelectedFiles();
 				String location = getDossier() + "\\";
 				int cptExistantImage=0;
-				MiniPhoto icon;
 				
 				for (int i = 0; i < fs.length; i++) 
 				{
@@ -344,27 +337,25 @@ public class GalerieApp extends AppTemplate implements Resizable {
 							}
 							
 						}
-								try 
-								{
-									if(cptExistantImage>0) 
-									{
-										String recupNom = fs[i].getName().substring(0, fs[i].getName().lastIndexOf("."));
-										String recupExt = getFileExtension(fs[i]);
-										destination= new File(location+recupNom+"("+cptExistantImage+")."+recupExt); //création fichier à doublon
-									}else{
-										destination= new File(chemin); 		//création fichier normal
-									}
-									Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
-									createAddMiniIcon(chemin);
-									System.out.println("CHEMIN "+chemin);
+						if(cptExistantImage>0) 
+						{
+								String recupExt = getFileExtension(fs[i]); //Récupère extension
+								destination= new File(location+nomFChoisi+"("+cptExistantImage+")."+recupExt); //création fichier à doublon
+						}else{
+								destination= new File(chemin); 		//création fichier normal
+						}
+						try 
+						{
+						Files.copy(source, destination.toPath()); //copie fichier sélectionner à la dest.
+						createAddMiniIcon(chemin);
+						System.out.println("CHEMIN "+chemin);
 									
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								}
-								break;
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
 							
+					}
 				}
-			}
 				refreshGalerie();
 				cardLayout.first(getMainPanel());
 			}
@@ -390,7 +381,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		public void mouseReleased(MouseEvent e) {}
 	}
 
-	class resetGalerie implements ActionListener 
+	class ResetGalerie implements ActionListener 
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 

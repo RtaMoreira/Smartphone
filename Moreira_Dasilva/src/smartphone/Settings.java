@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import GUI.PhoneFrame;
+import GUI.composants.ImagePanel;
 import GUI.composants.MiniPhoto;
 import GUI.composants.Resizable;
 
@@ -52,9 +53,10 @@ public class Settings extends AppTemplate implements Resizable{
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		this.phone = phone;
-		//Section fond d'écran
+//		super.getNavigation().getBackButton().addActionListener(new ResetMenu());
 		
-			//Affichage image
+		//Section fond d'écran
+			//Affichage choix de fonds
 			MiniPhoto[] choix = RecupBG(dossier);
 			for (int i = 0; i < choix.length; i++) 
 			{
@@ -86,7 +88,9 @@ public class Settings extends AppTemplate implements Resizable{
 		{
 			String chemin = dossier.listFiles()[i].getPath();
 			ImageIcon background= new ImageIcon(chemin);
+			
 			MiniPhoto icon = new MiniPhoto(Resizable.resizePhotoRatio(110, 130,background), chemin);
+			
 			icon.addActionListener(new ChangeBg());
 			listeBG[i] = icon;
 		}
@@ -106,17 +110,19 @@ public class Settings extends AppTemplate implements Resizable{
 			String newBackground = photoTemp.getPathPhoto();
 			//Ecriture dans fichier
 			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(phone.getSettingsInfo()));
+				BufferedWriter writer = new BufferedWriter(new FileWriter(phone.getWpp().getSettingsInfo()));
 				writer.write(newBackground);
 				writer.close();
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			phone.getWpp().setImage();
+
 		}
 		
 	}
+
 	public ImageIcon getSettingsIcon() 
 	{
 		return settingsIcon;

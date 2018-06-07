@@ -63,12 +63,10 @@ public class ShowPanel extends JPanel
 			{
 				try {
 						Files.delete((Paths.get(galerieApp.getPhotoTemp().getPathPhoto()))); //supprime fichier
-					
 						File recupNom = new File(galerieApp.getPhotoTemp().getPathPhoto()); //supprime MiniPhoto de ArrayListe 
 						
 						for (int i = 0; i < galerieApp.getBoutonsIcons().size(); i++) 
 						{
-	
 							if(recupNom.getName().equals(galerieApp.getBoutonsIcons().get(i).getNomPhoto()) )
 							{
 								galerieApp.getGalerie().remove(galerieApp.getBoutonsIcons().get(i));
