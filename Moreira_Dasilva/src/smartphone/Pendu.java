@@ -10,6 +10,8 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -22,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import GUI.composants.MonField;
 
@@ -56,6 +59,13 @@ public class Pendu extends JPanel
 		return penduIcon;
 	}
 	
+	public void restart() 
+	{
+		menu.field.getField().setText("");
+		cardlayout.show(mainPanel,"menu");
+		game.imageHolder.removeAll();
+	}
+	
 	class Menu extends JPanel
 	{
 		ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
@@ -87,11 +97,25 @@ public class Pendu extends JPanel
 	
 	class Gameover extends JPanel
 	{
+		String mot;
+		GridBagConstraints c = new GridBagConstraints();
+		
 		Gameover()
 		{
 			setOpaque(false);
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setLayout(new GridBagLayout());
 			addMouseListener(new Restart());
+		}
+		
+		public void paint() 
+		{
+			c.gridx=0;
+			c.gridy=0;
+			add(new JLabel("Vous avez perdu"),c);
+			c.gridy=1;
+			add(new JLabel("Le mot était : "+mot),c);
+			c.gridy=2;
+			add(new JLabel("Cliquez l'écran pour recommencer"),c);
 		}
 	}
 	
@@ -167,7 +191,6 @@ public class Pendu extends JPanel
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			game.mot=String.valueOf(menu.field.getField().getPassword());
-			System.out.println(menu.field.getField().getPassword());
 			game.cases=new JTextField[game.mot.length()];
 			game.start();
 			cardlayout.show(mainPanel,"game");
@@ -203,9 +226,8 @@ public class Pendu extends JPanel
 				if(game.fails>6) 
 				{
 					gameover.removeAll();
-					gameover.add(new JLabel("Vous avez perdu"));
-					gameover.add(new JLabel("Le mot était : "+game.mot));
-					gameover.add(new JLabel("Cliquez l'écran pour recommencer"));
+					gameover.mot=game.mot;
+					gameover.paint();
 					cardlayout.show(mainPanel,"gameover");
 					return;
 				}

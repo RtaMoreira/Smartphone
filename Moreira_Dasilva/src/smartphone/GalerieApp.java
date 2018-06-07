@@ -410,6 +410,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		return mainPanel;
 	}
 
+	public JScrollPane getScroll() 
+	{
+		return scroll;
+	}
+	
 	public JPanel getGalerie() 
 	{
 		return galerie;

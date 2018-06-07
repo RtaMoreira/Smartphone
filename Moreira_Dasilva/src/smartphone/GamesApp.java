@@ -72,6 +72,8 @@ public class GamesApp extends AppTemplate
 		{
 			snake.getTimer().stop();
 			snake.restart();
+			demineur.restart();
+			pendu.restart();
 			cardlayout.show(gamePanel, "main");
 		}
 	}
