@@ -121,6 +121,7 @@ public class Settings extends AppTemplate implements Resizable{
 
 		}
 		
+		
 	}
 
 	public ImageIcon getSettingsIcon() 
