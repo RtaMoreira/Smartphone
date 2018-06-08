@@ -89,6 +89,7 @@ public class ShowPanel extends JPanel
 				galerieApp.refreshGalerie();	
 				galerieApp.getCardLayout().first(galerieApp.getMainPanel());
 				remove(2);
+				galerieApp.initializeNext(); //remet à zero la position de l'ActionListener NextImage
 			}
 
 		}

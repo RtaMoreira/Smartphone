@@ -15,54 +15,70 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class MiniPhoto extends JButton {
+	
 	private String pathPhoto;
 	private String nomPhoto;
 	private ImageIcon photoRedimensionne;
 	
-	public MiniPhoto(ImageIcon photoRedim, String pathPhoto) {
+	public MiniPhoto(ImageIcon photoRedim, String pathPhoto) 
+	{
 		super(photoRedim);
-		Dimension icon = new Dimension(135, 135);
-		this.setPreferredSize(icon);
-		this.setIcon(photoRedim);
+		
 		this.pathPhoto = pathPhoto;
 		this.photoRedimensionne = photoRedim;
 		this.nomPhoto = recupNom(pathPhoto);
-		this.setOpaque(false);
+		
+		Dimension icon = new Dimension(150, 150);
+		this.setPreferredSize(icon);
+		this.setIcon(photoRedim);
+		
+		//suppression du style bouton
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
-	
+		this.setBorder(getBorder());
+		
 	}
 	
-	public String recupNom(String path) {
+	
+	/**
+	 * Récupère le nom de l'image depuis son chemin
+	 * @param path
+	 * @return String
+	 */
+	public String recupNom(String path) 
+	{
 		File f = new File(path);
 		return f.getName();
 	}
 
-	public String getPathPhoto() {
+	public String getPathPhoto() 
+	{
 		return pathPhoto;
 	}
 
-	public void setPathPhoto(String pathPhoto) {
+	public void setPathPhoto(String pathPhoto) 
+	{
 		this.pathPhoto = pathPhoto;
 	}
 
-	public ImageIcon getPhotoRedimensionne() {
+	public ImageIcon getPhotoRedimensionne() 
+	{
 		return photoRedimensionne;
 	}
 
-	public void setPhotoRedimensionne(ImageIcon photoRedimensionne) {
+	public void setPhotoRedimensionne(ImageIcon photoRedimensionne) 
+	{
 		this.photoRedimensionne = photoRedimensionne;
 	}
 
-	public String getNomPhoto() {
+	public String getNomPhoto() 
+	{
 		return nomPhoto;
 	}
 
-	public void setNomPhoto(String nomPhoto) {
+	public void setNomPhoto(String nomPhoto) 
+	{
 		this.nomPhoto = nomPhoto;
 	}
-	
-	
-	
-	
+
 }

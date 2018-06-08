@@ -44,7 +44,7 @@ import smartphone.Settings;
 	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
 	
 	/** wallpaper*/
-	private ImagePanel wpp;
+	private ImagePanel wpp = new ImagePanel();
 	
 	/** menu ou on rajoute les icones*/
 	private AppGrid appsPanel = new AppGrid();
@@ -101,7 +101,6 @@ import smartphone.Settings;
 		phoneLayout.add(buttons, BorderLayout.SOUTH);
 
 		/**wallpaper*/
-		wpp = new ImagePanel();	//création wpp
 		wpp.setImage();	//ajout wpp sauvegardé
 		wpp.setLayout(new BorderLayout());
 		wpp.add(appsPanel, BorderLayout.CENTER);

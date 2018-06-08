@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,6 +32,7 @@ abstract class AppTemplate extends JPanel
 	private NavigationBar Navigation;
 	private JLabel appIcone;
 	private JLabel appIconeHover;
+	private Font titreFont = new Font("Titre", 1, 25);	// XXX Ajout string
 
 	
 	public AppTemplate(String nomApp, Color couleurNavig) {
@@ -75,13 +79,14 @@ abstract class AppTemplate extends JPanel
 			
 			//Design font du nomApp
 			JLabel titre = new JLabel(nomApp+"            ", SwingConstants.CENTER);
-			Font titreFont = new Font("Titre", 1, 25);
+			//Ajout font sauvegardé (setFont)
 			titre.setFont(titreFont);
 			this.add(titre, BorderLayout.CENTER);
 			this.getBackButton().addMouseListener(new ReturnMenu());
 			
 			this.setVisible(true);
 		}
+		
 		
 		public class BackButton extends JButton{
 			
@@ -137,23 +142,56 @@ abstract class AppTemplate extends JPanel
 		
 	}
 	
+	public String recupFont() 
+	{
+		String font;
+		Font newFont= new Font("Arial", 1, 25);
+	try 
+	{
+			FileReader fr;
+			fr = new FileReader("serials/SettingsInfo.txt");
+			BufferedReader br = new BufferedReader(fr);
+
+			String backgroundPath = br.readLine();
+			font = br.readLine();
+			newFont.
+		} catch (IOException e) 
+			{e.printStackTrace();}
+	
+		return backgroundPath;
+	}
+	
 	//Getters Setters
-	public JLabel getAppIcone() {
+	public JLabel getAppIcone() 
+	{
 		return appIcone;
 	}
 
-	public void setAppIcone(JLabel appIcone) {
+	public void setAppIcone(JLabel appIcone) 
+	{
 		this.appIcone = appIcone;
 	}
 
-	public JLabel getAppIconeHover() {
+	public JLabel getAppIconeHover() 
+	{
 		return appIconeHover;
 	}
 
-	public void setAppIconeHover(JLabel appIconeHover) {
+	public void setAppIconeHover(JLabel appIconeHover) 
+	{
 		this.appIconeHover = appIconeHover;
 	}
 
+	public Font getTitreFont() 
+	{
+		return titreFont;
+	}
+
+	public void setTitreFont() 
+	{
+		this.titreFont = titreFont;
+	}
+	
 
 
 
