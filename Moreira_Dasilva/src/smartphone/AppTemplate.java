@@ -142,24 +142,24 @@ abstract class AppTemplate extends JPanel
 		
 	}
 	
-	public String recupFont() 
-	{
-		String font;
-		Font newFont= new Font("Arial", 1, 25);
-	try 
-	{
-			FileReader fr;
-			fr = new FileReader("serials/SettingsInfo.txt");
-			BufferedReader br = new BufferedReader(fr);
-
-			String backgroundPath = br.readLine();
-			font = br.readLine();
-			newFont.
-		} catch (IOException e) 
-			{e.printStackTrace();}
-	
-		return backgroundPath;
-	}
+//	public String recupFont() 
+//	{
+//		String font;
+//		Font newFont= new Font("Arial", 1, 25);
+////	try 
+//	{
+//			FileReader fr;
+//			fr = new FileReader("serials/SettingsInfo.txt");
+//			BufferedReader br = new BufferedReader(fr);
+//
+//			String backgroundPath = br.readLine();
+//			font = br.readLine();
+//			newFont.
+//		} catch (IOException e) 
+//			{e.printStackTrace();}
+//	
+//		return backgroundPath;
+//	}
 	
 	//Getters Setters
 	public JLabel getAppIcone() 
