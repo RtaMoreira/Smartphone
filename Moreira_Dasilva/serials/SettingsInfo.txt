@@ -1,2 +1,2 @@
 image\background\samsung8.jpg
-java.awt.Font[family=Courier New,name=Courier New,style=bold,size=25]
+java.awt.Font[family=Rockwell,name=Rockwell,style=bold,size=18]

@@ -32,7 +32,7 @@ abstract class AppTemplate extends JPanel
 	private NavigationBar Navigation;
 	private JLabel appIcone;
 	private JLabel appIconeHover;
-	private Font titreFont = new Font("Titre", 1, 25);	// XXX Ajout string
+
 
 	
 	public AppTemplate(String nomApp, Color couleurNavig) {
@@ -41,7 +41,6 @@ abstract class AppTemplate extends JPanel
 		Navigation = new NavigationBar(nomApp);
 		Navigation.setBackground(couleurNavig);
 		this.add(Navigation, BorderLayout.NORTH);
-//		this.add(appScreen, BorderLayout.CENTER);
 
 		this.setVisible(true);
 	}
@@ -60,7 +59,8 @@ abstract class AppTemplate extends JPanel
 	
 	/*********** Barre de Navigation ********/
 	
-	public class NavigationBar extends JPanel{
+	public class NavigationBar extends JPanel
+	{
 		
 
 		private ImageIcon backImage = new ImageIcon("image\\icon\\backicon.png");
@@ -68,6 +68,7 @@ abstract class AppTemplate extends JPanel
 		
 		private JLabel backIcon = new JLabel(backImage);
 		private BackButton backButton = new BackButton();
+		private JLabel titre;
 		
 		public NavigationBar(String nomApp) {
 
@@ -78,9 +79,8 @@ abstract class AppTemplate extends JPanel
 			this.add(backButton, BorderLayout.WEST);
 			
 			//Design font du nomApp
-			JLabel titre = new JLabel(nomApp+"            ", SwingConstants.CENTER);
-			//Ajout font sauvegardé (setFont)
-			titre.setFont(titreFont);
+			titre = new JLabel(nomApp+"            ", SwingConstants.CENTER);
+			titre.setFont(recupFont());				//Récupération du Font
 			this.add(titre, BorderLayout.CENTER);
 			this.getBackButton().addMouseListener(new ReturnMenu());
 			
@@ -88,7 +88,8 @@ abstract class AppTemplate extends JPanel
 		}
 		
 		
-		public class BackButton extends JButton{
+		public class BackButton extends JButton
+		{
 			
 			BackButton(){
 				this.add(backIcon);
@@ -105,12 +106,11 @@ abstract class AppTemplate extends JPanel
 			public void setImage(ImageIcon backImage) {
 				backIcon.setIcon(backImage);
 			}
-			
-
-
 
 		}
-		public  BackButton getBackButton() {
+		
+		public  BackButton getBackButton() 
+		{
 			
 			return backButton;
 		}
@@ -140,26 +140,57 @@ abstract class AppTemplate extends JPanel
 
 		}
 		
+
+		public void setTitreFont() 
+		{
+			this.titre.setFont(recupFont());
+			this.updateUI();
+		}
 	}
 	
-//	public String recupFont() 
-//	{
-//		String font;
-//		Font newFont= new Font("Arial", 1, 25);
-////	try 
-//	{
-//			FileReader fr;
-//			fr = new FileReader("serials/SettingsInfo.txt");
-//			BufferedReader br = new BufferedReader(fr);
-//
-//			String backgroundPath = br.readLine();
-//			font = br.readLine();
-//			newFont.
-//		} catch (IOException e) 
-//			{e.printStackTrace();}
-//	
-//		return backgroundPath;
-//	}
+	/** Méthode qui récupère la font enregistrée dans un File
+	 * 
+	 * @return Font
+	 */
+	
+	public Font recupFont() 
+	{
+		String font;
+		BufferedReader br;
+		Font newFont= new Font("Arial", 1, 25); //Par défaut
+		
+		try 
+		{
+			FileReader fr;
+			fr = new FileReader("serials/SettingsInfo.txt");
+			br = new BufferedReader(fr);
+
+			br.readLine();			//1ère ligne
+			font = br.readLine();	//2ème ligne lue (info font)
+			
+			if(font != null)
+			newFont = new Font(getNameFont(font),1,25);
+			
+			br.close();
+			
+		}catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	
+		return newFont;
+	}
+	
+	
+	private String getNameFont(String font) 
+	{
+		String name="";
+		name= font.substring(font.indexOf("=") + 1);
+		name= name.substring(0,name.indexOf(","));
+		
+		return name;
+	}
+
 	
 	//Getters Setters
 	public JLabel getAppIcone() 
@@ -182,16 +213,7 @@ abstract class AppTemplate extends JPanel
 		this.appIconeHover = appIconeHover;
 	}
 
-	public Font getTitreFont() 
-	{
-		return titreFont;
-	}
 
-	public void setTitreFont() 
-	{
-		this.titreFont = titreFont;
-	}
-	
 
 
 

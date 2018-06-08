@@ -353,6 +353,10 @@ import smartphone.Settings;
 			System.exit(0);
 		}
 	}
+	
+//	public [] getApplis() {
+//		
+//	}
 
 	public ImagePanel getWpp() 
 	{
@@ -383,4 +387,68 @@ import smartphone.Settings;
 	{
 		this.appsPanel = appsPanel;
 	}
+
+	public GalerieApp getGalerie() {
+		return galerie;
+	}
+
+	public void setGalerie(GalerieApp galerie) {
+		this.galerie = galerie;
+	}
+
+	public ContactApp getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(ContactApp contacts) {
+		this.contacts = contacts;
+	}
+
+	public GamesApp getGames() {
+		return games;
+	}
+
+	public void setGames(GamesApp games) {
+		this.games = games;
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
+	public Camera getCamera() 
+	{
+		return camera;
+	}
+
+	public void setCamera(Camera camera) 
+	{
+		this.camera = camera;
+	}
+
+	public Meteo getMeteo() 
+	{
+		return meteo;
+	}
+
+	public void setMeteo(Meteo meteo) 
+	{
+		this.meteo = meteo;
+	}
+
+	public NotesApp getNotes() 
+	{
+		return notes;
+	}
+
+	public void setNotes(NotesApp notes) 
+	{
+		this.notes = notes;
+	}
+	
+	
 }
