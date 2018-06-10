@@ -1,6 +1,6 @@
 /**
-* TP Week2
-*Author: Joao Silva
+* Jeux Snake
+* @author jcfds
 *Date creation : 23 mai 2018
 */
 package smartphone;
@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,15 +26,15 @@ public class Snake extends JPanel implements ActionListener
 	private final int DELAY = 100;
     private JPanel[][] pixels = new JPanel[100][60];
 
-    /* The coordinates of the snake. */
+    /** The coordinates of the snake. */
     private int[] x = new int[pixels[0].length*pixels.length];//possible d'avoir le tout accupé par le snake
     private int[] y = new int[pixels[0].length*pixels.length];
 
-    /* Coordinates for apple. */
+    /** Coordinates for the food. */
     private int apple_x, apple_y;
 
-    /* Pressed Key. */
-    private int snakeSize = 3;//commence a 3
+    
+    private int snakeSize = 3;
     private Timer t = new Timer(DELAY, this);
     private int direction = 1;
     private boolean over=false;
@@ -111,7 +109,7 @@ public class Snake extends JPanel implements ActionListener
 		}
 		
 		snakeSize=3;
-		
+		over=false;
 		randomFood();
     	paint();
 	}
@@ -121,8 +119,15 @@ public class Snake extends JPanel implements ActionListener
         apple_y=(int)(Math.random()*pixels[0].length);
     }
     
-    public boolean checkpixel() //si c'es une pomme on rajoute 1 pixel de longueur
+    
+    /**
+     * @author jcfds
+     * methode verifie si pixel ou snake se deplace est occupé
+     * action par rapport a ce qu'il y a (food, body or border)
+     */
+    public boolean checkpixel() 
     {
+    	//si c'es une pomme on rajoute 1 pixel de longueur
     	if(x[0]==apple_x&&y[0]==apple_y) 
     	{
     		snakeSize++;
@@ -145,6 +150,7 @@ public class Snake extends JPanel implements ActionListener
     	return false;
     }
     
+    /**ouvre un JOptionPane avec l'option de recommencer*/
     public void gameover() 
     {
     	t.stop();
@@ -164,7 +170,7 @@ public class Snake extends JPanel implements ActionListener
     	}
     }
     
-	@Override
+	@Override/**action du Timer*/
 	public void actionPerformed(ActionEvent e) 
 	{
 		for (int i = (snakeSize-1); i > 0; i--) 
@@ -189,19 +195,22 @@ public class Snake extends JPanel implements ActionListener
 			paint();
 	}
 	
+	/**
+	 * change la direction par rapport a la touche(fleche) clicked
+	 */
 	class ChangeDirect implements KeyListener
 	{
 
 		@Override
 		public void keyPressed(KeyEvent arg0) 
 		{
-			if(arg0.getKeyCode()==37)//gauche
+			if(arg0.getKeyCode()==37)/**gauche*/
 				direction=4;
-			if(arg0.getKeyCode()==39)//droite
+			if(arg0.getKeyCode()==39)/**droite*/
 				direction=2;
-			if(arg0.getKeyCode()==38)//haut
+			if(arg0.getKeyCode()==38)/**haut*/
 				direction=3;
-			if(arg0.getKeyCode()==40)//bas
+			if(arg0.getKeyCode()==40)/**bas*/
 				direction=1;
 		}
 		public void keyReleased(KeyEvent arg0) {}

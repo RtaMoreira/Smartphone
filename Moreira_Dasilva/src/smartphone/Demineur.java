@@ -1,6 +1,8 @@
 /**
-* TP Week2
-*Author: Joao Silva
+* Jeux du démineur
+* place des bombes aleatoirement et les numeros par rapport aux bombes
+* quand on clique un des boutons il affiche le numero qu'il y a dessous et desactivates
+* @author jcfds
 *Date creation : 28 mai 2018
 */
 package smartphone;
@@ -41,6 +43,7 @@ public class Demineur extends JPanel implements ActionListener
 		return demineurIcon;
 	 }
 	 
+	 //pour recommencer le jeu replace des bombes et num
 	 public void restart() 
 	 {
 		bombes();
@@ -61,7 +64,7 @@ public class Demineur extends JPanel implements ActionListener
 		return demineurIconHover;
 	}
 	
-	@Override
+	@Override//action quand on clique un bouton
 	public void actionPerformed(ActionEvent arg0) 
 	{
 		for (int i = 0; i < boutons.length; i++) 
@@ -82,6 +85,7 @@ public class Demineur extends JPanel implements ActionListener
 		}
 	}
 	
+	//pour placer le bombes aleatoirement
 	private void bombes() 
 	{
 		for (int i = 0; i<nbBombes; i++)
@@ -100,6 +104,8 @@ public class Demineur extends JPanel implements ActionListener
 		}
 	}
 	
+	
+	 // placer les numeros par rapport aux bombes
 	private void numeros() 
 	{
 		for (int i = 0; i < cases.length; i++) 

@@ -1,6 +1,6 @@
 /**
-* TP Week2
-*Author: Joao Silva
+* Jeux du pendu
+* @author jcfds
 *Date creation : 1 juin 2018
 */
 package smartphone;
@@ -24,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import GUI.composants.FlatField;
 
@@ -59,6 +58,7 @@ public class Pendu extends JPanel
 		return penduIcon;
 	}
 	
+	//pour recommencer avec un nouveau mot
 	public void restart() 
 	{
 		menu.field.getField().setText("");
@@ -66,13 +66,18 @@ public class Pendu extends JPanel
 		game.imageHolder.removeAll();
 	}
 	
+	/**
+	 * classe qui construit le pannel du menu
+	 * @author jcfds
+	 *
+	 */
 	class Menu extends JPanel
 	{
-		ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
-		JPanel vide = new JPanel();
-		FlatField field = new FlatField(2);
-		JButton ok = new JButton("ok");
-		JPanel mot = new JPanel();
+		private ImageIcon logo = new ImageIcon("image/icon/pendu/logo.png");
+		private JPanel vide = new JPanel();
+		private FlatField field = new FlatField(2);
+		private JButton ok = new JButton("ok");
+		private JPanel mot = new JPanel();
 		
 		Menu()
 		{
@@ -95,10 +100,14 @@ public class Pendu extends JPanel
 		}
 	}
 	
+	/**
+	 * @author jcfds
+	 *classe qui represente le panel de gameove
+	 */
 	class Gameover extends JPanel
 	{
-		String mot;
-		GridBagConstraints c = new GridBagConstraints();
+		private String mot;
+		private GridBagConstraints c = new GridBagConstraints();
 		
 		Gameover()
 		{
@@ -119,6 +128,10 @@ public class Pendu extends JPanel
 		}
 	}
 	
+	/**
+	 * classe du JPanel du jeu avec les images du pendu
+	 * @author jcfds
+	 */
 	class Game extends JPanel
 	{
 		String mot;
@@ -157,6 +170,7 @@ public class Pendu extends JPanel
 			playerInput.add(tryBut);
 		}
 		
+		//pour comencer le jeu avec le pendu a l'état de début*/
 		public void start() 
 		{
 			removeAll();
@@ -185,6 +199,7 @@ public class Pendu extends JPanel
 		
 	}
 	
+	//action du bouton ok
 	class StartGame implements ActionListener
 	{
 		@Override
@@ -197,6 +212,7 @@ public class Pendu extends JPanel
 		}
 	}
 	
+	//action de restart le jeu
 	class Restart implements MouseListener
 	{
 		@Override
@@ -212,6 +228,7 @@ public class Pendu extends JPanel
 		public void mouseReleased(MouseEvent arg0) {}
 	}
 	
+	//pour verifier la lettre qu'on ajoute
 	class Letter implements ActionListener
 	{
 		char letter;
@@ -235,11 +252,18 @@ public class Pendu extends JPanel
 				game.imageHolder.removeAll();
 				game.imageHolder.add(new JLabel(game.pendu[game.fails]));
 			}
-			else
-				game.cases[game.mot.indexOf(letter)].setText(String.valueOf(letter));
-/**---------------------------------------------------------------------------------------------
- * see if multiple same letters
- */
+			else 
+			{
+				for (int i = 0; i < game.mot.length(); i++) 
+				{
+					if (game.mot.charAt(i)==letter) 
+					{
+						game.cases[i].setText(String.valueOf(letter));
+					}
+				}
+			}
+				
+			
 		}
 		
 	}

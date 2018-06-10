@@ -1,6 +1,6 @@
 /**
-* TP Week2
-*Author: Joao Silva
+* Contact qui sera serializé
+* @author jcfds
 *Date creation : 22 mai 2018
 */
 package smartphone;

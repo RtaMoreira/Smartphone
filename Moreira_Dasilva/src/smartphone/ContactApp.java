@@ -23,26 +23,26 @@ public class ContactApp extends AppTemplate implements Resizable
 	
 	private ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
-	//cardLayout management
+	/**cardLayout management*/
 	private CardLayout cardlayout = new CardLayout();
 	private JPanel myPanel = new JPanel();
 	private MainContact maincontact = new MainContact();
 	private NewContact newcontact = new NewContact();
 	
-	//pour ouvrir la galerie
+	/**pour ouvrir la galerie*/
 	private GalerieApp galerieapp;
 	private JScrollPane galerie;
 	
-	//boutons pour NavigationBar
+	/**boutons pour NavigationBar*/
 	private FlatButton add = new FlatButton (new ImageIcon("image/icon/Plusicon.png"),new ImageIcon("image/icon/PlusiconHOVER.png"));
 	private FlatButton delete = new FlatButton (new ImageIcon("image/icon/delete.png"),new ImageIcon("image/icon/deleteHOVER.png"));
 	private JPanel buttonHolder = new JPanel();
 	
-	//icones d'appli
+	/**icones d'appli*/
 	private ImageIcon contactIcon =new ImageIcon("image/icon/contact.png");
 	private ImageIcon contactIconHover =new ImageIcon("image/icon/contactHOVER.png");
 	
-	//gerer quel contact est activé
+	/**gerer quel contact est activé*/
 	private int enabled;
 	
 	public ContactApp() 
@@ -82,7 +82,7 @@ public class ContactApp extends AppTemplate implements Resizable
 	}
 	
 	private void insertLabels() 
-	//rajoute un panel a liste pour chaque contact trouvé
+	/**rajoute un panel a liste pour chaque contact trouvé*/
 	{
 		for (int i = 0; i < contacts.size(); i++) 
 		{
@@ -92,7 +92,7 @@ public class ContactApp extends AppTemplate implements Resizable
 	}
 
 	public void deserializeContacts() 
-	//affiche tous les panels dans l'appli
+	/**affiche tous les panels dans l'appli*/
 	{ 
 		try {
 			FileInputStream fichier;
@@ -121,7 +121,10 @@ public class ContactApp extends AppTemplate implements Resizable
 			{e1.printStackTrace();}
 	}
 	
-	class MainContact extends JPanel//le panel d'affichage de tous les contacts
+	/**le panel d'affichage de tous les contacts
+	 * @author jcfds
+	 */
+	class MainContact extends JPanel
 	{
 		private JTextField recherche = new JTextField();
 		private JPanel liste = new JPanel();
@@ -145,9 +148,13 @@ public class ContactApp extends AppTemplate implements Resizable
 		}	
 	}
 	
-	class NewContact extends JPanel//panel pour inserer un nouveau contact
+	/**panel avec les informations
+	 * rempli avec les informations qunad modify ou showAperçu
+	 * textfield enabled quand showInfo et addContact
+	 * @author jcfds
+	 */
+	class NewContact extends JPanel
 	{
-		//display infos
 		private FlatLabel lnom = new FlatLabel("Nom: ");
 		private FlatLabel lprenom = new FlatLabel("Prenom: ");
 		private FlatLabel lnatel = new FlatLabel("Numéro natel: ");
@@ -240,6 +247,10 @@ public class ContactApp extends AppTemplate implements Resizable
 		
 	}
 	
+	/**
+	 * action pour recuperer URL de la galerie photo
+	 * @author jcfds
+	 */
 	class GetURL implements MouseListener
 	{
 		@Override
@@ -270,10 +281,19 @@ public class ContactApp extends AppTemplate implements Resizable
 		{
 			newcontact.tnom.setText("");
 			newcontact.tnom.setEditable(true);
+			newcontact.tnom.setBorder(null);
 			newcontact.tprenom.setText("");
 			newcontact.tprenom.setEditable(true);
+			newcontact.tprenom.setBorder(null);
 			newcontact.tnatel.setText("");
 			newcontact.tnatel.setEditable(true);
+			newcontact.tnatel.setBorder(null);
+			newcontact.ttelephone.setText("");
+			newcontact.ttelephone.setEditable(true);
+			newcontact.tmail.setText("");
+			newcontact.tmail.setEditable(true);
+			newcontact.tadresse.setText("");
+			newcontact.tadresse.setEditable(true);
 			
 			buttonHolder.removeAll();
 			
@@ -305,12 +325,46 @@ public class ContactApp extends AppTemplate implements Resizable
 		}
 	}
 	
+	private boolean onlyContainsNumbers(String text) {
+	    try {
+	        Long.parseLong(text);
+	        return true;
+	    } catch (NumberFormatException ex) {
+	        return false;
+	    }
+	}
 	
+	/**
+	 * classe va ajouter le contact qu'on a créé dans le bon androit en ordre alphabetiquement
+	 * teste si le numero c'est bien des numeros et qu'il y ait un nom ou prenom
+	 * @author jcfds
+	 */
 	class addContact implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
+			
+			if(!(onlyContainsNumbers(newcontact.tnatel.getText())) && !(newcontact.tnatel.getText().equals("")))
+			{
+				newcontact.tnatel.error();
+				return;
+			}
+			
+			if(!(onlyContainsNumbers(newcontact.ttelephone.getText())) && !(newcontact.ttelephone.getText().equals("")))
+			{
+				newcontact.ttelephone.error();
+				return;
+			}
+	
+			if((newcontact.tnom.getText()+newcontact.tprenom.getText()).equals(""))
+			{
+				newcontact.tnom.error();
+				newcontact.tprenom.error();
+				return;
+			}
+				
+				
 			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
 										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.imagePath);
 			
@@ -433,14 +487,18 @@ public class ContactApp extends AppTemplate implements Resizable
 		public void mouseReleased(MouseEvent e) {}
 	}
 	
+	
 	class ShowModify implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			newcontact.tnom.setEditable(true);
+			newcontact.tnom.setBorder(null);
 			newcontact.tprenom.setEditable(true);
+			newcontact.tprenom.setBorder(null);
 			newcontact.tnatel.setEditable(true);
+			newcontact.tnatel.setBorder(null);
 			newcontact.ttelephone.setEditable(true);
 			newcontact.tmail.setEditable(true);
 			newcontact.tadresse.setEditable(true);
@@ -452,6 +510,12 @@ public class ContactApp extends AppTemplate implements Resizable
 		}
 	}
 	
+	/**
+	 * quand on rajoute une lettre dans la recherche 
+	 * il cherche ou existe le substring
+	 * @author jcfds
+	 *
+	 */
 	class Recherche implements KeyListener
 	{
 		public void keyPressed(KeyEvent arg0) {}
@@ -474,16 +538,26 @@ public class ContactApp extends AppTemplate implements Resizable
 		public void keyTyped(KeyEvent arg0) {}
 	}
 	
+	/**
+	 * pour effacer un contact
+	 * @author jcfds
+	 */
 	class Erase implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			
+			if(!(onlyContainsNumbers(newcontact.tnatel.getText())) && !(newcontact.tnatel.getText().equals("")))
+				return;
+			if(!(onlyContainsNumbers(newcontact.ttelephone.getText())) && !(newcontact.ttelephone.getText().equals("")))
+				return;
+			if(((newcontact.tnom.getText()+newcontact.tprenom.getText()).equals("")))
+				return;
+			
 			maincontact.liste.remove(contacts.get(enabled).getButton());
-
 			contacts.remove(enabled);
 			serializeContacts();
-			
 			maincontact.scroll.repaint();
 		}
 	}

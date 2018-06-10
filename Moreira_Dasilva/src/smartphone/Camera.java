@@ -1,7 +1,8 @@
 /**
-* TP Week2
-*Author: Joao Silva
+* Camera
+* @author jcfds
 *Date creation : 4 juin 2018
+*Access webcam avec l'aide d'une librairie qui ajoute des images a la galerie  du telephone
 */
 package smartphone;
 
@@ -21,7 +22,7 @@ import javax.swing.JPanel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
-//Copyright (C) 2012 - 2015 Bartosz Firyn (https://github.com/sarxos)
+/**Library webcam: Copyright (C) 2012 - 2015 Bartosz Firyn (https://github.com/sarxos)*/
 
 public class Camera extends AppTemplate 
 {
@@ -65,6 +66,10 @@ public class Camera extends AppTemplate
 		super.getNavigation().getBackButton().addActionListener(new Close());
 	}
 	
+	/**
+	 * @author jcfds
+	 * ouvrir l'acces webcam et enlever celle qu'on avait desactivé
+	 */
 	public void start() 
 	{
 		cam =new WebcamPanel(webcam);
@@ -88,6 +93,7 @@ public class Camera extends AppTemplate
 		return cameraIconHover;
 	}
 	
+	//pour le bouton capture
 	class Capture implements ActionListener
 	{
 		@Override
@@ -97,10 +103,24 @@ public class Camera extends AppTemplate
 			String nom="capture"+numero+".jpg";
 			File list[]=dossier.listFiles();
 
-			for (int i = 0; i < list.length; i++) {
-				if (list[i].getName().indexOf(nom.substring(0,nom.indexOf("e")+1))!=-1) {
-					if (numero<=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf("."))))
-						numero=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf(".")))+1;
+			/**
+			 * pour avoir de numeros différents pour toutes les photos
+			 * @author jcfds
+			 */
+			for (int i = 0; i < list.length; i++) 
+			{
+				if (list[i].getName().indexOf(nom.substring(0,nom.indexOf("e")+1))!=-1) 
+				{
+					if(list[i].getName().indexOf("(")==-1) 
+					{
+						if (numero<=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf("."))))
+							numero=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf(".")))+1;
+					}
+					else 
+					{
+						if (numero<=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf("("))))
+							numero=Integer.parseInt(list[i].getName().substring(7,list[i].getName().indexOf("(")))+1;
+					}
 				}
 			}
 			
@@ -108,7 +128,8 @@ public class Camera extends AppTemplate
 			File fichier=new File(dossier, nom);
 			
 			
-			try {
+			try 
+			{
 				ImageIO.write(webcam.getImage(), "JPG", fichier);
 			} catch (IOException e) 
 				{e.printStackTrace();}
@@ -119,6 +140,9 @@ public class Camera extends AppTemplate
 		}
 	}
 	
+	/**
+	 * pour fermer la camera quand on clique sur le bouton retour
+	 */
 	class Close implements ActionListener
 	{
 		@Override

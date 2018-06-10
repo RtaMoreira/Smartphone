@@ -36,6 +36,10 @@ public class ImagePanel extends JPanel
     	this.image=new ImageIcon(recupBackground());
     }
     
+    public void setImage(String image) {
+    	this.image=new ImageIcon(image);
+    }
+    
     /**
      * Méthode qui récupère le Path du fond d'écran
      * 
