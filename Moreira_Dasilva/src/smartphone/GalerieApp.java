@@ -9,9 +9,11 @@ package smartphone;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -49,22 +53,23 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	private ArrayList<MiniPhoto> BoutonsIcons = new ArrayList<>();
 	private MiniPhoto photoTemp; //photo cliquée gardée en mémoire
 	private JFileChooser chooser = new JFileChooser();
-	
-	private int countClick = 0; //Comteur de click (pour ActionListener NextImage)
-	private int positionNext = 0;
+
 
 	// JPanel principal
 	private CardLayout cardLayout = new CardLayout();
 	private JPanel mainPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane();
 
-	// Jpanel qui contient la galerie et le JLabel d'Ajout de photo, etc.
+	// Jpanel qui contient la galerie et l'icon d'Ajout de photo, etc.
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
 	private JPanel galerie = new JPanel(new GridLayout(0,3,0,5));
-	
 	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
-	private JLabel message = new JLabel(" ") ;
-	private JPanel south = new JPanel(new BorderLayout());
+	private JLabel message = new JLabel("") ;
+	private JPanel msgPanel = new JPanel();
+	private Timer timer = new Timer();
+	private JPanel south = new JPanel(new GridLayout(2, 1));
+	
+	//Panel qui affiche l'image en entier
 	private ShowPanel apercu = new ShowPanel(this);
 
 	public GalerieApp() 
@@ -88,8 +93,8 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		ajout.setBorder(new CompoundBorder(border, margin));
 		
 		south.setBackground(Color.cyan);
-		south.add(ajout, BorderLayout.CENTER);
-		south.add(message, BorderLayout.SOUTH);
+		south.add(ajout);
+		south.add(message, FlowLayout.CENTER);
 
 		scroll.setViewportView(galerie);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -233,6 +238,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 	// *******ActionListener & MouseListeners ********
 
+	/**
+	 * Listener qui affiche l'image cliquée en grand
+	 * @author Rita Moreira
+	 *
+	 */
 	class ShowImage implements ActionListener {
 
 		// Affiche l'image choisie dans aperçu en grand
@@ -253,26 +263,21 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			getApercu().setBackground(Color.BLACK);
 			getApercu().add(photoZoom);
 			
-
 			cardLayout.show(mainPanel, "aperçu");
-
 		}
-		
-		class NextImage implements MouseListener
+
+		/**
+		 * Listener qui affiche l'image suivante
+		 * @author Rita Moreira
+		 *
+		 */
+		class NextImage extends MouseAdapter 
 		{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
-				countClick++;		//compte nb de clic
-				
-				if(countClick == 1) 	//au 1er click calcule la position dans tableau
-				{
-					while(photoTemp.getNomPhoto().equals(getBoutonsIcons().get(positionNext).getNomPhoto())==false) 
-					{
-						positionNext++;
-					}
-				}
+				int positionNext = getBoutonsIcons().indexOf(photoTemp);
 				
 				if(positionNext != getBoutonsIcons().size()-1) 
 				{
@@ -280,9 +285,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				}else{
 					positionNext = 0;		//recommence à zero à fin de la galerie
 				}
-				MiniPhoto nextImage=getBoutonsIcons().get(positionNext);
+				photoTemp = getBoutonsIcons().get(positionNext);
 				
-				ImageIcon nextPhoto = new ImageIcon(nextImage.getPathPhoto()); //Récupère le chemin selon positions dans icons
+				ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin de l'icon
 				
 				nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Affichage nextPhoto en grde taille
 				JLabel nextPhotoGrd = new JLabel(nextPhoto);
@@ -293,10 +298,6 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
 				
 			}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
 			
 		}
 
@@ -369,8 +370,31 @@ public class GalerieApp extends AppTemplate implements Resizable {
 					}
 				}
 				refreshGalerie();
-				if(error==false) message.setText("Ajout réussi");
-				else message.setText(" Erreur : Fichier JPEG,JPG et PNG uniquement");
+
+				if(error==false)
+				{
+					message.setText("Ajout réussi");
+					timer.schedule(new TimerTask() 
+					{
+						public void run() 
+						{
+							message.setText("");
+						}
+					}, 2000);
+				}else
+				{
+					message.setText("Erreur : Fichier jpg,jpeg et png uniquement");
+
+					timer.schedule(new TimerTask() 
+					{
+						public void run() 
+						{
+							message.setText("");
+						}
+					}, 2000);
+				}
+
+
 				cardLayout.first(getMainPanel());
 			}
 			if (reponse == chooser.CANCEL_OPTION) 
@@ -481,10 +505,5 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		this.message = message;
 	}
 
-	public void initializeNext() 
-	{
-		this.positionNext = 0;
-		this.countClick = 0;
-	}
 
 }

@@ -40,7 +40,7 @@ import smartphone.Settings;
 	private NorthPanel hour = new NorthPanel();
 	private SouthPanel buttons = new SouthPanel();
 	
-	/** forme du natel (PNJ)*/
+	/** forme du natel (PNG)*/
 	private ImagePanel phoneLayout = new ImagePanel(new ImageIcon("image/icon/phone.png"));
 	
 	/** wallpaper*/
@@ -211,7 +211,7 @@ import smartphone.Settings;
 						cardLayout.show(screen, "games");
 					else 
 					{
-						if(app==settingsIcon) 
+						if(app==settingsIcon)
 							cardLayout.show(screen, "settings");
 						else 
 						{
@@ -346,7 +346,7 @@ import smartphone.Settings;
 	}
 	
 	/**timer si longClick dans bouton eteindre*/
-	class CalculeTimer implements ActionListener 
+	public class CalculeTimer implements ActionListener 
 	{
 		public void actionPerformed(ActionEvent arg0) 
 		{
@@ -354,9 +354,7 @@ import smartphone.Settings;
 		}
 	}
 	
-//	public [] getApplis() {
-//		
-//	}
+
 
 	public ImagePanel getWpp() 
 	{

@@ -9,12 +9,15 @@ package GUI.composants;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -28,7 +31,8 @@ public class ShowPanel extends JPanel
 
 	private JLabel delete = new JLabel(new ImageIcon("image/icon/delete.png"));
 	private JLabel quit = new JLabel(new ImageIcon("image/icon/crossBL.png"));
-	
+	private Timer timer = new Timer();
+
 	private GalerieApp galerieApp;
 	
 	public ShowPanel(GalerieApp maGalerie) 
@@ -53,7 +57,7 @@ public class ShowPanel extends JPanel
 		add(gestion, BorderLayout.SOUTH);
 	}
 
-	class OptionsApercu implements MouseListener 
+	class OptionsApercu extends MouseAdapter 
 	{
 
 		public void mouseClicked(MouseEvent e) 
@@ -79,6 +83,14 @@ public class ShowPanel extends JPanel
 						}
 						
 						galerieApp.getMessage().setText("Suppression réussie");
+
+						timer.schedule(new TimerTask() 
+						{
+							public void run() 
+							{
+								galerieApp.getMessage().setText("");
+							}
+						}, 2000);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.getMessage();
@@ -89,7 +101,7 @@ public class ShowPanel extends JPanel
 				galerieApp.refreshGalerie();	
 				galerieApp.getCardLayout().first(galerieApp.getMainPanel());
 				remove(2);
-				galerieApp.initializeNext(); //remet à zero la position de l'ActionListener NextImage
+
 			}
 
 		}
@@ -108,8 +120,6 @@ public class ShowPanel extends JPanel
 				getDelete().setIcon(new ImageIcon("image/icon/delete.png"));
 		}
 
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
 	}
 
 	public JLabel getDelete() 

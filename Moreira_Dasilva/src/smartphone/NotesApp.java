@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 
 public class NotesApp extends AppTemplate{
 	//icon
-	private ImageIcon notesIcon = new ImageIcon("image\\icon\\galerie.png");
-	private ImageIcon notesIconHover = new ImageIcon("image\\icon\\galerieHOVER.png");
+	private ImageIcon notesIcon = new ImageIcon("image\\icon\\notes.png");
+	private ImageIcon notesIconHover = new ImageIcon("image\\icon\\notesHOVER.png");
 	
 	//panel
 	private JPanel mainPanel = new JPanel(new BorderLayout());

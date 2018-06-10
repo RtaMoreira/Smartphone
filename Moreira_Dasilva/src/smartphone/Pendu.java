@@ -29,8 +29,8 @@ import GUI.composants.FlatField;
 
 public class Pendu extends JPanel
 {
-	private ImageIcon penduIcon = new ImageIcon("image/icon/galerie.png");
-	private ImageIcon penduIconHover = new ImageIcon("image/icon/galerieHOVER.png");
+	private ImageIcon penduIcon = new ImageIcon("image/icon/pendu.png");
+	private ImageIcon penduIconHover = new ImageIcon("image/icon/penduHOVER.png");
 	private CardLayout cardlayout = new CardLayout();
 	private Menu menu = new Menu();
 	private Game game = new Game();
