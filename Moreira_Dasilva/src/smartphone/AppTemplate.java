@@ -41,9 +41,7 @@ abstract class AppTemplate extends JPanel
 	}
 
 	
-	/**
-	 * Getter & Setters
-	 */
+	//******** Getter & Setters *********//
 	
 	public NavigationBar getNavigation() 
 	{

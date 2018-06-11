@@ -13,6 +13,7 @@ package smartphone;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -79,8 +80,9 @@ public class Settings extends AppTemplate implements Resizable {
 			for (int i = 0; i < choix.length; i++) 
 			{
 				listeFond.add(choix[i]);
+				
 			}	
-
+			listeFond.setBackground(Color.RED);
 		//Option : Police
 		fontApp.add(generateTitre("Police des titres"),BorderLayout.NORTH);
 		createButton();
@@ -113,7 +115,8 @@ public class Settings extends AppTemplate implements Resizable {
 			ImageIcon background= new ImageIcon(chemin);
 			
 			MiniPhoto icon = new MiniPhoto(Resizable.resizePhotoRatio(110, 130,background), chemin);
-			
+			icon.setBackground(Color.red);
+			icon.setSize(125, 150);
 			icon.addActionListener(new ChangeBg());
 			listeBG[i] = icon;
 		}
@@ -269,10 +272,8 @@ public class Settings extends AppTemplate implements Resizable {
 		}	
 	}
 
-/**
- * Getters & Setters	
- * Classe : Settings
- */
+//******** Getter & Setters *********//
+	
 	public ImageIcon getSettingsIcon() 
 	{
 		return settingsIcon;

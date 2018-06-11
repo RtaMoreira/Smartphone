@@ -139,10 +139,8 @@ public class ShowPanel extends JPanel
 	}
 	
 	
-	/** 
-	 * Getters & Setters
-	 * Classe ShowPanel
-	 */
+	//******** Getter & Setters *********//
+	
 	public JLabel getDelete() 
 	{
 		return delete;

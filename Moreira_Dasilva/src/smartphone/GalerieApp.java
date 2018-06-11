@@ -146,6 +146,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		}catch (ArrayIndexOutOfBoundsException aie) {
 			System.out.println(aie.getMessage());
 		}
+		
 		return liste;
 		
 	}
@@ -167,12 +168,14 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		}
 	}
 	
+	
 	/**
 	 * Selon les photos récupérées (ArrayList photos)
 	 * Crée des MiniPhoto qu'on ajoute un ArrayList
 	 * @param photos récupérées auparavant
 	 * @author Rita Moreira
 	 */
+	
 	private void creationGalerie(ArrayList<File> photos) 
 	{
 
@@ -186,28 +189,31 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 
 	/**
+	 * Rafraîchir la galerie photo (après suppression, ajout, retour à la galerie)
+	 *@author Rita Moreira
+	 */
+	
+	public void refreshGalerie() 
+	{
+		showGalery(BoutonsIcons);
+		message.setText("");
+	}
+	
+	
+	/**
 	 * Méthode qui récupère l'extension d'un Fichier
 	 * @param file
 	 * @return l'extension en String
 	 * @author Rita Moreira
 	 */
-	private static String getFileExtension(File file) 
+	
+	public String getFileExtension(File file) 
 	{
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
 			return fileName.substring(fileName.lastIndexOf(".") + 1);
 		else
 			return "";
-	}
-
-	/**
-	 * Rafraîchir la galerie photo (après suppression, ajout, retour à la galerie)
-	 *@author Rita Moreira
-	 */
-	public void refreshGalerie() 
-	{
-		showGalery(BoutonsIcons);
-		message.setText("");
 	}
 	
 	
@@ -217,7 +223,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	 *@return boolean (true = extension valide)
 	 * @author Rita Moreira
 	 */
-	private boolean checkExtension(File fichier) 
+	public boolean checkExtension(File fichier) 
 	{
 		String ext = getFileExtension(fichier);
 		if(ext.toLowerCase().equals("jpeg")|| ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("png")) 
@@ -225,6 +231,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		else
 			return false;
 	}
+	
 	
 	/**
 	 * Création d'un MiniIcon et ajout à ArrayListe BoutonIcon
@@ -465,10 +472,8 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 
 	
-	/**
-	 * Getters & Setters
-	 * Classe : GalerieApp
-	 */
+	//******** Getter & Setters *********//
+	
 	public ImageIcon getGalerieIcon() 
 	{
 		return galerieIcon;
