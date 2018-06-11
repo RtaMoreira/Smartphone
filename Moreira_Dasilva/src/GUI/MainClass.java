@@ -1,7 +1,10 @@
 /**
-* Classe avec le main!
-*Author: Joao Silva
-*Date creation : 7 mai 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : MainClass <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : class qui cocntien le main<br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI;
 public class MainClass 

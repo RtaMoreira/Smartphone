@@ -1,8 +1,10 @@
 /**
-* NorthPanel
-*Author: Joao Silva
-*Date creation : 20 avr. 2018
-*panel avec l'heure an haut du natel
+* --------------------------------------------------------------------------<br/>
+* Classe : NorthPanel <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Affiche l'heure en haut du natel <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI.composants;
 import java.awt.Color;

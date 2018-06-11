@@ -1,9 +1,11 @@
 /**
-* PhoneFrame
-*Author: Joao Silva
-*Date creation : 7 mai 2018
-*regroupe le wallpaper et toutes les icones d'application
-*aussi avec le cardLayout qui permet d'ouvrir les applications
+* --------------------------------------------------------------------------<br/>
+* Classe : PhoneFrame <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : regroupe le wallpaper et toutes les icones d'application <br/>
+* aussi avec le cardLayout qui permet d'ouvrir les applications<br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI;
 

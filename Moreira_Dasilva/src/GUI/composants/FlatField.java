@@ -1,8 +1,12 @@
 /**
-* FlatField
-*Author: Joao Silva
-*Date creation : 1 juin 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : FlatField <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Field dans un panel pour faciliter les changements de taille <br/>
+* --------------------------------------------------------------------------<br/>
 */
+
 package GUI.composants;
 
 import java.awt.Color;

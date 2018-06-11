@@ -1,7 +1,10 @@
 /**
-* Jeux du pendu
-* @author jcfds
-*Date creation : 1 juin 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : Jeux Pendu <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Jeux du pendu <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 
@@ -24,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import GUI.composants.FlatField;
 
@@ -108,6 +112,10 @@ public class Pendu extends JPanel
 	{
 		private String mot;
 		private GridBagConstraints c = new GridBagConstraints();
+		private JLabel perdu = new JLabel("Vous avez perdu");
+		private JLabel gagne = new JLabel("Vous avez gagné");
+		private JLabel motEtait = new JLabel("Le mot était : ");
+		private JLabel cliquez = new JLabel("Cliquez l'écran pour recommencer");
 		
 		Gameover()
 		{
@@ -116,15 +124,28 @@ public class Pendu extends JPanel
 			addMouseListener(new Restart());
 		}
 		
-		public void paint() 
+		public void win() 
 		{
 			c.gridx=0;
 			c.gridy=0;
-			add(new JLabel("Vous avez perdu"),c);
+			add(gagne,c);
 			c.gridy=1;
-			add(new JLabel("Le mot était : "+mot),c);
+			motEtait.setText(motEtait.getText()+mot);
+			add(motEtait,c);
 			c.gridy=2;
-			add(new JLabel("Cliquez l'écran pour recommencer"),c);
+			add(cliquez,c);
+		}
+		
+		public void lose() 
+		{
+			c.gridx=0;
+			c.gridy=0;
+			add(perdu,c);
+			c.gridy=1;
+			motEtait.setText(motEtait.getText()+mot);
+			add(motEtait,c);
+			c.gridy=2;
+			add(cliquez,c);
 		}
 	}
 	
@@ -143,6 +164,7 @@ public class Pendu extends JPanel
 		private JTextField input = new JTextField();
 		private JButton tryBut = new JButton("Try");
 		private int fails=0;
+		private int wins=0;
 		ImageIcon[] pendu=new ImageIcon[7];
 		
 		Game()
@@ -178,6 +200,7 @@ public class Pendu extends JPanel
 			input.setText("");
 			imageHolder.add(new JLabel(pendu[0]));
 			fails=0;
+			wins=0;
 			
 			
 			add(imageHolder);
@@ -185,7 +208,8 @@ public class Pendu extends JPanel
 			for (int i = 0; i < cases.length; i++) 
 			{
 				cases[i]=new JTextField();
-				cases[i].setEnabled(false);
+				cases[i].setEditable(false);
+				cases[i].setForeground(Color.BLACK);
 				cases[i].setPreferredSize(new Dimension(20, 20));
 				cases[i].setMaximumSize(new Dimension(20, 20));
 				cases[i].setMinimumSize(new Dimension(20, 20));
@@ -205,10 +229,16 @@ public class Pendu extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
+			if(String.valueOf(menu.field.getField().getPassword())=="")
+				menu.field.setBorder(new LineBorder(Color.RED));
+			else
+			{
 			game.mot=String.valueOf(menu.field.getField().getPassword());
 			game.cases=new JTextField[game.mot.length()];
 			game.start();
+			menu.field.setBorder(null);
 			cardlayout.show(mainPanel,"game");
+			}
 		}
 	}
 	
@@ -244,7 +274,7 @@ public class Pendu extends JPanel
 				{
 					gameover.removeAll();
 					gameover.mot=game.mot;
-					gameover.paint();
+					gameover.lose();
 					cardlayout.show(mainPanel,"gameover");
 					return;
 				}
@@ -259,7 +289,17 @@ public class Pendu extends JPanel
 					if (game.mot.charAt(i)==letter) 
 					{
 						game.cases[i].setText(String.valueOf(letter));
+						game.wins++;
 					}
+				}
+				
+				if(game.wins==game.mot.length())
+				{
+					gameover.removeAll();
+					gameover.mot=game.mot;
+					gameover.win();
+					cardlayout.show(mainPanel,"gameover");
+					return;
 				}
 			}
 				

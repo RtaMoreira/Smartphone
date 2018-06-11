@@ -1,8 +1,10 @@
 /**
-* LockScrean
-*Author: Joao Silva
-*Date creation : 7 mai 2018
-*ce Panel sera présent lors de l'ouverture de l'appkication et lorsqu'on le verouille
+* --------------------------------------------------------------------------<br/>
+* Classe : LockScrean <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur : Joao Silva <br/>
+* Description : Panel sera présent lors de l'ouverture de l'appkication et lorsqu'on le verouille <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI;
 

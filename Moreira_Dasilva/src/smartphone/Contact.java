@@ -1,7 +1,10 @@
 /**
-* Contact qui sera serializé
-* @author jcfds
-*Date creation : 22 mai 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : contact <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Contact qui sera serializé <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 

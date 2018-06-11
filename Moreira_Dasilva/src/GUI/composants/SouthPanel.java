@@ -1,7 +1,10 @@
 /**
-* SouthPanel
-*Author: Joao Silva
-*Date creation : 20 avr. 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : SouthPanel <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Barre noire en bas du natel <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI.composants;
 

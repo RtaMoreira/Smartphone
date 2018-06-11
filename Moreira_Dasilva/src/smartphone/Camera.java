@@ -1,9 +1,13 @@
 /**
-* Camera
-* @author jcfds
-*Date creation : 4 juin 2018
-*Access webcam avec l'aide d'une librairie qui ajoute des images a la galerie  du telephone
+* --------------------------------------------------------------------------<br/>
+* Classe : Camera <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao silva <br/>
+* Extension : AppTemplate <br/>
+* Description : Access webcam avec l'aide d'une librairie qui ajoute des images a la galerie du telephone <br/>
+* --------------------------------------------------------------------------<br/>
 */
+
 package smartphone;
 
 import java.awt.BorderLayout;

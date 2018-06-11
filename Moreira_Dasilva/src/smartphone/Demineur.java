@@ -1,9 +1,14 @@
 /**
-* Jeux du démineur
-* place des bombes aleatoirement et les numeros par rapport aux bombes
-* quand on clique un des boutons il affiche le numero qu'il y a dessous et desactivates
-* @author jcfds
-*Date creation : 28 mai 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : Demineur <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Extension : AppTemplate <br/>
+* Interface : Resizable <br/>
+* Description : place des bombes aleatoirement et les numeros par <br/>
+* rapport aux bombes quand on clique un des boutons il affiche le numero<br/>
+*  qu'il y a dessous et desactivates<br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 
@@ -44,7 +49,7 @@ public class Demineur extends JPanel implements ActionListener
 	 }
 	 
 	 //pour recommencer le jeu replace des bombes et num
-	 public void restart() 
+	 protected void restart() 
 	 {
 		bombes();
 		numeros();

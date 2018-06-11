@@ -1,8 +1,11 @@
 /**
-* Application Meteo
-* @author jcfds
-*Date creation : 4 juin 2018
-*utilise API de  {@link}OpenWeatherMap.org
+* --------------------------------------------------------------------------<br/>
+* Classe : Meteo <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Extension : AppTemplate <br/>
+* Description : utilise API de  {@link}OpenWeatherMap.org <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 
@@ -128,7 +131,7 @@ public class Meteo extends AppTemplate
 	 * getInfos pour recup les autres Infos
 	 * @author jcfds
 	 */
-	public void initializeCity() 
+	private void initializeCity() 
 	{
 		getDate();
 		getCity();
@@ -137,7 +140,7 @@ public class Meteo extends AppTemplate
 		getInfos();
 	}
 
-	public void getDate() 
+	private void getDate() 
 	{
 		datePanel.removeAll();
 		Calendar cal = Calendar.getInstance();
@@ -147,7 +150,7 @@ public class Meteo extends AppTemplate
 		datePanel.add(date);
 	}
 	
-	public void getCity() 
+	private void getCity() 
 	{
 		String s=infoJSON.substring((infoJSON.indexOf("name")+7),(infoJSON.indexOf("cod")-3))+", "+
 				infoJSON.substring((infoJSON.indexOf("country")+10),(infoJSON.indexOf("sunrise")-3));
@@ -158,7 +161,7 @@ public class Meteo extends AppTemplate
 		cityPanel.add(city);
 	}
 	
-	public void getStatus() 
+	private void getStatus() 
 	{
 		String status;
 		status=infoJSON.substring((infoJSON.indexOf("icon")+7),(infoJSON.indexOf("base")-5));
@@ -208,7 +211,7 @@ public class Meteo extends AppTemplate
 		updateUI();
 	}
 	
-	public void getTemp() 
+	private void getTemp() 
 	{
 		JLabel actual;
 		if(infoJSON.indexOf(".",infoJSON.indexOf("temp"))<infoJSON.indexOf("pressure",infoJSON.indexOf("temp")))
@@ -235,14 +238,14 @@ public class Meteo extends AppTemplate
 		tempPanel.add(minMax,c);
 	}
 	
-	public void getInfos() 
+	private void getInfos() 
 	{
 		infoPanel.removeAll();
 		JLabel pressure =new JLabel( "Pression:                 "+ infoJSON.substring((infoJSON.indexOf("pressure")+10),(infoJSON.indexOf("humidity")-2))+" hpa");
 		JLabel humidity =new JLabel( "Humidité:                 "+ infoJSON.substring((infoJSON.indexOf("humidity")+10),(infoJSON.indexOf("temp_min")-2))+"%");
 		JLabel windSpeed;
 		JLabel sunRise =new JLabel(  "Lever du soleil :       "+ hhmm.format(new Date((Integer.parseInt(infoJSON.substring((infoJSON.indexOf("sunrise")+9),(infoJSON.indexOf("sunset")-2))))*1000L)));
-		JLabel sunSet =new JLabel(   "Coucher du soleil :  "+ hhmm.format(new Date((Integer.parseInt(infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("id")-3))))*1000L)));
+		JLabel sunSet =new JLabel(   "Coucher du soleil :  "+ hhmm.format(new Date(Integer.parseInt(infoJSON.substring((infoJSON.indexOf("sunset")+8),(infoJSON.lastIndexOf("\"id\"")-3)))*1000L)));
 		
 		if(infoJSON.indexOf("deg")!=-1)//parce que le degré du vent n'est pas toujours présent
 			windSpeed =new JLabel(   "Vitesse vent:           "+ infoJSON.substring((infoJSON.indexOf("speed")+7),(infoJSON.indexOf(",",infoJSON.indexOf("speed")+7)))+" m/s");
@@ -280,7 +283,7 @@ public class Meteo extends AppTemplate
 		
 	}
 	
-	public void getInfo(int cityCode) 
+	private void getInfo(int cityCode) 
 	{
 		try
 		{
@@ -291,7 +294,6 @@ public class Meteo extends AppTemplate
 	        in.close();
 		} catch (IOException e) 
 			{e.printStackTrace();}
-		System.out.println(infoJSON);
 	}
 	
 	public ImageIcon getMeteoIcon() 

@@ -1,8 +1,12 @@
 /**
-* FlatButton
-*Author: Joao Silva
-*Date creation : 1 juin 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : FlatButton <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : button dans un panel pour faciliter les tailles <br/>
+* --------------------------------------------------------------------------<br/>
 */
+
 package GUI.composants;
 
 import java.awt.Color;

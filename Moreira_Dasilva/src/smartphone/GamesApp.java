@@ -1,7 +1,11 @@
 /**
-* TP Week2
-*Author: Joao Silva
-*Date creation : 22 mai 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : GamesApp <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Extension : AppTemplate <br/>
+* Description : contient les icons correspondants aux jeux<br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 

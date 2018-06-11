@@ -1,7 +1,10 @@
 /**
-* AppGrid
-*Author: Joao Silva
-*Date creation : 21 avr. 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : AppGrid <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Description : Classe gérant la mise en page de icons<br/>
+* --------------------------------------------------------------------------<br/>
 */
 package GUI.composants;
 

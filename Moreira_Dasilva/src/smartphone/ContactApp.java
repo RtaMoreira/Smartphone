@@ -1,8 +1,14 @@
 /**
-* TP Week2
-*Author: Joao Silva
-*Date creation : 22 mai 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : ContactApp <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Joao Silva <br/>
+* Extension : AppTemplate <br/>
+* Interface : Resizable <br/>
+* Description : Classe qui gére l'appli Contacts <br/>
+* --------------------------------------------------------------------------<br/>
 */
+
 package smartphone;
 
 import java.awt.*;
@@ -91,7 +97,7 @@ public class ContactApp extends AppTemplate implements Resizable
 		}
 	}
 
-	public void deserializeContacts() 
+	private void deserializeContacts() 
 	/**affiche tous les panels dans l'appli*/
 	{ 
 		try {
@@ -109,7 +115,7 @@ public class ContactApp extends AppTemplate implements Resizable
 		}
 	}
 	
-	public void serializeContacts() 
+	private void serializeContacts() 
 	{
 		try {
 			FileOutputStream fichier;
@@ -135,7 +141,7 @@ public class ContactApp extends AppTemplate implements Resizable
 			paint();
 		}
 
-		public  void paint() 
+		protected  void paint() 
 		{
 			liste.setLayout(new BoxLayout(liste, BoxLayout.Y_AXIS));//boxLayout vertical a ma liste de contacts
 			liste.setBackground(Color.WHITE);			
