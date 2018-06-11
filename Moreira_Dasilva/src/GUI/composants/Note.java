@@ -1,15 +1,20 @@
 /**
- *	Exercise : GUI.composants Note.java
- *	Author : Rita Moreira
- *	Date : 5 juin 2018
- */
+* --------------------------------------------------------------------------<br/>
+* Classe : Note <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Rita Moreira <br/>
+* Extension : JPanel <br/>
+* Description :	Cette classe contient les informations nécessaires pour une note <br/>
+* 
+* Remarques : en cours de développement
+* --------------------------------------------------------------------------<br/>
+*/
 
 package GUI.composants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.swing.JPanel;
 
 public class Note extends JPanel {
@@ -25,7 +30,11 @@ public class Note extends JPanel {
 //	Date date = new Date();
 //	System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
 
-	
+	/**
+	 * Constructeur 
+	 * @param titre
+	 * @param date
+	 */
 	public Note(String titre, Date date) {
 		this.titre = titre;
 		this.date = date;

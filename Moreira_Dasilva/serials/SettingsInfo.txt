@@ -1,2 +1,1 @@
-image\background\samsung2.jpg
-java.awt.Font[family=Courier New,name=Courier New,style=bold,size=18]
+image\background\samsung5.jpg

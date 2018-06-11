@@ -1,21 +1,23 @@
 /**
- *	Exercise : smartphone GalerieApp.java
- *	Author : Rita Moreira
- *	Date : 7 mai 2018
- */
-
+* --------------------------------------------------------------------------<br/>
+* Classe : GalerieApp <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Rita Moreira <br/>
+* Extension : AppTemplate <br/>
+* Interface : Resizable <br/>
+* Description : Classe gérant la galerie photo <br/>
+* --------------------------------------------------------------------------<br/>
+*/
 package smartphone;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +28,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -37,21 +38,20 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import GUI.composants.MiniPhoto;
-import GUI.composants.Photo;
 import GUI.composants.Resizable;
 import GUI.composants.ShowPanel;
 
 public class GalerieApp extends AppTemplate implements Resizable {
+	
 	// icon du menu
 	private ImageIcon galerieIcon = new ImageIcon("image\\icon\\galerie.png");
 	private ImageIcon galerieIconHover = new ImageIcon("image\\icon\\galerieHOVER.png");
 
-	private File dossier = new File("image\\image");
+	private File dossier = new File("image\\image");	
 	
 	private ArrayList<MiniPhoto> BoutonsIcons = new ArrayList<>();
-	private MiniPhoto photoTemp; //photo cliquée gardée en mémoire
+	private MiniPhoto photoTemp; 	//photo cliquée gardée en mémoire
 	private JFileChooser chooser = new JFileChooser();
 
 
@@ -60,41 +60,43 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	private JPanel mainPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane();
 
-	// Jpanel qui contient la galerie et l'icon d'Ajout de photo, etc.
+	// Jpanel qui contient la galerie
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
 	private JPanel galerie = new JPanel(new GridLayout(0,3,0,5));
+	
+	//JPanel avec bouton d'ajout d'image et Message de confirmation
+	private JPanel south = new JPanel(new GridLayout(0, 1));
 	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
 	private JLabel message = new JLabel("") ;
 	private JPanel msgPanel = new JPanel();
-	private Timer timer = new Timer();
-	private JPanel south = new JPanel(new GridLayout(2, 1));
-	
+	private Timer timer = new Timer();	//pour la durée des messages
+
 	//Panel qui affiche l'image en entier
 	private ShowPanel apercu = new ShowPanel(this);
 
+	/**
+	 * Constructeur
+	 * @author Rita Moreira
+	 */
 	public GalerieApp() 
 	{
 		super("Galerie Photo", Color.CYAN);
-
+		mainPanel.setLayout(cardLayout);
 		
 		creationGalerie(recupImages());	//première génération de la galerie (création de ArrayList)
 		refreshGalerie();
 		
 		super.getNavigation().getBackButton().addActionListener(new ResetGalerie());
-
-		mainPanel.setLayout(cardLayout);
-		this.add(mainPanel);
 	
-		//Panel Sud 
+		//Panel South
 		ajout.addMouseListener(new AddImage());
-		
-			Border border = ajout.getBorder();
-			Border margin = new EmptyBorder(5, 10, 5, 10);
+		Border border = ajout.getBorder();
+		Border margin = new EmptyBorder(5, 10, 5, 10);
 		ajout.setBorder(new CompoundBorder(border, margin));
 		
 		south.setBackground(Color.cyan);
+		msgPanel.add(message);
 		south.add(ajout);
-		south.add(message, FlowLayout.CENTER);
 
 		scroll.setViewportView(galerie);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -105,50 +107,56 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		
 		mainPanel.add(mainGalerie, "galerie");
 		mainPanel.add(apercu, "aperçu");
+		this.add(mainPanel);
 	}
 
-	// *******Méthodes********
+	// *********** Méthodes **********//
 
 /**
  * 	Méthode qui récupère les images du dossier au lancement du smartphone
- * 
- * @return ArrayList<Photo>
+ *  
+ * @return ArrayList<Photo> contenant toutes les photos du dossier
  * @author Rita Moreira
  * 
- * Partie classant les images du plus récent ajout au plus vieux:
+ * Partie classant les images du plus récent ajout au plus vieux :
  * copyright : @cwick - 14.10.08
  * https://stackoverflow.com/questions/203030/best-way-to-list-files-in-java-sorted-by-date-modified?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
  */
-	public ArrayList<Photo> recupImages() 
+	private ArrayList<File> recupImages() 
 	{
 
-		ArrayList<Photo> liste = new ArrayList<Photo>();
-		Photo image;
-
+		ArrayList<File> liste = new ArrayList<File>();
+		File image;
 		for (int i = 0; i < dossier.list().length; i++) //Ajout à arrayList
 		{	
-			image = new Photo(dossier.list()[i]);
+			image = new File(dossier+"\\"+dossier.list()[i]);
 			liste.add(image);
 		}
 		
 		//classement de Arraylist (du + récent ajout au + vieux)
 		try {	
-				Collections.sort(liste, new Comparator<Photo>() 
-				{ 
-			
-			        public int compare(Photo p1, Photo p2)
-			        {
-			        		return  Long.valueOf(p1.lastModified()).compareTo(p2.lastModified());
-			        }
-				});
-    		}catch (ArrayIndexOutOfBoundsException aie) {
-    			System.out.println(aie.getMessage());
-    		}
+			Collections.sort(liste, new Comparator<File>() 
+			{ 
+		
+		        public int compare(File p1, File p2)
+		        {
+		        		return  Long.valueOf(p1.lastModified()).compareTo(p2.lastModified());
+		        }
+			});
+		}catch (ArrayIndexOutOfBoundsException aie) {
+			System.out.println(aie.getMessage());
+		}
 		return liste;
 		
 	}
 
-	public void showGalery(ArrayList<MiniPhoto> icons) {
+	/**
+	 * Méthode qui ajoute les MiniPhoto à la galerie
+	 * @param icons : ArralyList de toutes les icons
+	 * @author Rita Moreira
+	 */
+	private void showGalery(ArrayList<MiniPhoto> icons) 
+	{
 		// Supprime si des photos étaient déjà dans galerie avant
 		galerie.removeAll();
 
@@ -160,29 +168,28 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 	
 	/**
-	 * Selon photos récupérées (ArrayList)
-	 * Crée des MiniPhoto qu'on ajoute à ArrayList
-	 * @param photos
+	 * Selon les photos récupérées (ArrayList photos)
+	 * Crée des MiniPhoto qu'on ajoute un ArrayList
+	 * @param photos récupérées auparavant
+	 * @author Rita Moreira
 	 */
-	public void creationGalerie(ArrayList<Photo> photos) 
+	private void creationGalerie(ArrayList<File> photos) 
 	{
-		// Supprime si des photos étaient déjà dans galerie avant
-		galerie.removeAll();
 
 		// Créations des miniPhotos à partir du ArrayList passé en paramètre
 		for (int i = 0; i < photos.size(); i++) 
 		{
-			
-			String path = photos.get(i).getLocation();
+			String path = photos.get(i).getPath();
+
 			createAddMiniIcon(path);
 		}
 	}
 
 	/**
-	 * Récupérer l'extension d'un Fichier
-	 * 
+	 * Méthode qui récupère l'extension d'un Fichier
 	 * @param file
-	 * @return
+	 * @return l'extension en String
+	 * @author Rita Moreira
 	 */
 	private static String getFileExtension(File file) 
 	{
@@ -194,23 +201,21 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 
 	/**
-	 * Rafraîchir la galerie photo (après delete, ajout, retour)
-	 *
+	 * Rafraîchir la galerie photo (après suppression, ajout, retour à la galerie)
+	 *@author Rita Moreira
 	 */
 	public void refreshGalerie() 
 	{
-//		galerie.setPreferredSize(setDimension(480));
 		showGalery(BoutonsIcons);
 		message.setText("");
 	}
 	
 	
 	/**
-	 * Contrôle des images ajoutées 
+	 * Contrôle de l'extension des images ajoutées.
 	 * uniquement accepté : JPEG, JPG, PNG
-	 * 
-	 * @author Rita Moreira
 	 *@return boolean (true = extension valide)
+	 * @author Rita Moreira
 	 */
 	private boolean checkExtension(File fichier) 
 	{
@@ -222,9 +227,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	}
 	
 	/**
-	 * Création MiniIcon et ajout à ArrayListe BoutonIcon
+	 * Création d'un MiniIcon et ajout à ArrayListe BoutonIcon
 	 * @author Rita Moreira
-	 *
+	 * @param path de la photo source
 	 */
 	public void createAddMiniIcon(String path) 
 	{
@@ -235,18 +240,28 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		icon.addActionListener(new ShowImage()); //ajoute action
 		BoutonsIcons.add(0,icon);	//ajoute au tableau d'icons
 	}
+	
+	
+	public void styleMsgPanel() 
+	{
+		if(message.getText().equals("Suppression réussie") ||message.getText().equals("Ajout réussi") )
+			msgPanel.setBackground(Color.GREEN);
+		else if (message.getText().equals("Erreur : Fichier jpg,jpeg et png uniquement")) {
+			msgPanel.setBackground(Color.RED);
+		}
+	}
 
 	// *******ActionListener & MouseListeners ********
 
 	/**
 	 * Listener qui affiche l'image cliquée en grand
 	 * @author Rita Moreira
-	 *
 	 */
-	class ShowImage implements ActionListener {
-
+	class ShowImage implements ActionListener 
+	{
 		// Affiche l'image choisie dans aperçu en grand
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
 
 			// récupère l'url de l'image
 			Object event = e.getSource();
@@ -265,45 +280,52 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			
 			cardLayout.show(mainPanel, "aperçu");
 		}
-
-		/**
-		 * Listener qui affiche l'image suivante
-		 * @author Rita Moreira
-		 *
-		 */
-		class NextImage extends MouseAdapter 
+	}
+	
+	/**
+	 * Listener qui affiche l'image suivante
+	 * @author Rita Moreira
+	 */
+	class NextImage extends MouseAdapter 
+	{
+			
+		@Override
+		public void mouseClicked(MouseEvent e) 
 		{
+			int positionNext = getBoutonsIcons().indexOf(photoTemp);
 			
-			@Override
-			public void mouseClicked(MouseEvent e) 
+			if(positionNext != getBoutonsIcons().size()-1) 
 			{
-				int positionNext = getBoutonsIcons().indexOf(photoTemp);
-				
-				if(positionNext != getBoutonsIcons().size()-1) 
-				{
-					positionNext += 1;
-				}else{
-					positionNext = 0;		//recommence à zero à fin de la galerie
-				}
-				photoTemp = getBoutonsIcons().get(positionNext);
-				
-				ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin de l'icon
-				
-				nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Affichage nextPhoto en grde taille
-				JLabel nextPhotoGrd = new JLabel(nextPhoto);
-				
-				getApercu().remove(2);
-				getApercu().add(nextPhotoGrd);
-				
-				nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
-				
+				positionNext += 1;
+			}else{
+				positionNext = 0;		//recommence à zero à fin de la galerie
 			}
-			
+			photoTemp = getBoutonsIcons().get(positionNext);
+				
+			ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin de l'icon
+				
+			nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Affichage nextPhoto en grde taille
+			JLabel nextPhotoGrd = new JLabel(nextPhoto);
+				
+			getApercu().remove(2);
+			getApercu().add(nextPhotoGrd);
+				
+			nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
+				
 		}
-
+			
 	}
 
-	class AddImage implements MouseListener 
+	/**
+	 * Listener d'ajout d'image
+	 * @author Rita Moreira
+	 * 
+	 * Contrôle fait durant l'ajout :
+	 * 	1) extension du fichier valide
+	 * 	2) Nom du fichier pas déjà existant (si c'est le cas : ajoute un "(1)" par exemple)
+	 */
+
+	class AddImage extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent e) 
@@ -330,7 +352,8 @@ public class GalerieApp extends AppTemplate implements Resizable {
 					
 					Path source = fs[i].toPath();
 
-					if(checkExtension(fs[i])== true) //CONTROLE: extension (ajout uniquement si ok)
+					//CONTROLE: extension (ajout uniquement si ok)
+					if(checkExtension(fs[i])== true) 
 					{
 						String nomFChoisi  = fs[i].getName().substring(0, fs[i].getName().lastIndexOf("."));
 
@@ -347,7 +370,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 						if(cptExistantImage>0) 
 						{
 								String recupExt = getFileExtension(fs[i]); //Récupère extension
-								destination= new File(location+nomFChoisi+"("+cptExistantImage+")."+recupExt); //création fichier à doublon
+								destination= new File(location+nomFChoisi+"("+(cptExistantImage+1)+")."+recupExt); //création fichier à doublon
 						}else{
 								destination= new File(chemin); 		//création fichier normal
 						}
@@ -357,7 +380,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 							
 							Date newDate = new Date();	//nouvelle date de modif (pour ordrer la galerie)
 							destination.setLastModified(newDate.getTime());
-							createAddMiniIcon(chemin);
+							createAddMiniIcon(destination.getPath());
 							
 						} catch (IOException e1) {
 							e1.printStackTrace();
@@ -374,22 +397,29 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				if(error==false)
 				{
 					message.setText("Ajout réussi");
-					timer.schedule(new TimerTask() 
-					{
-						public void run() 
-						{
-							message.setText("");
-						}
-					}, 2000);
-				}else
-				{
-					message.setText("Erreur : Fichier jpg,jpeg et png uniquement");
+					styleMsgPanel();
+					south.add(msgPanel);
 
 					timer.schedule(new TimerTask() 
 					{
 						public void run() 
 						{
 							message.setText("");
+							south.remove(msgPanel);
+						}
+					}, 2000);
+				}
+				else
+				{
+					message.setText("Erreur : Fichier jpg,jpeg et png uniquement");
+					styleMsgPanel();
+					south.add(msgPanel);
+					timer.schedule(new TimerTask() 
+					{
+						public void run() 
+						{
+							message.setText("");
+							south.remove(msgPanel);
 						}
 					}, 2000);
 				}
@@ -415,10 +445,12 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			getAjout().setIcon(new ImageIcon("image/icon/Plusicon.png"));
 		}
 
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
 	}
 
+	/** 
+	 * Listener qui remet la galerie à Zero quand clique sur backButton de l'application
+	 * @author Rita Moreira
+	 */
 	class ResetGalerie implements ActionListener 
 	{
 		@Override
@@ -429,12 +461,14 @@ public class GalerieApp extends AppTemplate implements Resizable {
 				getApercu().remove(2);
 			}
 			cardLayout.first(getMainPanel());
-			message.setText("");
 		}
-		
 	}
 
-	// ****** Getter *******
+	
+	/**
+	 * Getters & Setters
+	 * Classe : GalerieApp
+	 */
 	public ImageIcon getGalerieIcon() 
 	{
 		return galerieIcon;
@@ -505,5 +539,14 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		this.message = message;
 	}
 
+	public JPanel getSouth() 
+	{
+		return south;
+	}
+
+	public JPanel getMsgPanel() 
+	{
+		return msgPanel;
+	}
 
 }

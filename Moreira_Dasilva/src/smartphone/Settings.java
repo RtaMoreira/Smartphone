@@ -1,20 +1,24 @@
 /**
-* TP Week2
-*Author: Joao Silva
-*Date creation : 4 juin 2018
+* --------------------------------------------------------------------------<br/>
+* Classe : Settings <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Rita Moreira <br/>
+* Extension : AppTemplate <br/>
+* Interface : Resizable <br/>
+* Description : Classe gérant les paramètres du smartphone (fond d'écran <br/>
+* et police des titres) <br/>
+* --------------------------------------------------------------------------<br/>
 */
 package smartphone;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -34,57 +37,56 @@ import GUI.PhoneFrame;
 import GUI.composants.MiniPhoto;
 import GUI.composants.Resizable;
 
-public class Settings extends AppTemplate implements Resizable{
+public class Settings extends AppTemplate implements Resizable {
 
 	private ImageIcon settingsIcon = new ImageIcon("image/icon/reglage.png");
 	private ImageIcon settingsIconHover = new ImageIcon("image/icon/reglageHOVER.png");
 
+	private PhoneFrame phone;
 	private JPanel mainPanel;
+	
 	//Panel Option fond d'écran
 	private JPanel fondEcran = new  JPanel(new BorderLayout());
 	private JPanel listeFond = new JPanel(new GridLayout(1, 7));
 	
-	//Panel Option police des titres des apps
+	//Panel Option police
 	private JPanel fontApp = new JPanel(new BorderLayout());
 	private JPanel listePolice = new JPanel(new GridLayout(2, 3));
-	
-	//Autres
-	private File dossier = new File("image//background//");
-	private PhoneFrame phone;
-	
+
 	private Timer timer = new Timer();
 	private JPanel msgPanel = new JPanel();
 	private JLabel message = new JLabel("changement sauvergardé");
 
-	
+	/**
+	 * Constructeur
+	 * @param phoneFrame
+	 * @author Rita Moreira
+	 */	
 	public Settings(PhoneFrame phone) 
 	{
-		super("Parametres", Color.WHITE);
+		super("Paramètres", Color.WHITE);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		this.phone = phone;
 
-		
-		//Section fond d'écran
+		//Option : fond d'écran
 		fondEcran.add(generateTitre("Fond d'écran"),BorderLayout.NORTH);
 		
 		fondEcran.add(listeFond,BorderLayout.CENTER);
 		
-			//Affichage choix de fonds
-			MiniPhoto[] choix = RecupBG(dossier);
-			
+			//Affichage de chaque police
+			MiniPhoto[] choix = RecupBG(new File("image//background//"));
 			for (int i = 0; i < choix.length; i++) 
 			{
 				listeFond.add(choix[i]);
 			}	
 
-			
-		//Section font titre
+		//Option : Police
 		fontApp.add(generateTitre("Police des titres"),BorderLayout.NORTH);
 		createButton();
 		fontApp.add(listePolice);	
 	
-		//message de changements
+		//message de validation de changement
 		message.setForeground(Color.WHITE);
 		msgPanel.setBackground(Color.GREEN);
 		msgPanel.add(message);
@@ -96,6 +98,11 @@ public class Settings extends AppTemplate implements Resizable{
 		add(mainPanel);
 	}
 	
+/**
+ * Méthode qui récupère les Background depuis un dossier	
+ * @param dossier où se trouvent les fonds d'écran
+ * @return tableau de MiniPhoto contenant tous les fonds d'écran
+ */
 	public MiniPhoto[] RecupBG(File dossier)
 	{
 		MiniPhoto[] listeBG = new MiniPhoto[dossier.listFiles().length];
@@ -110,13 +117,13 @@ public class Settings extends AppTemplate implements Resizable{
 			icon.addActionListener(new ChangeBg());
 			listeBG[i] = icon;
 		}
-		
+
 		return listeBG;
 	}
 
 /**
- * Méthode qui crée des boutons pour chaque Police proposée
- * Et les ajoute dans le tableau de JButton appelé "listePolice"
+ * Méthode qui crée des boutons pour chaque Police proposée (String[] choixFont)
+ * Et les ajoute dans le tableau de JButton listePolice
  * @author Rita Moreira
  * @return boutons des polices proposées
  */
@@ -131,8 +138,7 @@ public class Settings extends AppTemplate implements Resizable{
 			bouton.setFont(new Font(choixFont[i], 1, 18));
 			bouton.addMouseListener(new ChangeTitleFont());
 			
-			//Supprimer les effets par défaut bouton 
-			bouton.setContentAreaFilled(false);
+			bouton.setContentAreaFilled(false); //Supprimer l'effet bouton
 			bouton.setForeground(Color.BLACK);
 			bouton.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 			listePolice.add(bouton);
@@ -140,9 +146,9 @@ public class Settings extends AppTemplate implements Resizable{
 	}
 	
 /**
- * Génération des titres des réglages, avec le visuel identique
+ * Génération des titres des options avec un visuel identique
  * @author Rita Moreira
- * @param titre
+ * @param titre de l'option
  * @return le titre de chaque option de règlage
  */
 	public JPanel generateTitre(String titre) 
@@ -154,23 +160,20 @@ public class Settings extends AppTemplate implements Resizable{
 			
 		JPanel titrePanel = new JPanel();
 		titrePanel.setBackground(new Color(70,109,146));
-		titrePanel.add(titreSetting,FlowLayout.LEFT);
+		titrePanel.add(titreSetting);
 		return titrePanel;
 	}
 	
 /**
  * Listener pour changer de fond d'écran
  * @author Rita Moreira
- *
  */
 	public class ChangeBg implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			int x = 0;
 			Object event = e.getSource();
-
 			MiniPhoto photoTemp = (MiniPhoto) event;
 
 			String newBackground = photoTemp.getPathPhoto();
@@ -181,12 +184,11 @@ public class Settings extends AppTemplate implements Resizable{
 				writer.write(newBackground);
 				writer.close();
 			} catch (IOException ioe) {
-				// TODO Auto-generated catch block
 				ioe.printStackTrace();
 			}
 
 			msgPanel.setVisible(true);
-			timer.schedule(new TimerTask() 
+			timer.schedule(new TimerTask() 		 //Timer pour l'affichage des msg
 			{
 				public void run() 
 				{
@@ -195,25 +197,24 @@ public class Settings extends AppTemplate implements Resizable{
 			}, 2000);
 
 			phone.getWpp().setImage();
-			
-
 		}
 	}
 
 /**
- * Listener pour changer de Font	
+ * Listener pour changer de Police	
  * @author Rita Moreira
- *
  */
 	
-	public class ChangeTitleFont extends MouseAdapter{
+	public class ChangeTitleFont extends MouseAdapter
+	{
 
 		@Override
 		public void mouseClicked(MouseEvent me) 
 		{
 			Object event = me.getSource();
 			JButton boutonClick= (JButton) event;
-			Font newFont = boutonClick.getFont();	
+			Font newFont = boutonClick.getFont();
+			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(phone.getWpp().getSettingsInfo())); //accès fichier Settings
 				String bg = br.readLine();
@@ -225,8 +226,10 @@ public class Settings extends AppTemplate implements Resizable{
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
+			
 			msgPanel.setVisible(true);
-			timer.schedule(new TimerTask() 
+			
+			timer.schedule(new TimerTask() //timer message
 			{
 				public void run() 
 				{
@@ -256,18 +259,20 @@ public class Settings extends AppTemplate implements Resizable{
 		}
 
 		@Override
-		public void mouseExited(MouseEvent me) {
+		public void mouseExited(MouseEvent me) 
+		{
 			Object event = me.getSource();
 			JButton boutonClick= (JButton) event;
 			boutonClick.setContentAreaFilled(false);
 			boutonClick.setForeground(Color.BLACK);
-
 			boutonClick.setBackground(null);
 		}	
-		
 	}
 
-	
+/**
+ * Getters & Setters	
+ * Classe : Settings
+ */
 	public ImageIcon getSettingsIcon() 
 	{
 		return settingsIcon;
@@ -282,6 +287,4 @@ public class Settings extends AppTemplate implements Resizable{
 		return msgPanel;
 	}
 	
-	
-
 }

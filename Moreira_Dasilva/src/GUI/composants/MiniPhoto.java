@@ -1,16 +1,16 @@
 /**
- *	Exercise : GUI.composants miniPhoto.java
- *	Author : Rita Moreira
- *	Date : 25 mai 2018
- */
-
+* --------------------------------------------------------------------------<br/>
+* Classe : MiniPhoto <br/>
+* --------------------------------------------------------------------------<br/>
+* Auteur: Rita Moreira <br/>
+* Extension : JButton <br/>
+* Description : Classe de JButton contenant l'icon d'une image <br/>
+* --------------------------------------------------------------------------<br/>
+*/
 package GUI.composants;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -20,6 +20,12 @@ public class MiniPhoto extends JButton {
 	private String nomPhoto;
 	private ImageIcon photoRedimensionne;
 	
+	/**
+	 * Constructeur
+	 * @param photoRedim : Image redimensionnée en petit
+	 * @param pathPhoto : chemin de l'image
+	 * @author Rita Moreira
+	 */
 	public MiniPhoto(ImageIcon photoRedim, String pathPhoto) 
 	{
 		super(photoRedim);
@@ -28,8 +34,8 @@ public class MiniPhoto extends JButton {
 		this.photoRedimensionne = photoRedim;
 		this.nomPhoto = recupNom(pathPhoto);
 		
-		Dimension icon = new Dimension(150, 150);
-		this.setPreferredSize(icon);
+		Dimension iconMax = new Dimension(150, 150);
+		this.setPreferredSize(iconMax);
 		this.setIcon(photoRedim);
 		
 		//suppression du style bouton
