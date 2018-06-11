@@ -27,7 +27,7 @@ import GUI.composants.Resizable;
 public class ContactApp extends AppTemplate implements Resizable
 {
 	
-	private ArrayList<Contact> contacts = new ArrayList<Contact>();
+	public ArrayList<Contact> contacts = new ArrayList<Contact>();
 	
 	/**cardLayout management*/
 	private CardLayout cardlayout = new CardLayout();
@@ -159,7 +159,7 @@ public class ContactApp extends AppTemplate implements Resizable
 	 * textfield enabled quand showInfo et addContact
 	 * @author jcfds
 	 */
-	class NewContact extends JPanel
+	public class NewContact extends JPanel
 	{
 		private FlatLabel lnom = new FlatLabel("Nom: ");
 		private FlatLabel lprenom = new FlatLabel("Prenom: ");
@@ -167,9 +167,9 @@ public class ContactApp extends AppTemplate implements Resizable
 		private FlatLabel ltelephone = new FlatLabel("Numéro téléphone: ");
 		private FlatLabel lmail = new FlatLabel("Mail: ");
 		private FlatLabel ladresse = new FlatLabel("Adresse: ");
-		private FlatField tnom = new FlatField();
-		private FlatField tprenom = new FlatField();
-		private FlatField tnatel = new FlatField();
+		public FlatField tnom = new FlatField();
+		public FlatField tprenom = new FlatField();
+		public FlatField tnatel = new FlatField();
 		private FlatField ttelephone = new FlatField();
 		private FlatField tmail = new FlatField();
 		private FlatField tadresse = new FlatField();
@@ -211,7 +211,7 @@ public class ContactApp extends AppTemplate implements Resizable
 			}
 		};
 		
-		NewContact()
+		public NewContact()
 		{
 			setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 			
@@ -245,9 +245,9 @@ public class ContactApp extends AppTemplate implements Resizable
 			add(infoPanel);
 			
 			//listeners das boutons possibles
-			save.addActionListener(new addContact());
+			save.addActionListener(new AddContact());
 			modify.addActionListener(new ShowModify());
-			update.addActionListener(new addContact());
+			update.addActionListener(new AddContact());
 			update.addActionListener(new Erase());
 		}
 		
@@ -332,7 +332,7 @@ public class ContactApp extends AppTemplate implements Resizable
 		}
 	}
 	
-	private boolean onlyContainsNumbers(String text) {
+	public boolean onlyContainsNumbers(String text) {
 	    try {
 	        Long.parseLong(text);
 	        return true;
@@ -342,86 +342,89 @@ public class ContactApp extends AppTemplate implements Resizable
 	}
 	
 	/**
-	 * classe va ajouter le contact qu'on a créé dans le bon androit en ordre alphabetiquement
+	 * methode va ajouter le contact qu'on a créé dans le bon androit en ordre alphabetiquement
 	 * teste si le numero c'est bien des numeros et qu'il y ait un nom ou prenom
 	 * @author jcfds
 	 */
-	class addContact implements ActionListener
+	public void addContact() {
+		if(!(onlyContainsNumbers(newcontact.tnatel.getText())) && !(newcontact.tnatel.getText().equals("")))
+		{
+			newcontact.tnatel.error();
+			return;
+		}
+		
+		if(!(onlyContainsNumbers(newcontact.ttelephone.getText())) && !(newcontact.ttelephone.getText().equals("")))
+		{
+			newcontact.ttelephone.error();
+			return;
+		}
+
+		if((newcontact.tnom.getText()+newcontact.tprenom.getText()).equals(""))
+		{
+			newcontact.tnom.error();
+			newcontact.tprenom.error();
+			return;
+		}
+			
+			
+		Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
+									newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.imagePath);
+		
+		maincontact.removeAll();
+		
+	//ajouter le nouveau contact au bon endroit alphabetiquement
+		String newPers=newcontact.tnom.getText() +" "+ newcontact.tprenom.getText();
+		int next=0;
+		boolean last=true;
+		
+		if (contacts.size()>0) 
+		{
+			for (int j = 0; j < contacts.size(); j++) 
+			{
+				last=true;
+				if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+" "+contacts.get(j).getPrenom())<0) 
+				{
+					next=j;
+					last=false;//si je trouve un négatif c'est que le nouveau contact n'est pas dernier
+					break;
+				}
+			}
+			
+			if(last)
+				contacts.add(contacts.size(),p1);
+			else
+				contacts.add(next,p1);
+		}
+		else
+			contacts.add(next,p1);
+		
+		p1.getButton().addMouseListener(new GetInfo());
+		
+		
+		newcontact.tnom.setText("");
+		newcontact.tprenom.setText("");
+		newcontact.tnatel.setText("");
+		newcontact.ttelephone.setText("");
+		newcontact.tmail.setText("");
+		newcontact.tadresse.setText("");
+		
+		serializeContacts();
+		maincontact.paint();
+		insertLabels();
+		
+		buttonHolder.removeAll();
+		buttonHolder.add(add);
+		updateUI();
+		cardlayout.show(myPanel, "main");
+	}
+	class AddContact implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			
-			if(!(onlyContainsNumbers(newcontact.tnatel.getText())) && !(newcontact.tnatel.getText().equals("")))
-			{
-				newcontact.tnatel.error();
-				return;
-			}
-			
-			if(!(onlyContainsNumbers(newcontact.ttelephone.getText())) && !(newcontact.ttelephone.getText().equals("")))
-			{
-				newcontact.ttelephone.error();
-				return;
-			}
-	
-			if((newcontact.tnom.getText()+newcontact.tprenom.getText()).equals(""))
-			{
-				newcontact.tnom.error();
-				newcontact.tprenom.error();
-				return;
-			}
-				
-				
-			Contact p1 = new Contact(newcontact.tnom.getText(), newcontact.tprenom.getText(), newcontact.tnatel.getText(), newcontact.ttelephone.getText(),
-										newcontact.tmail.getText(), newcontact.tadresse.getText(),newcontact.imagePath);
-			
-			maincontact.removeAll();
-			
-		//ajouter le nouveau contact au bon endroit alphabetiquement
-			String newPers=newcontact.tnom.getText() +" "+ newcontact.tprenom.getText();
-			int next=0;
-			boolean last=true;
-			
-			if (contacts.size()>0) 
-			{
-				for (int j = 0; j < contacts.size(); j++) 
-				{
-					last=true;
-					if(newPers.compareToIgnoreCase(contacts.get(j).getNom()+" "+contacts.get(j).getPrenom())<0) 
-					{
-						next=j;
-						last=false;//si je trouve un négatif c'est que le nouveau contact n'est pas dernier
-						break;
-					}
-				}
-				
-				if(last)
-					contacts.add(contacts.size(),p1);
-				else
-					contacts.add(next,p1);
-			}
-			else
-				contacts.add(next,p1);
-			
-			p1.getButton().addMouseListener(new GetInfo());
-			
-			
-			newcontact.tnom.setText("");
-			newcontact.tprenom.setText("");
-			newcontact.tnatel.setText("");
-			newcontact.ttelephone.setText("");
-			newcontact.tmail.setText("");
-			newcontact.tadresse.setText("");
-			
-			serializeContacts();
-			maincontact.paint();
-			insertLabels();
-			
-			buttonHolder.removeAll();
-			buttonHolder.add(add);
-			updateUI();
-			cardlayout.show(myPanel, "main");
+			addContact();
 		}
+			
 	}
 	
 	class GetInfo implements MouseListener
