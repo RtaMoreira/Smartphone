@@ -84,13 +84,16 @@ private MouseListener ml = new RemoveError();
 		t1.addMouseListener(ml);
 	}
 	
+	public void removeError() {
+		t1.setBorder(null);
+		t1.removeMouseListener(ml);
+	}
 	class RemoveError implements MouseListener
 	{
 		@Override
 		public void mouseClicked(MouseEvent arg0) 
 		{
-			t1.setBorder(null);
-			t1.removeMouseListener(ml);
+			removeError();
 		}
 		public void mouseEntered(MouseEvent arg0) {}
 		public void mouseExited(MouseEvent arg0) {}

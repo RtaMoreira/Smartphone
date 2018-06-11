@@ -177,7 +177,7 @@ public class ContactApp extends AppTemplate implements Resizable
 		//boutons possibles pour cahque état
 		private FlatButton save = new FlatButton("enregistrer");
 		private FlatButton modify = new FlatButton("modifier");
-		private FlatButton update = new FlatButton("modifier");
+		private FlatButton update = new FlatButton("valider");
 		
 		//gestion des panels
 		private JPanel imagePanel = new JPanel();
@@ -287,15 +287,16 @@ public class ContactApp extends AppTemplate implements Resizable
 		{
 			newcontact.tnom.setText("");
 			newcontact.tnom.setEditable(true);
-			newcontact.tnom.setBorder(null);
+			newcontact.tnom.removeError();
 			newcontact.tprenom.setText("");
 			newcontact.tprenom.setEditable(true);
-			newcontact.tprenom.setBorder(null);
+			newcontact.tprenom.removeError();
 			newcontact.tnatel.setText("");
 			newcontact.tnatel.setEditable(true);
-			newcontact.tnatel.setBorder(null);
+			newcontact.tnatel.removeError();
 			newcontact.ttelephone.setText("");
 			newcontact.ttelephone.setEditable(true);
+			newcontact.ttelephone.removeError();
 			newcontact.tmail.setText("");
 			newcontact.tmail.setEditable(true);
 			newcontact.tadresse.setText("");
@@ -441,12 +442,16 @@ public class ContactApp extends AppTemplate implements Resizable
 				enabled=selected;
 				newcontact.tnom.setText(contacts.get(selected).getNom());
 				newcontact.tnom.setEditable(false);
+				newcontact.tnom.removeError();
 				newcontact.tprenom.setText(contacts.get(selected).getPrenom());
 				newcontact.tprenom.setEditable(false);
+				newcontact.tprenom.removeError();
 				newcontact.tnatel.setText(contacts.get(selected).getNatel());
 				newcontact.tnatel.setEditable(false);
+				newcontact.tnatel.removeError();
 				newcontact.ttelephone.setText(contacts.get(selected).getTelephone());
 				newcontact.ttelephone.setEditable(false);
+				newcontact.ttelephone.removeError();
 				newcontact.tmail.setText(contacts.get(selected).getMail());
 				newcontact.tmail.setEditable(false);
 				newcontact.tadresse.setText(contacts.get(selected).getAdresse());
@@ -511,7 +516,7 @@ public class ContactApp extends AppTemplate implements Resizable
 			newcontact.imagePanel.addMouseListener(newcontact.mouselistener);
 			newcontact.infoPanel.remove(newcontact.modify);
 			newcontact.infoPanel.add(newcontact.update);
-			
+			updateUI();
 			buttonHolder.removeAll();
 		}
 	}
