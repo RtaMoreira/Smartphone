@@ -3,7 +3,7 @@
 * Classe : MainClass <br/>
 * --------------------------------------------------------------------------<br/>
 * Auteur: Joao Silva <br/>
-* Description : class qui cocntien le main<br/>
+* Description : class qui contien le main<br/>
 * --------------------------------------------------------------------------<br/>
 */
 package GUI;
