@@ -50,7 +50,7 @@ public class GamesApp extends AppTemplate
 	
 	public GamesApp() 
 	{
-		super("Games", Color.BLUE);
+		super("Games", new Color(0,125,175));
 		
 		snakeButton.addMouseListener(new OpenSnake());
 		demineurButton.addMouseListener(new OpenDemineur());

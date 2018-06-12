@@ -38,7 +38,7 @@ public class ShowPanel extends JPanel
 	
 	/**
 	 * Constructeur
-	 * @param maGalerie
+	 * @param GalerieApp
 	 * @author Rita Moreira
 	 */
 	public ShowPanel(GalerieApp maGalerie) 
@@ -48,7 +48,7 @@ public class ShowPanel extends JPanel
 		this.galerieApp = maGalerie;
 		
 		JPanel gestion = new JPanel(new FlowLayout(FlowLayout.CENTER, 170, 5)); //Panel gestion
-		gestion.setBackground(Color.CYAN);
+		gestion.setBackground(new Color(66,164,93));
 
 		delete.addMouseListener(new OptionsApercu());
 		quit.addMouseListener(new OptionsApercu());
@@ -82,12 +82,11 @@ public class ShowPanel extends JPanel
 				try {
 						Files.delete((Paths.get(galerieApp.getPhotoTemp().getPathPhoto()))); //supprime fichier
 						File recupNom = new File(galerieApp.getPhotoTemp().getPathPhoto()); //supprime MiniPhoto de ArrayListe 
-						System.out.println("recup nom:"+recupNom);
+					
 						for (int i = 0; i < galerieApp.getBoutonsIcons().size(); i++) 
 						{
 							if(recupNom.getName().equals(galerieApp.getBoutonsIcons().get(i).getNomPhoto()) )
 							{
-								System.out.println("vaut "+galerieApp.getBoutonsIcons().get(i).getNomPhoto());
 								galerieApp.getGalerie().remove(galerieApp.getBoutonsIcons().get(i));
 								galerieApp.getBoutonsIcons().remove(i);	
 								

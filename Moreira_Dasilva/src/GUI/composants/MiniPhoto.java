@@ -4,7 +4,8 @@
 * --------------------------------------------------------------------------<br/>
 * Auteur: Rita Moreira <br/>
 * Extension : JButton <br/>
-* Description : Classe de JButton contenant l'icon d'une image <br/>
+* Description : Classe héritant de JButton  et qui contient l'icon de l'image <br/>
+* passé en paramètres <br/>
 * --------------------------------------------------------------------------<br/>
 */
 package GUI.composants;

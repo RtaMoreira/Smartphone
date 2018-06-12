@@ -14,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -52,35 +53,43 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	
 	private ArrayList<MiniPhoto> BoutonsIcons = new ArrayList<>();
 	private MiniPhoto photoTemp; 	//photo cliquée gardée en mémoire
+	
 	private JFileChooser chooser = new JFileChooser();
 
 
-	// JPanel principal
+	// JPanel principal mainPanel
 	private CardLayout cardLayout = new CardLayout();
 	private JPanel mainPanel = new JPanel();
-	private JScrollPane scroll = new JScrollPane();
 
 	// Jpanel qui contient la galerie
 	private JPanel mainGalerie = new JPanel(new BorderLayout());
-	private JPanel galerie = new JPanel(new GridLayout(0,3,0,5));
+	private JPanel galerie = new JPanel(new GridLayout(0,3,0,5));	
+	private JScrollPane scroll = new JScrollPane();
 	
-	//JPanel avec bouton d'ajout d'image et Message de confirmation
+	//JPanel avec bouton d'ajout d'image et message de modification
 	private JPanel south = new JPanel(new GridLayout(0, 1));
 	private JLabel ajout = new JLabel(new ImageIcon("image/icon/Plusicon.png"));
 	private JLabel message = new JLabel("") ;
 	private JPanel msgPanel = new JPanel();
 	private Timer timer = new Timer();	//pour la durée des messages
 
-	//Panel qui affiche l'image en entier
+	//JPanel qui affiche l'image en entier
 	private ShowPanel apercu = new ShowPanel(this);
 
+	
 	/**
-	 * Constructeur
-	 * @author Rita Moreira
+	 * Constructeur GalerieApp <br/>
+	 * --------------------------- <br/>
+	 * Description : il récupère le Layout de AppTemplate. 
+	 * Il génère la galerie en allant chercher les images depuis le dossier.
+	 * --------------------------- <br/>
+	 * Il comprend un mainPanel en cardLayout qui contient : <br/>
+	 *  - mainGalerie : contient la liste d'images et un JPanel south pour le bouton d'ajout + message de gestion <br/>
+	 *  - aperçu : ShowPanel qui affiche l'image en grand <br/>
 	 */
 	public GalerieApp() 
 	{
-		super("Galerie Photo", Color.CYAN);
+		super("Galerie", new Color(66,164,93));
 		mainPanel.setLayout(cardLayout);
 		
 		creationGalerie(recupImages());	//première génération de la galerie (création de ArrayList)
@@ -94,8 +103,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		Border margin = new EmptyBorder(5, 10, 5, 10);
 		ajout.setBorder(new CompoundBorder(border, margin));
 		
-		south.setBackground(Color.cyan);
-		msgPanel.add(message);
+		msgPanel.add(message);	//ajout à south uniquement lorsque doit s'afficher
+		
+		south.setBackground(new Color(66,164,93));
 		south.add(ajout);
 
 		scroll.setViewportView(galerie);
@@ -115,11 +125,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 /**
  * 	Méthode qui récupère les images du dossier au lancement du smartphone
  *  
- * @return ArrayList<Photo> contenant toutes les photos du dossier
+ * @return ArrayList<File> contenant toutes les photos du dossier
  * @author Rita Moreira
  * 
- * Partie classant les images du plus récent ajout au plus vieux :
- * copyright : @cwick - 14.10.08
+ * Partie classant les images du plus récent ajout au plus vieux : <br />
+ * copyright : @cwick - 14.10.08 <br />
  * https://stackoverflow.com/questions/203030/best-way-to-list-files-in-java-sorted-by-date-modified?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
  */
 	private ArrayList<File> recupImages() 
@@ -150,29 +160,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		return liste;
 		
 	}
-
-	/**
-	 * Méthode qui ajoute les MiniPhoto à la galerie
-	 * @param icons : ArralyList de toutes les icons
-	 * @author Rita Moreira
-	 */
-	private void showGalery(ArrayList<MiniPhoto> icons) 
-	{
-		// Supprime si des photos étaient déjà dans galerie avant
-		galerie.removeAll();
-
-		// Créations des miniPhotos à partir du ArrayList
-		for (int i = 0; i < icons.size(); i++) 
-		{
-			galerie.add(icons.get(i));
-		}
-	}
-	
 	
 	/**
-	 * Selon les photos récupérées (ArrayList photos)
-	 * Crée des MiniPhoto qu'on ajoute un ArrayList
-	 * @param photos récupérées auparavant
+	 * Selon les photos récupérées (ArrayList photos),
+	 * crée des MiniPhoto qu'on ajoute à un ArrayList
+	 * @param photos récupérées auparavant avec recupImages()
 	 * @author Rita Moreira
 	 */
 	
@@ -187,6 +179,27 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			createAddMiniIcon(path);
 		}
 	}
+
+	
+	/**
+	 * Méthode qui ajoute les MiniPhoto à la galerie
+	 * @param icons : ArrayList avec toutes les icons
+	 * @author Rita Moreira
+	 */
+	
+	private void showGalery(ArrayList<MiniPhoto> icons) 
+	{
+		// Supprime si des photos étaient déjà dans galerie avant
+		galerie.removeAll();
+
+		// Créations des miniPhotos à partir du ArrayList
+		for (int i = 0; i < icons.size(); i++) 
+		{
+			galerie.add(icons.get(i));
+		}
+	}
+	
+	
 
 	/**
 	 * Rafraîchir la galerie photo (après suppression, ajout, retour à la galerie)
@@ -219,10 +232,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	
 	/**
 	 * Contrôle de l'extension des images ajoutées.
-	 * uniquement accepté : JPEG, JPG, PNG
+	 * Uniquement accepté : JPEG, JPG, PNG
 	 *@return boolean (true = extension valide)
 	 * @author Rita Moreira
 	 */
+	
 	public boolean checkExtension(File fichier) 
 	{
 		String ext = getFileExtension(fichier);
@@ -234,7 +248,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 	
 	
 	/**
-	 * Création d'un MiniIcon et ajout à ArrayListe BoutonIcon
+	 * Création d'un MiniIcon et ajout à ArrayList BoutonIcon
 	 * @author Rita Moreira
 	 * @param path de la photo source
 	 */
@@ -248,7 +262,9 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		BoutonsIcons.add(0,icon);	//ajoute au tableau d'icons
 	}
 	
-	
+	/**
+	 * Méthode qui gère les messages d'erreur et leur visuel
+	 */
 	public void styleMsgPanel() 
 	{
 		if(message.getText().equals("Suppression réussie") ||message.getText().equals("Ajout réussi") )
@@ -257,8 +273,56 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			msgPanel.setBackground(Color.RED);
 		}
 	}
+	
 
-	// *******ActionListener & MouseListeners ********
+	/**
+	 * Calcule le nombre de doublon qu'une image possède dans le dossier image
+	 * 
+	 * (S'il y a des doublons, récupère le numero entre parenthèse le plus grand)
+	 * Exemple : photo.jpg - photo(1).jpg - photo(3).jpg -> retourne 3
+	 * 
+	 * @param file
+	 * @param nomFChoisi : nom du fichier choisi
+	 * @return int
+	 * @author Rita Moreira
+	 */
+	public int checkNumDoublon(File file, String nomFChoisi) 
+	{
+		int cptExistantImage= 0;
+		int numDoublonExistant;
+		for (int j = 0; j < getBoutonsIcons().size(); j++) //vérifie si fichier déjà présent dans tout le dossier
+		{	
+			
+			String nomFExistant = getBoutonsIcons().get(j).getNomPhoto();
+			nomFExistant = nomFExistant.substring(0,nomFExistant.lastIndexOf("."));
+			
+			String nomFExistantSSNum="";
+			
+			if(nomFExistant.contains("(")) 
+			{
+			 nomFExistantSSNum = nomFExistant.substring(0,nomFExistant.lastIndexOf("("));
+			}
+			
+			if(nomFChoisi.equals(nomFExistant)== true || nomFChoisi.equals(nomFExistantSSNum)) //vérifie les doublons
+			{		
+
+				if(nomFExistant.contains("(") && nomFExistant.contains(")"))
+				{
+					numDoublonExistant = Character.getNumericValue(nomFExistant.charAt(nomFExistant.lastIndexOf("(")+1)); //récup valeur entre parenthèse
+					
+					if(numDoublonExistant>cptExistantImage) 
+						cptExistantImage = numDoublonExistant;	
+				}else
+					cptExistantImage++;	
+			}
+		}
+		return cptExistantImage;
+	};
+
+	
+	
+	
+// *******ActionListener & MouseListeners ********
 
 	/**
 	 * Listener qui affiche l'image cliquée en grand
@@ -280,7 +344,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			ImageIcon photoChoisie = Resizable.resizePhotoRatio(480, 600, imageOriginal);
 			
 			JLabel photoZoom = new JLabel(photoChoisie);
-
+				
 			photoZoom.addMouseListener(new NextImage());
 			getApercu().setBackground(Color.BLACK);
 			getApercu().add(photoZoom);
@@ -289,8 +353,11 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		}
 	}
 	
+	
+	
 	/**
-	 * Listener qui affiche l'image suivante
+	 * Listener qui affiche l'image suivante ou précédente selon où on clique sur l'image
+	 * 
 	 * @author Rita Moreira
 	 */
 	class NextImage extends MouseAdapter 
@@ -299,37 +366,58 @@ public class GalerieApp extends AppTemplate implements Resizable {
 		@Override
 		public void mouseClicked(MouseEvent e) 
 		{
-			int positionNext = getBoutonsIcons().indexOf(photoTemp);
 			
-			if(positionNext != getBoutonsIcons().size()-1) 
-			{
-				positionNext += 1;
-			}else{
-				positionNext = 0;		//recommence à zero à fin de la galerie
-			}
-			photoTemp = getBoutonsIcons().get(positionNext);
+		    int x=e.getX();  //Lieu du click (pour déterminer si affiche l'image précédente ou suivante)
+
+				int positionNext = getBoutonsIcons().indexOf(photoTemp);
 				
-			ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin de l'icon
+				if(x>=(480/2)) //Affiche la suivante
+				{
+					if(positionNext != getBoutonsIcons().size()-1) 
+					{
+						positionNext += 1;
+					}else{
+						positionNext = 0; //recommence à zero à fin de la galerie
+					}
+					
+				}else{ //Affiche la précédente
 				
-			nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Affichage nextPhoto en grde taille
-			JLabel nextPhotoGrd = new JLabel(nextPhoto);
+					if(positionNext == 0) 
+					{
+						positionNext = getBoutonsIcons().size()-1;
+					}else{
+						positionNext -= 1;		//recommence depuis la fin
+					}
+				}	
 				
-			getApercu().remove(2);
-			getApercu().add(nextPhotoGrd);
-				
-			nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
-				
+				photoTemp = getBoutonsIcons().get(positionNext);
+					
+				ImageIcon nextPhoto = new ImageIcon(photoTemp.getPathPhoto()); //Récupère le chemin de l'icon
+					
+				nextPhoto = Resizable.resizePhotoRatio(480, 600, nextPhoto); //Affichage nextPhoto en grde taille
+				JLabel nextPhotoGrd = new JLabel(nextPhoto);
+				getApercu().remove(2);
+				getApercu().updateUI();
+				getApercu().add(nextPhotoGrd);
+				nextPhotoGrd.addMouseListener(new NextImage());	//Ajout du même ActionListener
+
 		}
 			
 	}
 
 	/**
 	 * Listener d'ajout d'image
-	 * @author Rita Moreira
+
+	 * Contrôle fait durant l'ajout : <br/ >
+	 * 	1) Extension du fichier valide <br/ > 
+	 * 	2) Nom du fichier pas déjà existant (si c'est le cas : ajoute un "(1)" par exemple) <br/ >
 	 * 
-	 * Contrôle fait durant l'ajout :
-	 * 	1) extension du fichier valide
-	 * 	2) Nom du fichier pas déjà existant (si c'est le cas : ajoute un "(1)" par exemple)
+	 * Durant l'ajout : <br/ >
+	 * - Copy le fichier dans un fichier destination (le nom aura été corrigé s'il est déjà existant) <br/ >
+	 * - Modification de "lastModified" Date du fichier afin de classer la galerie <br/ >
+	 * - Affichage d'un message si succès ou erreur <br/ >
+	 * 
+	 * @author Rita Moreira 
 	 */
 
 	class AddImage extends MouseAdapter
@@ -359,25 +447,17 @@ public class GalerieApp extends AppTemplate implements Resizable {
 					
 					Path source = fs[i].toPath();
 
-					//CONTROLE: extension (ajout uniquement si ok)
+					//CONTROLE 1) extension (ajout uniquement si true)
 					if(checkExtension(fs[i])== true) 
 					{
 						String nomFChoisi  = fs[i].getName().substring(0, fs[i].getName().lastIndexOf("."));
 
-						for (int j = 0; j < getBoutonsIcons().size(); j++) //vérifie si fichier déjà présent
-						{	
-							String nomFExistant = getBoutonsIcons().get(j).getNomPhoto();
-							nomFExistant = nomFExistant.substring(0,nomFExistant.lastIndexOf("."));
-							if(nomFChoisi.equals(nomFExistant)== true ||nomFChoisi.compareTo(nomFExistant)==-3) 
-							{
-								cptExistantImage++;	//compte nb de fois qu'il est déjà présent
-							}
-							
-						}
+						//CONTROLE 2 : les doublons
+						cptExistantImage = checkNumDoublon(fs[i], nomFChoisi);
 						if(cptExistantImage>0) 
 						{
 								String recupExt = getFileExtension(fs[i]); //Récupère extension
-								destination= new File(location+nomFChoisi+"("+(cptExistantImage+1)+")."+recupExt); //création fichier à doublon
+								destination= new File(location+nomFChoisi+"("+(cptExistantImage+1)+")."+recupExt); //création fichier à double avec "(cpt)"
 						}else{
 								destination= new File(chemin); 		//création fichier normal
 						}
@@ -407,7 +487,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 					styleMsgPanel();
 					south.add(msgPanel);
 
-					timer.schedule(new TimerTask() 
+					timer.schedule(new TimerTask() //timer pour l'affichage du message
 					{
 						public void run() 
 						{
@@ -434,6 +514,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 
 				cardLayout.first(getMainPanel());
 			}
+			
 			if (reponse == chooser.CANCEL_OPTION) 
 			{
 				chooser.cancelSelection();
@@ -470,7 +551,7 @@ public class GalerieApp extends AppTemplate implements Resizable {
 			cardLayout.first(getMainPanel());
 		}
 	}
-
+	
 	
 	//******** Getter & Setters *********//
 	

@@ -48,7 +48,7 @@ public class Settings extends AppTemplate implements Resizable {
 	
 	//Panel Option fond d'écran
 	private JPanel fondEcran = new  JPanel(new BorderLayout());
-	private JPanel listeFond = new JPanel(new GridLayout(1, 7));
+	private JPanel listeFond = new JPanel(new GridLayout(2, 4));
 	
 	//Panel Option police
 	private JPanel fontApp = new JPanel(new BorderLayout());
@@ -60,7 +60,7 @@ public class Settings extends AppTemplate implements Resizable {
 
 	/**
 	 * Constructeur
-	 * @param phone
+	 * @param phoneFrame
 	 * @author Rita Moreira
 	 */	
 	public Settings(PhoneFrame phone) 
@@ -72,17 +72,14 @@ public class Settings extends AppTemplate implements Resizable {
 
 		//Option : fond d'écran
 		fondEcran.add(generateTitre("Fond d'écran"),BorderLayout.NORTH);
-		
 		fondEcran.add(listeFond,BorderLayout.CENTER);
-		
-			//Affichage de chaque police
+ 			//Affichage de chaque police
 			MiniPhoto[] choix = RecupBG(new File("image//background//"));
 			for (int i = 0; i < choix.length; i++) 
 			{
 				listeFond.add(choix[i]);
-				
 			}	
-			listeFond.setBackground(Color.RED);
+			
 		//Option : Police
 		fontApp.add(generateTitre("Police des titres"),BorderLayout.NORTH);
 		createButton();
@@ -114,10 +111,12 @@ public class Settings extends AppTemplate implements Resizable {
 			String chemin = dossier.listFiles()[i].getPath();
 			ImageIcon background= new ImageIcon(chemin);
 			
-			MiniPhoto icon = new MiniPhoto(Resizable.resizePhotoRatio(110, 130,background), chemin);
-			icon.setBackground(Color.red);
-			icon.setSize(125, 150);
-			icon.addActionListener(new ChangeBg());
+			MiniPhoto icon = new MiniPhoto(Resizable.resizePhotoRatio(150, 190,background), chemin);
+	
+			icon.setContentAreaFilled(false); //Supprimer l'effet bouton
+			icon.setBorderPainted(true);
+			icon.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+			icon.addMouseListener(new ChangeBg());
 			listeBG[i] = icon;
 		}
 
@@ -139,11 +138,12 @@ public class Settings extends AppTemplate implements Resizable {
 		{
 			JButton bouton = new JButton(choixFont[i]);
 			bouton.setFont(new Font(choixFont[i], 1, 18));
-			bouton.addMouseListener(new ChangeTitleFont());
 			
 			bouton.setContentAreaFilled(false); //Supprimer l'effet bouton
 			bouton.setForeground(Color.BLACK);
 			bouton.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+			
+			bouton.addMouseListener(new ChangeTitleFont());
 			listePolice.add(bouton);
 		}
 	}
@@ -171,12 +171,12 @@ public class Settings extends AppTemplate implements Resizable {
  * Listener pour changer de fond d'écran
  * @author Rita Moreira
  */
-	public class ChangeBg implements ActionListener
+	public class ChangeBg extends MouseAdapter
 	{
 		@Override
-		public void actionPerformed(ActionEvent e) 
+		public void mouseClicked(MouseEvent me) 
 		{
-			Object event = e.getSource();
+			Object event = me.getSource();
 			MiniPhoto photoTemp = (MiniPhoto) event;
 
 			String newBackground = photoTemp.getPathPhoto();
@@ -201,6 +201,24 @@ public class Settings extends AppTemplate implements Resizable {
 
 			phone.getWpp().setImage();
 		}
+		
+		@Override
+		public void mouseEntered(MouseEvent me) 
+		{
+			Object event = me.getSource();
+			MiniPhoto photoTemp = (MiniPhoto) event;
+			photoTemp.setContentAreaFilled(true);
+			photoTemp.setBackground(new Color(70,109,146));
+		}
+
+		@Override
+		public void mouseExited(MouseEvent me) 
+		{
+			Object event = me.getSource();
+			JButton photoTemp= (JButton) event;
+			photoTemp.setContentAreaFilled(false);
+			photoTemp.setBackground(null);
+		}	
 	}
 
 /**
@@ -272,8 +290,7 @@ public class Settings extends AppTemplate implements Resizable {
 		}	
 	}
 
-//******** Getter & Setters *********//
-	
+	//******** Getter & Setters *********//
 	public ImageIcon getSettingsIcon() 
 	{
 		return settingsIcon;
