@@ -110,7 +110,7 @@ public class Snake extends JPanel implements ActionListener
 			y[i]=50;
 			x[i]=50-i;
 		}
-		
+		direction=1;
 		snakeSize=3;
 		over=false;
 		randomFood();
@@ -121,7 +121,6 @@ public class Snake extends JPanel implements ActionListener
         apple_x=(int)(Math.random()*pixels.length);
         apple_y=(int)(Math.random()*pixels[0].length);
     }
-    
     
     /**
      * @author jcfds
@@ -160,16 +159,7 @@ public class Snake extends JPanel implements ActionListener
     	t.stop();
     	if(	JOptionPane.showConfirmDialog(null,"Voulez vous recommencer?")==JOptionPane.YES_OPTION)
     	{
-    		for (int i = 0; i <snakeSize; i++) 
-    		{
-				y[i]=50;
-				x[i]=50-i;
-			}
-			
-			snakeSize=3;
-			
-			randomFood();
-			paint();
+    		restart();
 	        t.start();
     	}
     }

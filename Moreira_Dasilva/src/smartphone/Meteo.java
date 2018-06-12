@@ -123,6 +123,7 @@ public class Meteo extends AppTemplate
 		northPanel.add(cityPanel);	
 		
 	}
+	
 	/**
 	 * utilise toutes les methodes
 	 * getDate pour la date du jour
@@ -164,8 +165,8 @@ public class Meteo extends AppTemplate
 	private void getStatus() 
 	{
 		String status;
-		status=infoJSON.substring((infoJSON.indexOf("icon")+7),(infoJSON.indexOf("base")-5));
-		
+		status=infoJSON.substring((infoJSON.indexOf("icon")+7),(infoJSON.indexOf("\"",(infoJSON.indexOf("icon")+7))));
+
 		switch (status) 
 		{
 			case "01d":

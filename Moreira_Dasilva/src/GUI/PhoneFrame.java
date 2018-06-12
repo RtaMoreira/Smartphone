@@ -7,6 +7,7 @@
 * aussi avec le cardLayout qui permet d'ouvrir les applications<br/>
 * --------------------------------------------------------------------------<br/>
 */
+
 package GUI;
 
 import java.awt.BorderLayout;
@@ -64,7 +65,7 @@ import smartphone.Settings;
 	private NotesApp notes = new NotesApp();
 	
 	/** ecran verrou*/
-	private LockScreen lockscrean = new LockScreen();
+	private LockScreen lockscreen = new LockScreen();
 
 	/** Panel d'affichage(principal)*/
 	private CardLayout cardLayout = new CardLayout();
@@ -82,17 +83,17 @@ import smartphone.Settings;
 
 	public PhoneFrame() 
 	{
-		/**je dois l'initializer au debut mais je ferme, elle s'ouvrent qund on clique dans l'icon*/
+		/**je dois l'initializer au debut mais je ferme, elle s'ouvre qaund on click sur l'icon*/
 		camera.getWebcam().close();
 		
-		/** frame settings*/
+		/**frame settings*/
 		setSize(480, 860);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setUndecorated(true);
 		setBackground(new Color(0, 0, 0, 0));
 
-		/** forme natel(hardware)*/
+		/**forme natel(hardware)*/
 		setContentPane(phoneLayout);// on va mettre du contenu dans le phoneLayout
 		phoneLayout.setLayout(new BorderLayout());
 		phoneLayout.add(screen, BorderLayout.CENTER); // l'écran va au centre
@@ -144,6 +145,9 @@ import smartphone.Settings;
 		notes.getNavigation().getBackButton().addMouseListener(new ReturnMenu());
 		
 		/**ajouter le cards au cardLayout*/
+		screen.add(lockscreen, "lockscreen");
+		lockscreen.getVerrou().addActionListener(new UnlockClick());
+		
 		screen.add(wpp, "menu");
 		screen.add(games, "games");
 		screen.add(galerie, "galerie");
@@ -152,32 +156,28 @@ import smartphone.Settings;
 		screen.add(camera, "camera");
 		screen.add(meteo, "meteo");
 		screen.add(notes, "notes");
-		
-		screen.add(lockscrean, "lockscreen");
-		lockscrean.getVerrou().addActionListener(new UnlockClick());
-
 		this.setVisible(true);
 	}
 
-	/**verifie le code de lockscrean et si juste vient au menu*/
+	/**verifie le code de lockscreen et si juste vient au menu*/
 	class UnlockClick implements ActionListener 
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (lockscrean.getCode().equals("1234")) 
+			if (lockscreen.getCode().equals("1234")) 
 			{
 				cardLayout.show(screen, "menu");
-				lockscrean.refresh();
+				lockscreen.refresh();
 			}
 				
 			else 
 			{
-				lockscrean.getCodeError().setText("Code erroné! Essayez de nouveau:");
+				lockscreen.getCodeError().setText("Code erroné! Essayez de nouveau:");
 			}
 		}
 	}
 
-	/**bouton de retour de chaque  appli*/
+	/**bouton de retour de chaque appli*/
 	class ReturnMenu implements MouseListener 
 	{
 
@@ -193,7 +193,10 @@ import smartphone.Settings;
 
 	}
 
-	/**acceder l'appli depuis l'icon et effet mmouseHover*/
+	/**
+	 * @author Rita Moreira
+	 * acceder l'appli depuis l'icon et effet mmouseHover
+	 */
 	class accesApp implements MouseListener 
 	{
 		@Override
@@ -316,7 +319,9 @@ import smartphone.Settings;
 		public void mouseReleased(MouseEvent e) {}
 	}
 	
-	/**eteindre ou verouiller le natel*/
+	/**eteindre ou verouiller le natel
+	 *@author jcfds 
+	 */
 	class TurnOff implements MouseListener 
 	{
 		public void mouseClicked(MouseEvent arg0) 
@@ -347,7 +352,9 @@ import smartphone.Settings;
 		}
 	}
 	
-	/**timer si longClick dans bouton eteindre*/
+	/**timer si longClick dans bouton eteindre
+	 *@author jcfds 
+	 */
 	public class CalculeTimer implements ActionListener 
 	{
 		public void actionPerformed(ActionEvent arg0) 

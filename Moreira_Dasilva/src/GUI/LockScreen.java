@@ -59,7 +59,12 @@ public class LockScreen extends JPanel{
 		timer.start();
 		add(cards);
 		
-	/**ajouter les composants dans l'écran vérouillé et le MouseListener*/
+		ok.setForeground(Color.WHITE);
+		ok.setOpaque(false);
+		ok.setContentAreaFilled(false);
+		ok.setBorderPainted(false);
+		
+		/**ajouter les composants dans l'écran vérouillé et le MouseListener*/
 		lock.setLayout(new BorderLayout());
 		datePanel.setOpaque(false);
 		
@@ -82,7 +87,7 @@ public class LockScreen extends JPanel{
 		lock.setBorder(new EmptyBorder(40, 0, 30, 0));
 		lock.addMouseMotionListener(new Drag());
 		
-	/**creer le clavier*/
+		/**creer le clavier*/
 		for (int i = 0; i < 9; i++) 
 		{
 			JLabel j = new JLabel(String.valueOf(i+1));
@@ -109,7 +114,7 @@ public class LockScreen extends JPanel{
 		
 		clavier.setOpaque(false);
 		
-	/**change codeInput*/
+		/**change codeInput*/
 		codeInput.setLayout(new GridBagLayout());
 		codeError.setForeground(Color.WHITE);
 		code.setOpaque(false);
@@ -129,7 +134,7 @@ public class LockScreen extends JPanel{
 		c.gridy=2;
 		codeInput.add(clavier,c);
 		
-	/**manage cardLayout*/
+		/**manage cardLayout*/
 		cards.add(lock, "lock");
 		cards.add(codeInput, "codeInput");
 	}

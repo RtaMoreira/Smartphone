@@ -4,7 +4,8 @@
 * --------------------------------------------------------------------------<br/>
 * Auteur: Joao silva <br/>
 * Extension : AppTemplate <br/>
-* Description : Access webcam avec l'aide d'une librairie qui ajoute des images a la galerie du telephone <br/>
+* Description : Access webcam avec l'aide d'une librairie qui ajoute <br/>
+* des images a la galerie du telephone <br/>
 * --------------------------------------------------------------------------<br/>
 */
 
@@ -108,7 +109,7 @@ public class Camera extends AppTemplate
 			File list[]=dossier.listFiles();
 
 			/**
-			 * pour avoir de numeros différents pour toutes les photos
+			 * pour avoir des numeros différents pour toutes les photos
 			 * @author jcfds
 			 */
 			for (int i = 0; i < list.length; i++) 

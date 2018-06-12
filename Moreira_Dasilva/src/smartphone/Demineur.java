@@ -90,7 +90,9 @@ public class Demineur extends JPanel implements ActionListener
 		}
 	}
 	
-	//pour placer le bombes aleatoirement
+	/**pour placer le bombes aleatoirement
+	 *@author jcfds 
+	 */
 	private void bombes() 
 	{
 		for (int i = 0; i<nbBombes; i++)
@@ -110,7 +112,9 @@ public class Demineur extends JPanel implements ActionListener
 	}
 	
 	
-	 // placer les numeros par rapport aux bombes
+	 /** placer les numeros par rapport aux bombes
+	  * @author jcfds
+	  */
 	private void numeros() 
 	{
 		for (int i = 0; i < cases.length; i++) 
