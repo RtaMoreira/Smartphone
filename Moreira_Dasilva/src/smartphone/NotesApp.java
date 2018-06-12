@@ -38,7 +38,7 @@ public class NotesApp extends AppTemplate{
 
 	
 	
-	/**
+	/*
 	 * Getters & Setters
 	 */
 	public ImageIcon getNotesIcon() {

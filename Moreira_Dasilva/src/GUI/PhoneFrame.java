@@ -64,7 +64,7 @@ import smartphone.Settings;
 	private NotesApp notes = new NotesApp();
 	
 	/** ecran verrou*/
-	private LockScrean lockscrean = new LockScrean();
+	private LockScreen lockscrean = new LockScreen();
 
 	/** Panel d'affichage(principal)*/
 	private CardLayout cardLayout = new CardLayout();

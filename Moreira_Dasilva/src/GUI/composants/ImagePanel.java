@@ -61,7 +61,7 @@ public class ImagePanel extends JPanel
 		return backgroundPath;
 	}
 
-	/**
+	/*
 	 * Getters & Setters	
 	 */
     public void setImage() 

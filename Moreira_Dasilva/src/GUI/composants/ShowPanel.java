@@ -38,7 +38,7 @@ public class ShowPanel extends JPanel
 	
 	/**
 	 * Constructeur
-	 * @param GalerieApp
+	 * @param maGalerie
 	 * @author Rita Moreira
 	 */
 	public ShowPanel(GalerieApp maGalerie) 

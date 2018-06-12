@@ -33,7 +33,9 @@ private MouseListener ml = new RemoveError();
 		setOpaque(false);
 	}
 	
-	/**field est en passwordField en gris*/
+	/**field est en passwordField en gris
+	 * @param i: on met un int dans le constructeur si c'est passwordField
+	 */
 	public FlatField(int i)
 	{
 		add(p1);
@@ -55,20 +57,26 @@ private MouseListener ml = new RemoveError();
 		return t1.getText();
 	}
 	
-	/**method pour setter le textField directement*/
+	/**method pour setter le textField directement
+	 * @param s: texte a mettre dans le field
+	 */
 	public void setText(String s) 
 	{
 		t1.setText(s);
 	}
 	
-	/**method pour setter le textField directement*/
+	/**method pour setter le textField directement
+	 * @param bol: s'il est editable
+	 */
 	public void setEditable(Boolean bol) 
 	{
 		t1.setEditable(bol);
 		t1.setBackground(Color.WHITE);
 	}
 	
-	/**method pour setter le textField directement*/
+	/**method pour setter le textField directement
+	 * @param bg: couleur pour le background
+	 */
 	public void setFieldBackground(Color bg) 
 	{
 		t1.setBackground(bg);

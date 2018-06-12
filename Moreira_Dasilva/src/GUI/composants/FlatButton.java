@@ -22,7 +22,9 @@ public class FlatButton extends JPanel
 	private ImageIcon im = new ImageIcon();
 	private ImageIcon imh = new ImageIcon();
 	
-	/**pour les bouttons avec un string*/
+	/**pour les bouttons avec un string
+	 * @param s: string qu'on insere dans le button
+	 */
 	public FlatButton(String s)
 	{
 		b1.setBackground(Color.DARK_GRAY);
@@ -31,7 +33,10 @@ public class FlatButton extends JPanel
 		add(b1);
 	}
 	
-	/**pour les boutons avec un icon*/
+	/**pour les boutons avec un icon
+	 * @param im: icon pour le bouton
+	 * @param imh: icon pour le boutom Hover
+	 */
 	public FlatButton(ImageIcon im, ImageIcon imh)
 	{
 		this.im=im;
@@ -47,7 +52,7 @@ public class FlatButton extends JPanel
 	}
 	
 	
-	/**methode qui rajout l'actionListenner que je veux dans les autres classes*/
+	/*methode qui rajout l'actionListenner que je veux dans les autres classes*/
 	public void addActionListener(ActionListener e) 
 	{
 		b1.addActionListener(e);

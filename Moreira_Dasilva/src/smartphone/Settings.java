@@ -60,7 +60,7 @@ public class Settings extends AppTemplate implements Resizable {
 
 	/**
 	 * Constructeur
-	 * @param phoneFrame
+	 * @param phone
 	 * @author Rita Moreira
 	 */	
 	public Settings(PhoneFrame phone) 

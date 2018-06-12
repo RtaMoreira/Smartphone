@@ -1,9 +1,9 @@
 /**
 * --------------------------------------------------------------------------<br/>
-* Classe : LockScrean <br/>
+* Classe : LockScreen <br/>
 * --------------------------------------------------------------------------<br/>
 * Auteur : Joao Silva <br/>
-* Description : Panel sera présent lors de l'ouverture de l'appkication et lorsqu'on le verouille <br/>
+* Description : Panel sera présent lors de l'ouverture de l'application et lorsqu'on le verouille <br/>
 * --------------------------------------------------------------------------<br/>
 */
 package GUI;
@@ -29,7 +29,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import GUI.composants.ImagePanel;
-public class LockScrean extends JPanel{
+public class LockScreen extends JPanel{
 	
 	private ImagePanel lock = new ImagePanel(new ImageIcon("image/background/samsung.jpg"));
 	private ImagePanel codeInput = new ImagePanel(new ImageIcon("image/background/samsung.jpg"));
@@ -53,13 +53,13 @@ public class LockScrean extends JPanel{
 	private JLabel swipe = new JLabel("Swipe to unlock");
 	private JLabel codeError = new JLabel("");
 	
-	public LockScrean() 
+	public LockScreen() 
 	{
 		setLayout(new BorderLayout());
 		timer.start();
 		add(cards);
 		
-	/**ajouter les trucs dans l'écran vérouillé et le MouseListenner*/
+	/**ajouter les composants dans l'écran vérouillé et le MouseListener*/
 		lock.setLayout(new BorderLayout());
 		datePanel.setOpaque(false);
 		

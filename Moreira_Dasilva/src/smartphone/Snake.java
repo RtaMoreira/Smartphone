@@ -127,6 +127,7 @@ public class Snake extends JPanel implements ActionListener
      * @author jcfds
      * methode verifie si pixel ou snake se deplace est occupé
      * action par rapport a ce qu'il y a (food, body or border)
+     * @return boolean
      */
     public boolean checkpixel() 
     {
